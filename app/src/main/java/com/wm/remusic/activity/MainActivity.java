@@ -148,26 +148,29 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 1:
-                        drawerLayout.closeDrawers();
-                        break;
-                    case 2:
                         CardPickerDialog dialog = new CardPickerDialog();
                         dialog.setClickListener(MainActivity.this);
                         dialog.show(getSupportFragmentManager(), "theme");
                         drawerLayout.closeDrawers();
 
                         break;
-                    case 3:
+                    case 2:
                         TimingFragment fragment3 = new TimingFragment();
                         fragment3.show(getSupportFragmentManager(), "timing");
                         drawerLayout.closeDrawers();
 
                         break;
-                    case 4:
+                    case 3:
                         BitSetFragment bfragment = new BitSetFragment();
                         bfragment.show(getSupportFragmentManager(), "bitset");
                         drawerLayout.closeDrawers();
 
+                        break;
+                    case 4:
+                        drawerLayout.closeDrawers();
+                        Intent intent=new Intent(MainActivity.this,simpleActivity.class);
+                        startActivity(intent);
+                        finish();
                         break;
                     case 5:
                         if (MusicPlayer.isPlaying()) {
@@ -176,7 +179,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
                         unbindService();
                         finish();
                         drawerLayout.closeDrawers();
-
+                        break;
                 }
             }
         });
