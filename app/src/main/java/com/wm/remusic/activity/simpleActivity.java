@@ -12,8 +12,8 @@ import android.view.MenuItem;
 import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
 import com.wm.remusic.fragment.BitSetFragment;
+import com.wm.remusic.fragment.MainFragment;
 import com.wm.remusic.fragment.TimingFragment;
-import com.wm.remusic.fragment.simpleMainFrag;
 import com.wm.remusic.service.MusicPlayer;
 import com.wm.remusic.uitl.ActivityUtils;
 
@@ -28,14 +28,14 @@ public class simpleActivity extends BaseActivity {
     NavigationView navView;
     @BindView(R.id.drawLayout)
     DrawerLayout drawLayout;
-    simpleMainFrag mainfrag;
+    MainFragment fragment;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple);
         ButterKnife.bind(this);
-        mainfrag=new simpleMainFrag();
-        ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),mainfrag,R.id.frame);
+        fragment=new MainFragment();
+        ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),fragment,R.id.frame);
         initToolBar();
         setNavView();
     }
@@ -90,6 +90,7 @@ public class simpleActivity extends BaseActivity {
     private void initToolBar() {
         setSupportActionBar(toolBar);
         ActionBar ab = getSupportActionBar();
+        ab.setTitle("极简模式");
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
     }
