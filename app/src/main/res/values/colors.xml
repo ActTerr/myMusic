@@ -352,5 +352,6 @@
     <color name="red_dark">#C62828</color>
     <color name="red_trans">#99F44336</color>
     <color name="gray2">#515151</color>
+    <color name="black">#000000</color>
 
 </resources>

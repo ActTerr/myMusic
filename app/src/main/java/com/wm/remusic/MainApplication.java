@@ -243,4 +243,14 @@ public class MainApplication extends Application implements ThemeUtils.switchCol
     public static boolean isSimple() {
         return isSimple;
     }
+
+    static String userName;
+
+    public static String getUserName() {
+        return userName;
+    }
+
+    public static void setUserName(String userName) {
+        MainApplication.userName = userName;
+    }
 }

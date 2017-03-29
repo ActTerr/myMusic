@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.wm.remusic.MainApplication;
 import com.wm.remusic.MediaAidlInterface;
 import com.wm.remusic.R;
 import com.wm.remusic.fragment.QuickControlsFragment;
@@ -23,6 +22,8 @@ import com.wm.remusic.uitl.IConstants;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+
+import rx.Subscription;
 
 import static com.wm.remusic.service.MusicPlayer.mService;
 
@@ -37,7 +38,12 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
     private QuickControlsFragment fragment; //底部播放控制栏
     private String TAG = "BaseActivity";
     private ArrayList<MusicStateListener> mMusicListener = new ArrayList<>();
-
+    protected Subscription subscription;
+    protected void unsubscribe() {
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
+    }
     /**
      * 更新播放队列
      */

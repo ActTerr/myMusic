@@ -1,15 +1,81 @@
 package com.wm.remusic.activity;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
+import com.wm.remusic.net.ApiWrapper;
+import com.wm.remusic.net.ServerAPI;
+import com.wm.remusic.uitl.ExceptionFilter;
+import com.wm.remusic.uitl.MFGT;
+import com.wm.remusic.uitl.SpUtil;
+import com.wm.remusic.uitl.ToastUtil;
 
-public class LoginActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
+
+public class LoginActivity extends BaseActivity {
+    Context context;
+    @BindView(R.id.userName)
+    EditText name;
+    @BindView(R.id.passwd)
+    EditText passwd;
+
+    ProgressDialog progressDialog;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
+        context = this;
+        progressDialog=new ProgressDialog(context);
+    }
+
+    Observer<String> observer=new Observer<String>() {
+        @Override
+        public void onCompleted() {
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            progressDialog.dismiss();
+            if (ExceptionFilter.filter(context,e)){
+                Toast.makeText(LoginActivity.this, "密码或者用户名错误!" , Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onNext(String s) {
+            progressDialog.dismiss();
+            ToastUtil.showToast(context,"登陆成功！");
+            SpUtil.saveLoginUser(context,name.getText().toString());
+            Intent intent = new Intent(context, MainActivity.class);
+           MainApplication.setUserName(name.getText().toString());
+            startActivity(intent);
+            MFGT.finish((Activity) context);
+
+        }
+    };
+    public void onLogin(View view) {
+        progressDialog.show();
+        ApiWrapper<ServerAPI> ApiWrapper =new ApiWrapper<>();
+        subscription= ApiWrapper.targetClass(ServerAPI.class).getAPI().login(name.getText().toString(),
+                passwd.getText().toString()).compose(ApiWrapper.<String>applySchedulers())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+
     }
 }
