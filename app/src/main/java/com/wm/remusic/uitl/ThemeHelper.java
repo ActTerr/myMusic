@@ -35,6 +35,7 @@ public class ThemeHelper {
     public static final int CARD_THUNDER = 0x6;
     public static final int CARD_SAND = 0x7;
     public static final int CARD_FIREY = 0x8;
+    public static final int CARD_SIMPLE = 0x9;
 
     public static SharedPreferences getSharePreference(Context context) {
         return context.getSharedPreferences("multiple_theme", Context.MODE_PRIVATE);

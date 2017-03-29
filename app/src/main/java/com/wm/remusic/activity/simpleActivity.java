@@ -7,6 +7,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.wm.remusic.MainApplication;
@@ -16,9 +17,12 @@ import com.wm.remusic.fragment.MainFragment;
 import com.wm.remusic.fragment.TimingFragment;
 import com.wm.remusic.service.MusicPlayer;
 import com.wm.remusic.uitl.ActivityUtils;
+import com.wm.remusic.uitl.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.wm.remusic.MainApplication.context;
 
 public class simpleActivity extends BaseActivity {
 
@@ -93,6 +97,24 @@ public class simpleActivity extends BaseActivity {
         ab.setTitle("极简模式");
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
+    }
+    private long FirstTime = 0;
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                long SecondTime = System.currentTimeMillis();
+                if (SecondTime - FirstTime > 2000) {
+                    ToastUtil.showToast(context, "再按一次退出应用");
+                    FirstTime = SecondTime;
+                    return true;
+                } else {
+                    System.exit(0);
+                }
+                break;
+        }
+        return super.onKeyUp(keyCode, event);
     }
 
 }

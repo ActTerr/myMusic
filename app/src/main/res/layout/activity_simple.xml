@@ -8,15 +8,18 @@
     android:orientation="vertical"
     tools:openDrawer="start"
     >
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <include layout="@layout/item_title"/>
+        <include
+            layout="@layout/item_title"/>
         <android.support.design.widget.CoordinatorLayout
+            android:layout_marginTop="70dp"
             android:id="@+id/coordinatorLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp">
             <FrameLayout
                 android:id="@+id/frame"
                 android:layout_width="match_parent"
@@ -24,7 +27,12 @@
 
             </FrameLayout>
         </android.support.design.widget.CoordinatorLayout>
-    </LinearLayout>
+        <FrameLayout
+            android:layout_alignParentBottom="true"
+            android:id="@+id/bottom_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+    </RelativeLayout>
 
 
     <android.support.design.widget.NavigationView
@@ -35,4 +43,5 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         />
+
 </android.support.v4.widget.DrawerLayout>

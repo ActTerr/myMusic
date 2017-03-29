@@ -205,6 +205,8 @@ public class MainApplication extends Application implements ThemeUtils.switchCol
             return "orange";
         } else if (ThemeHelper.getTheme(context) == ThemeHelper.CARD_FIREY) {
             return "red";
+        } else if(ThemeHelper.getTheme(context)==ThemeHelper.CARD_SIMPLE){
+            return "black";
         }
         return null;
     }

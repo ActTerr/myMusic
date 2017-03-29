@@ -34,11 +34,14 @@ import com.wm.remusic.fragmentnet.TabNetPagerFragment;
 import com.wm.remusic.handler.HandlerUtil;
 import com.wm.remusic.service.MusicPlayer;
 import com.wm.remusic.uitl.ThemeHelper;
+import com.wm.remusic.uitl.ToastUtil;
 import com.wm.remusic.widget.CustomViewPager;
 import com.wm.remusic.widget.SplashScreen;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.wm.remusic.MainApplication.context;
 
 public class MainActivity extends BaseActivity implements CardPickerDialog.ClickListener {
     private ActionBar ab;
@@ -167,7 +170,6 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
                         BitSetFragment bfragment = new BitSetFragment();
                         bfragment.show(getSupportFragmentManager(), "bitset");
                         drawerLayout.closeDrawers();
-
                         break;
                     case 4:
                         drawerLayout.closeDrawers();
@@ -212,7 +214,11 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
                                 final MainActivity context = MainActivity.this;
                                 ActivityManager.TaskDescription taskDescription = new ActivityManager.TaskDescription(null, null, ThemeUtils.getThemeAttrColor(context, android.R.attr.colorPrimary));
                                 setTaskDescription(taskDescription);
-                                getWindow().setStatusBarColor(ThemeUtils.getColorById(context, R.color.theme_color_primary));
+                                if (MainApplication.isSimple()){
+                                 getWindow().setStatusBarColor(getResources().getColor(R.color.black2));
+                                }else {
+                                    getWindow().setStatusBarColor(ThemeUtils.getColorById(context, R.color.theme_color_primary));
+                                }
                             }
                         }
 
@@ -309,4 +315,23 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
         // System.exit(0);
         // finish();
     }
+    private long FirstTime = 0;
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                long SecondTime = System.currentTimeMillis();
+                if (SecondTime - FirstTime > 2000) {
+                    ToastUtil.showToast(context, "再按一次退出应用");
+                    FirstTime = SecondTime;
+                    return true;
+                } else {
+                    System.exit(0);
+                }
+                break;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
 }

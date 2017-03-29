@@ -168,11 +168,12 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
         f.addAction(IConstants.PLAYLIST_COUNT_CHANGED);
         f.addAction(MediaService.MUSIC_LODING);
         registerReceiver(mPlaybackStatus, new IntentFilter(f));
-        if (MainApplication.isSimple()){
-            showQuickControl(false);
-        }else {
-            showQuickControl(true);
-        }
+//        if (MainApplication.isSimple()){
+//            showQuickControl(false);
+//        }else {
+//
+//        }
+        showQuickControl(true);
     }
 
 

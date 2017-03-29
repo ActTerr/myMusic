@@ -137,11 +137,11 @@
         <activity
             android:name="net.youmi.android.AdBrowser"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
-            android:theme="@android:style/Theme.Light.NoTitleBar"></activity>
+            android:theme="@android:style/Theme.Light.NoTitleBar" />
 
         <service
             android:name="net.youmi.android.AdService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <receiver android:name="net.youmi.android.AdReceiver">
             <intent-filter>
@@ -177,7 +177,8 @@
                 android:resource="@xml/file_provider" />
         </provider>
 
-        <activity android:name=".activity.simpleActivity"></activity>
+        <activity android:name=".activity.simpleActivity" />
+        <activity android:name=".activity.LoginActivity"></activity>
     </application>
 
 </manifest>
