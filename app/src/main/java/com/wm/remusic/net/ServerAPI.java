@@ -1,12 +1,10 @@
 package com.wm.remusic.net;
 
-import mac.yk.devicemanagement.I;
-import mac.yk.devicemanagement.bean.Device;
-import mac.yk.devicemanagement.bean.Result;
-import mac.yk.devicemanagement.bean.Scrap;
-import mac.yk.devicemanagement.bean.Weixiu;
-import mac.yk.devicemanagement.bean.Xunjian;
-import okhttp3.RequestBody;
+
+import com.squareup.okhttp.RequestBody;
+import com.wm.remusic.I;
+import com.wm.remusic.bean.Result;
+
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -19,14 +17,12 @@ import rx.Observable;
  */
 
 public interface ServerAPI {
-    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.YUJING)
+    @GET(I.REQUEST.PATH+"?request="+ I.REQUEST.YUJING)
     Observable<Result<String>> getyujing();
 
     @GET(I.REQUEST.PATH+"?request="+I.REQUEST.TONGJI)
     Observable<Result<Integer[]>> getTongji(@Query(I.TABLENAME) String tableName);
 
-    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.CHAXUN)
-    Observable<Result<Device>> chaxun(@Query(I.DEVICE.DID) String Did);
 
     @GET(I.REQUEST.PATH+"?request="+I.REQUEST.SAVE)
     Observable<Result<String>> saveDevice(@Query(I.USER.NAME) String name, @Query(I.DEVICE.TABLENAME) String device);
@@ -37,13 +33,6 @@ public interface ServerAPI {
     @GET(I.REQUEST.PATH+"?request="+I.REQUEST.LOGOUT)
     Observable<Result<String>> logOut(@Query(I.USER.NAME) String name);
 
-    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.DOWNWEIXIU)
-    Observable<Result<Weixiu[]>> downLoadWeixiu(@Query(I.DEVICE.DID) String did, @Query(I.DOWNLOAD.PAGE) int page,
-                                                @Query(I.DOWNLOAD.SIZE) int size);
-
-    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.DOWNXUNJIAN)
-    Observable<Result<Xunjian[]>> downloadXunJian(@Query(I.DEVICE.DID) String did, @Query(I.DOWNLOAD.PAGE) int page,
-                                                  @Query(I.DOWNLOAD.SIZE) int size);
 
     @GET(I.REQUEST.PATH+"?request="+I.REQUEST.XUNJIAN)
     Observable<Result<Integer>> xunjian(@Query(I.DEVICE.ISDIANCHI) boolean isdianchi, @Query(I.XUNJIAN.USER) String userName
@@ -65,15 +54,6 @@ public interface ServerAPI {
 
     @GET(I.REQUEST.PATH+"?request="+I.REQUEST.YONGHOU)
     Observable<Result<Integer>> yonghou(@Query(I.DEVICE.DID) String Did);
-
-    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.DOWNSCRAP)
-    Observable<Result<Scrap[]>> downScrap(@Query(I.DOWNLOAD.PAGE) int page, @Query(I.DOWNLOAD.SIZE) int size,
-                                          @Query(I.BAOFEI.DNAME) int dName);
-
-    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.DOWNDEVICE)
-    Observable<Result<Device[]>> downDevice(@Query(I.DOWNLOAD.PAGE) int page, @Query(I.DOWNLOAD.SIZE) int size,
-                                            @Query(I.DEVICE.DNAME) int dname,
-                                            @Query(I.DEVICE.STATUS) int status);
 
     @GET(I.REQUEST.PATH+"?request="+I.REQUEST.GETPICCOUNT)
     Observable<Result<Integer>> getCount(@Query(I.DEVICE.DNAME) int dName, @Query(I.PIC.TYPE) String type);

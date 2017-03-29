@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,17 +22,18 @@ import com.wm.remusic.uitl.ToastUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends AppCompatActivity {
     Context context;
     @BindView(R.id.userName)
     EditText name;
     @BindView(R.id.passwd)
     EditText passwd;
-
+    Subscription subscription;
     ProgressDialog progressDialog;
     @Override
     public void onCreate(Bundle savedInstanceState) {

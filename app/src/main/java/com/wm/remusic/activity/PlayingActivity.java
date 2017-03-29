@@ -856,9 +856,9 @@ public class PlayingActivity extends BaseActivity implements IConstants {
                 mNewOpts.inPreferredConfig = Bitmap.Config.RGB_565;
             }
             if (!MusicPlayer.isTrackLocal()) {
-                L.D(print, TAG, "music is net");
+                L.d( TAG, "music is net");
                 if (getAlbumPath() == null) {
-                    L.D(print, TAG, "getalbumpath is null");
+                    L.d( TAG, "getalbumpath is null");
                     mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_disk_210);
                     drawable = ImageUtils.createBlurredImageFromBitmap(mBitmap, PlayingActivity.this.getApplication(), 3);
                     return drawable;
@@ -879,14 +879,14 @@ public class PlayingActivity extends BaseActivity implements IConstants {
                                              // No need to do any cleanup.
                                              if (bitmap != null) {
                                                  mBitmap = bitmap;
-                                                 L.D(print, TAG, "getalbumpath bitmap success");
+                                                 L.d( TAG, "getalbumpath bitmap success");
                                              }
                                          }
 
                                          @Override
                                          public void onFailureImpl(DataSource dataSource) {
                                              // No cleanup required here.
-                                             L.D(print, TAG, "getalbumpath bitmap failed");
+                                             L.d( TAG, "getalbumpath bitmap failed");
                                              mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.placeholder_disk_210);
 
                                          }
@@ -901,7 +901,7 @@ public class PlayingActivity extends BaseActivity implements IConstants {
                     mBitmap = null;
                     Bitmap bitmap = null;
                     Uri art = Uri.parse(getAlbumPath());
-                    L.D(print, TAG, "album is local ");
+                    L.d( TAG, "album is local ");
                     if (art != null) {
                         ParcelFileDescriptor fd = null;
                         try {

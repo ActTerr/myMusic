@@ -2,11 +2,13 @@ package com.wm.remusic.uitl;
 
 import android.content.Context;
 
+import com.wm.remusic.I;
+import com.wm.remusic.net.APIException;
+
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
-import mac.yk.devicemanagement.I;
-import mac.yk.devicemanagement.net.APIException;
+
 
 /**
  * Created by mac-yk on 2017/3/19.

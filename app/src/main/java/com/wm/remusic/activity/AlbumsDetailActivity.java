@@ -636,7 +636,7 @@ public class AlbumsDetailActivity extends BaseActivity implements ObservableScro
         }
 
         public void run(){
-            L.D(d,TAG, " start");
+            L.d(TAG, " start");
             while(!isInterrupted){
                 HashMap<Long, MusicInfo> infos = new HashMap<Long, MusicInfo>();
                 int len = arrayList.size();
@@ -650,11 +650,11 @@ public class AlbumsDetailActivity extends BaseActivity implements ObservableScro
 //                try{
 //
 //                }catch(InterruptedException e){
-//                    L.D(d,TAG, " 从阻塞中退出...");
-//                    L.D(d,TAG, "this.isInterrupted()="+this.isInterrupted());
+//                    L.d(TAG, " 从阻塞中退出...");
+//                    L.d(TAG, "this.isInterrupted()="+this.isInterrupted());
 //                }
             }
-            L.D(d,TAG, "已经终止!");
+            L.d(TAG, "已经终止!");
         }
     }
 }

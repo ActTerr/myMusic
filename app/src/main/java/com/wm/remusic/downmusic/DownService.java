@@ -64,12 +64,12 @@ public class DownService extends Service {
     private DownloadTaskListener listener = new DownloadTaskListener() {
         @Override
         public void onPrepare(DownloadTask downloadTask) {
-            L.D(d, TAG, TAG + " task onPrepare");
+            L.d( TAG, TAG + " task onPrepare");
         }
 
         @Override
         public void onStart(DownloadTask downloadTask) {
-            L.D(d, TAG, TAG + " task onStart");
+            L.d( TAG, TAG + " task onStart");
             Intent intent = new Intent(TASK_STARTDOWN);
             intent.putExtra("completesize", downloadTask.getCompletedSize());
             intent.putExtra("totalsize", downloadTask.getTotalSize());
@@ -79,7 +79,7 @@ public class DownService extends Service {
 
         @Override
         public void onDownloading(DownloadTask downloadTask) {
-            // L.D(d,TAG, TAG + " task onDownloading");
+            // L.d(TAG, TAG + " task onDownloading");
             Intent intent = new Intent(UPDATE_DOWNSTAUS);
             intent.putExtra("completesize", downloadTask.getCompletedSize());
             intent.putExtra("totalsize", downloadTask.getTotalSize());
@@ -89,7 +89,7 @@ public class DownService extends Service {
 
         @Override
         public void onPause(DownloadTask downloadTask) {
-            L.D(d, TAG, TAG + " task onPause");
+            L.d( TAG, TAG + " task onPause");
             sendIntent(TASKS_CHANGED);
             if (prepareTaskList.size() > 0) {
                 if(currentTask != null)
@@ -102,7 +102,7 @@ public class DownService extends Service {
 
         @Override
         public void onCancel(DownloadTask downloadTask) {
-            L.D(d, TAG, TAG + " task onCancel");
+            L.d( TAG, TAG + " task onCancel");
             sendIntent(TASKS_CHANGED);
             if (prepareTaskList.size() > 0) {
                 if(currentTask != null)
@@ -116,21 +116,21 @@ public class DownService extends Service {
         @Override
         public void onCompleted(DownloadTask downloadTask) {
             sendIntent(TASKS_CHANGED);
-            L.D(d, TAG, TAG + " task Completed");
+            L.d( TAG, TAG + " task Completed");
             if (prepareTaskList.size() > 0) {
                 if(currentTask != null)
                 prepareTaskList.remove(currentTask.getId());
             }
             currentTask = null;
             downTaskDownloaded++;
-            L.D(d, TAG, "complete task and start");
+            L.d( TAG, "complete task and start");
             startTask();
 
         }
 
         @Override
         public void onError(DownloadTask downloadTask, int errorCode) {
-            L.D(d, TAG, TAG + " task onError");
+            L.d( TAG, TAG + " task onError");
             startTask();
         }
     };
@@ -143,7 +143,7 @@ public class DownService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        L.D(d, TAG, TAG + " oncreate");
+        L.d( TAG, TAG + " oncreate");
         mContext = this;
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         executorService = Executors.newSingleThreadExecutor();
@@ -152,7 +152,7 @@ public class DownService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        L.D(d, TAG, TAG + " onstartcommand");
+        L.d( TAG, TAG + " onstartcommand");
         if(intent == null){
             mNotificationManager.cancel(notificationid);
         }
@@ -180,17 +180,17 @@ public class DownService extends Service {
                 break;
             case RESUME_START_DOWNTASK:
                 String taskid = intent.getStringExtra("downloadid");
-                L.D(d, TAG, "resume task = " + taskid);
+                L.d( TAG, "resume task = " + taskid);
                 resume(taskid);
                 break;
             case PAUSE_TASK:
                 String taskid1 = intent.getStringExtra("downloadid");
-                L.D(d, TAG, "pause task = " + taskid1);
+                L.d( TAG, "pause task = " + taskid1);
                 pause(taskid1);
                 break;
             case CANCLE_DOWNTASK:
                 String taskid3 = intent.getStringExtra("downloadid");
-                L.D(d, TAG, "cancle task = " + taskid3);
+                L.d( TAG, "cancle task = " + taskid3);
                 cancel(taskid3);
                 break;
             case CANCLE_ALL_DOWNTASK:
@@ -264,7 +264,7 @@ public class DownService extends Service {
 
     private void addDownloadTask(String[] names, String[] artists, ArrayList<String> urls) {
 
-        L.D(d, TAG, "add task name = " + names + "  taskid = " + (urls).hashCode() + "  task artsit = " + artists);
+        L.d( TAG, "add task name = " + names + "  taskid = " + (urls).hashCode() + "  task artsit = " + artists);
         int len = urls.size();
         for (int i = 0; i < len; i++) {
             DownloadDBEntity dbEntity = new DownloadDBEntity((urls.get(i)).hashCode() + "", 0l,
@@ -276,7 +276,7 @@ public class DownService extends Service {
         Toast.makeText(mContext,"已加入到下载", Toast.LENGTH_SHORT).show();
         upDateNotification();
         if (currentTask != null) {
-            L.D(d, TAG, "add task wrong, current task is not null");
+            L.d( TAG, "add task wrong, current task is not null");
             return;
         }
 
@@ -287,7 +287,7 @@ public class DownService extends Service {
     private void addDownloadTask(String name, String artist, String url) {
 
 
-        L.D(d, TAG, "add task name = " + name + "  taskid = " + (url).hashCode() + "  task artsit = " + artist);
+        L.d( TAG, "add task name = " + name + "  taskid = " + (url).hashCode() + "  task artsit = " + artist);
         DownloadDBEntity dbEntity = new DownloadDBEntity((url).hashCode() + "", 0l,
                 0l, url, getDownSave(), name, artist, DownloadStatus.DOWNLOAD_STATUS_INIT);
         downFileStore.insert(dbEntity);
@@ -296,7 +296,7 @@ public class DownService extends Service {
         upDateNotification();
         Toast.makeText(mContext,"已加入到下载", Toast.LENGTH_SHORT).show();
         if (currentTask != null) {
-            L.D(d, TAG, "add task wrong, current task is not null");
+            L.d( TAG, "add task wrong, current task is not null");
             return;
         }
 
@@ -317,7 +317,7 @@ public class DownService extends Service {
     }
 
     private void cancleNotification() {
-        L.D(d, TAG, " canclenotification");
+        L.d( TAG, " canclenotification");
         stopForeground(true);
         isForeground = false;
         mNotificationManager.notify(notificationid, getNotification(true));
@@ -328,25 +328,25 @@ public class DownService extends Service {
 
 
     public void startTask() {
-        L.D(d, TAG, TAG + " start task task size = " + prepareTaskList.size());
+        L.d( TAG, TAG + " start task task size = " + prepareTaskList.size());
         if (currentTask != null) {
-            L.D(d, TAG, "start task wrong, current task is running");
+            L.d( TAG, "start task wrong, current task is running");
             return;
         }
         if (prepareTaskList.size() > 0) {
             DownloadTask downloadTask = null;
-            L.D(d, TAG, prepareTaskList.get(0));
+            L.d( TAG, prepareTaskList.get(0));
             DownloadDBEntity entity = downFileStore.getDownLoadedList(prepareTaskList.get(0));
 
             if (entity != null) {
-                L.D(d, TAG, "entity id = " + entity.getDownloadId());
+                L.d( TAG, "entity id = " + entity.getDownloadId());
                 downloadTask = DownloadTask.parse(entity, mContext);
             }
             if (downloadTask == null) {
-                L.D(d, TAG, "can't create downloadtask");
+                L.d( TAG, "can't create downloadtask");
                 return;
             }
-            L.D(d, TAG, "start task ,task name = " + downloadTask.getFileName() + "  taskid = " + downloadTask.getId());
+            L.d( TAG, "start task ,task name = " + downloadTask.getFileName() + "  taskid = " + downloadTask.getId());
             if (downloadTask.getDownloadStatus() != DownloadStatus.DOWNLOAD_STATUS_COMPLETED) {
                 downloadTask.setDownloadStatus(DownloadStatus.DOWNLOAD_STATUS_PREPARE);
                 downloadTask.setdownFileStore(downFileStore);
@@ -358,7 +358,7 @@ public class DownService extends Service {
                 sendIntent(TASKS_CHANGED);
             }
         } else {
-            L.D(d, TAG, " no task");
+            L.d( TAG, " no task");
             cancleNotification();
         }
     }
@@ -379,7 +379,7 @@ public class DownService extends Service {
             startTask();
         }
 
-        L.D(d, TAG, "resume task = " + taskId);
+        L.d( TAG, "resume task = " + taskId);
     }
 
 
@@ -402,7 +402,7 @@ public class DownService extends Service {
         downFileStore.deleteTask(taskId);
         upDateNotification();
         sendIntent(TASKS_CHANGED);
-        L.D(d, TAG, "cancle task = " + taskId);
+        L.d( TAG, "cancle task = " + taskId);
     }
 
     public void pause(String taskid) {
@@ -424,7 +424,7 @@ public class DownService extends Service {
         if (downTaskCount == 0) {
             downTaskCount = prepareTaskList.size();
         }
-        L.D(d, TAG, "notification downtaskcount = " + downTaskCount);
+        L.d( TAG, "notification downtaskcount = " + downTaskCount);
         if (downTaskDownloaded == -1) {
             downTaskDownloaded = 0;
         }

@@ -446,7 +446,7 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
             playlistDetailView.setText(playlistDetail);
             headerDetail.setVisibility(View.VISIBLE);
             if (mCollected) {
-                L.D(d, TAG, "collected");
+                L.d( TAG, "collected");
                 collectText.setText("已收藏");
             }
         }
@@ -487,7 +487,7 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
 
             if (isLocalPlaylist && !URLUtil.isNetworkUrl(albumPath)) {
                 new setBlurredAlbumArt().execute(ImageUtils.getArtworkQuick(PlaylistActivity.this, Uri.parse(albumPath), 300, 300));
-                L.D(d, TAG, "albumpath = " + albumPath);
+                L.d( TAG, "albumpath = " + albumPath);
             } else {
                 //drawable = Drawable.createFromStream( new URL(albumPath).openStream(),"src");
                 ImageRequest imageRequest = ImageRequest.fromUri(albumPath);
@@ -784,7 +784,7 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
         }
 
         public void run(){
-            L.D(d,TAG, " start");
+            L.d(TAG, " start");
             tryPlaying = true;
             while(!isInterrupted){
                 HashMap<Long, MusicInfo> infos = new HashMap<Long, MusicInfo>();
@@ -798,7 +798,7 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
                 MusicPlayer.playAll(infos, list, position, false);
             }
             tryPlaying = false;
-            L.D(d,TAG, "已经终止!");
+            L.d(TAG, "已经终止!");
         }
     }
 }

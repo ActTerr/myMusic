@@ -3,16 +3,57 @@ package com.wm.remusic.uitl;
 import android.util.Log;
 
 /**
- * Created by wm on 2016/8/16.
+ * Created by clawpo on 16/9/20.
  */
 public class L {
-    public static void D(boolean print, String tag, String content) {
-        if (print)
-            Log.d(tag, content);
+    public static boolean isDebug = true;
+    private static final String TAG = "fulicenter";
+
+    public static void i(String msg){
+        if(isDebug) {
+            Log.i(TAG, msg);
+        }
     }
 
-    public static void E(boolean print, String tag, String content) {
-        if (print)
-            Log.e(tag, content);
+    public static void d(String msg){
+        if(isDebug) {
+            Log.d(TAG, msg);
+        }
+    }
+
+    public static void e(String msg){
+        if(isDebug) {
+            Log.e(TAG, msg);
+        }
+    }
+
+    public static void v(String msg){
+        if(isDebug) {
+            Log.v(TAG, msg);
+        }
+    }
+
+    public static void i(String tag, String msg){
+        if(isDebug) {
+            Log.i(tag, msg);
+        }
+    }
+
+    public static void d(String tag, String msg){
+        if(isDebug) {
+            Log.d(tag, msg);
+        }
+    }
+
+    public static void e(String tag, String msg){
+        if(isDebug) {
+            Log.e(tag, msg);
+        }
+    }
+
+    public static void v(String tag, String msg){
+        if(isDebug) {
+            Log.v(tag, msg);
+        }
     }
 }

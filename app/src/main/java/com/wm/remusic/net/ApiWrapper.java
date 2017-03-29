@@ -1,7 +1,9 @@
 package com.wm.remusic.net;
 
-import mac.yk.devicemanagement.I;
-import mac.yk.devicemanagement.bean.Result;
+
+import com.wm.remusic.I;
+import com.wm.remusic.bean.Result;
+
 import okhttp3.OkHttpClient;
 import retrofit2.CallAdapter;
 import retrofit2.Converter;

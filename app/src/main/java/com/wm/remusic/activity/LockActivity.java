@@ -216,7 +216,7 @@ public class LockActivity extends LockBaseActivity implements View.OnClickListen
         lrcRows = getLrcRows();
         String url = MusicPlayer.getAlbumPath();
         if (url == null) {
-            mBack.setImageURI(Uri.parse("res:/" + R.drawable.login_bg_night));
+            mBack.setImageURI(Uri.parse("res:/" + R.drawable.login));
         } else {
             try {
                 ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(url)).build();

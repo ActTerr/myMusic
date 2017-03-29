@@ -346,7 +346,7 @@ public class RankPlaylistActivity extends BaseActivity implements ObservableScro
         try {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), albumPath);
             new setBlurredAlbumArt().execute(bitmap);
-            L.D(d, TAG, "albumpath = " + albumPath);
+            L.d( TAG, "albumpath = " + albumPath);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -635,7 +635,7 @@ public class RankPlaylistActivity extends BaseActivity implements ObservableScro
         }
 
         public void run() {
-            L.D(d, TAG, " start");
+            L.d( TAG, " start");
             tryPlaying = true;
             while (!isInterrupted) {
                 HashMap<Long, MusicInfo> infos = new HashMap<Long, MusicInfo>();
@@ -649,7 +649,7 @@ public class RankPlaylistActivity extends BaseActivity implements ObservableScro
                 MusicPlayer.playAll(infos, list, position, false);
             }
             tryPlaying = false;
-            L.D(d, TAG, "已经终止!");
+            L.d( TAG, "已经终止!");
         }
     }
 }

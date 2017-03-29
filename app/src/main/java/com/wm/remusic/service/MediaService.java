@@ -592,7 +592,7 @@ public class MediaService extends Service {
             }
         } else if (LOCK_SCREEN.equals(action)){
             mIsLocked = intent.getBooleanExtra("islock",true);
-            L.D(D,TAG,"isloced = " + mIsLocked);
+            L.d(TAG,"isloced = " + mIsLocked);
         } else if(SEND_PROGRESS.equals(action)){
             if(isPlaying() && !mIsSending){
                 mPlayerHandler.post(sendDuration);
@@ -919,7 +919,7 @@ public class MediaService extends Service {
                     }
                 }
                 if(url != null){
-                    L.E(D, TAG, "current url = " + url);
+                    L.e( TAG, "current url = " + url);
                 }else{
                     gotoNext(true);
                 }
@@ -957,7 +957,7 @@ public class MediaService extends Service {
 
         @Override
         public void run() {
-            L.E(D, TAG, "start to getlrc");
+            L.e( TAG, "start to getlrc");
             String url = null;
             if (musicInfo != null && musicInfo.lrc != null) {
                 url = musicInfo.lrc;
@@ -970,7 +970,7 @@ public class MediaService extends Service {
                 for (int i = 0; i < len; i++) {
                     url = array.get(i).getAsJsonObject().get("lrclink").getAsString();
                     if (url != null) {
-                        L.D(D,TAG,"lrclink = " + url);
+                        L.d(TAG,"lrclink = " + url);
                         break;
                     }
                 }
@@ -1002,15 +1002,15 @@ public class MediaService extends Service {
         MusicInfo info = mPlaylistInfo.get(id);
 
         if(info == null){
-            L.D(D,TAG,"get lrc err ,musicinfo is null");
+            L.d(TAG,"get lrc err ,musicinfo is null");
         }
         String lrc = Environment.getExternalStorageDirectory().getAbsolutePath() + LRC_PATH;
         File file = new File(lrc);
-        L.D(D,TAG, "file exists = " + file.exists());
+        L.d(TAG, "file exists = " + file.exists());
         if (!file.exists()) {
             //不存在就建立此目录
             boolean r = file.mkdirs();
-            L.D(D,TAG, "file created = " + r);
+            L.d(TAG, "file created = " + r);
 
         }
         file = new File(lrc + id);
@@ -1620,7 +1620,7 @@ public class MediaService extends Service {
                 }.getType());
                 if (play != null && play.size() > 0) {
                     mPlaylistInfo = play;
-                    L.D(D,TAG, mPlaylistInfo.keySet().toString());
+                    L.d(TAG, mPlaylistInfo.keySet().toString());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -2239,7 +2239,7 @@ public class MediaService extends Service {
         synchronized (this) {
 
             mPlaylistInfo = infos;
-            L.D(D,TAG,mPlaylistInfo.toString());
+            L.d(TAG,mPlaylistInfo.toString());
             if (mShuffleMode == SHUFFLE_AUTO) {
                 mShuffleMode = SHUFFLE_NORMAL;
             }
@@ -2806,7 +2806,7 @@ public class MediaService extends Service {
                     player.prepareAsync();
                     mIsTrackNet = true;
                 }
-                if(mIllegalState){
+              if(mIllegalState){
                     mIllegalState = false;
                 }
 
@@ -2819,7 +2819,7 @@ public class MediaService extends Service {
             } catch (final IllegalStateException todo){
                 todo.printStackTrace();
                 if(!mIllegalState){
-                    L.E(D,TAG,"mcurrentmediaplayer invoke IllegalState");
+                    L.e(TAG,"mcurrentmediaplayer invoke IllegalState");
                     mCurrentMediaPlayer = null;
                     mCurrentMediaPlayer = new MediaPlayer();
                     mCurrentMediaPlayer.setWakeMode(mService.get(), PowerManager.PARTIAL_WAKE_LOCK);
@@ -2827,7 +2827,7 @@ public class MediaService extends Service {
                     setDataSourceImpl(mCurrentMediaPlayer,path);
                     mIllegalState = true;
                 }else {
-                    L.E(D,TAG,"mcurrentmediaplayer invoke IllegalState ,and try set again failed ,setnext");
+                    L.e(TAG,"mcurrentmediaplayer invoke IllegalState ,and try set again failed ,setnext");
                     mIllegalState = false;
                     return false;
                 }
@@ -3088,7 +3088,7 @@ public class MediaService extends Service {
             try {
                 super.onTransact(code, data, reply, flags);
             } catch (final RuntimeException e) {
-               L.E(D,TAG,"onTransact error");
+               L.e(TAG,"onTransact error");
                 e.printStackTrace();
                 File file = new File(mService.get().getCacheDir().getAbsolutePath() + "/err/");
                 if (!file.exists()) {

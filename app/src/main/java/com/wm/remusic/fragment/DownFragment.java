@@ -106,7 +106,7 @@ public class DownFragment extends Fragment {
             protected Void doInBackground(Void... params) {
                 downFileStore = DownFileStore.getInstance(mContext);
                 mList = downFileStore.getDownLoadedListAllDowning();
-                L.D(d, TAG, " mlist size = " + mList.size());
+                L.d( TAG, " mlist size = " + mList.size());
                 return null;
             }
 
@@ -172,7 +172,7 @@ public class DownFragment extends Fragment {
         }
 
         public void notifyItem(long completed, long total) {
-            // L.D(d,TAG," comleted = " + completed + "  total = " + total);
+            // L.d(TAG," comleted = " + completed + "  total = " + total);
             this.completed = completed;
             if (total != -1)
                 this.totalsize = total;
@@ -193,7 +193,7 @@ public class DownFragment extends Fragment {
             ((ItemViewHolder) holder).title.setText(task.getFileName());
 
             if (currentTaskList.size() > 0) {
-                L.D(d, TAG, "currentlist size = " + currentTaskList.size());
+                L.d( TAG, "currentlist size = " + currentTaskList.size());
                 isCurrent = currentTaskList.get(0).equals(task.getDownloadId());
                 if (isCurrent) {
                     downPosition = position;
@@ -202,7 +202,7 @@ public class DownFragment extends Fragment {
                     isPreparing = true;
                 }
             }
-            // L.D(d,TAG,"isCurrent = " + isCurrent + " isPreparing = " + isPreparing);
+            // L.d(TAG,"isCurrent = " + isCurrent + " isPreparing = " + isPreparing);
             if (isCurrent) {
                 completed = completed > task.getCompletedSize() ? completed : task.getCompletedSize();
                 totalsize = totalsize > task.getTotalSize() ? totalsize : task.getTotalSize();
@@ -230,13 +230,13 @@ public class DownFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if (isPreparing1) {
-                        L.D(d, TAG, "isprepaing");
+                        L.d( TAG, "isprepaing");
                         Intent intent = new Intent(DownService.PAUSE_TASK);
                         intent.setPackage(IConstants.PACKAGE);
                         intent.putExtra("downloadid", task.getDownloadId());
                         mContext.startService(intent);
                     } else {
-                        L.D(d, TAG, "not isprepaing");
+                        L.d( TAG, "not isprepaing");
                         Intent intent = new Intent(DownService.RESUME_START_DOWNTASK);
                         intent.setPackage(IConstants.PACKAGE);
                         intent.putExtra("downloadid", task.getDownloadId());
