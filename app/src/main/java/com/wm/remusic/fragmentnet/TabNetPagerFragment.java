@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +91,7 @@ public class TabNetPagerFragment extends AttachFragment implements ChangeView {
         adapter.addFragment(recommendFragment, "新曲");
         adapter.addFragment(new AllPlaylistFragment(), "歌单");
         //  adapter.addFragment(new NetFragment(), "主播电台");
-        adapter.addFragment(new RankingFragment(), "排行榜");
+//        adapter.addFragment(new RankingFragment(), "排行榜");
 
         viewPager.setAdapter(adapter);
     }
