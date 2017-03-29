@@ -154,7 +154,7 @@
         <activity
             android:name=".activity.SplashActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout"
-            android:label="@string/app_name"
+            android:label="王祎毕设"
             android:screenOrientation="portrait">
             -
             <intent-filter>
@@ -178,7 +178,9 @@
         </provider>
 
         <activity android:name=".activity.simpleActivity" />
-        <activity android:name=".activity.LoginActivity"></activity>
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.UserActivity" />
+        <activity android:name=".showCauseActivity"></activity>
     </application>
 
 </manifest>

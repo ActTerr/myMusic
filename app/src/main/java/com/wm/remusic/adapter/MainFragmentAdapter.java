@@ -135,7 +135,6 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<MainFragmentAdapte
 
     @Override
     public void onViewRecycled(ItemHolder itemHolder) {
-
     }
 
     @Override

@@ -15,7 +15,7 @@
 			android:layout_marginTop="150dp"
 			android:textColor="@color/white"
 			android:textSize="30sp"
-			android:text="王玮毕设"
+			android:text="王祎毕设"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" />
 		<View

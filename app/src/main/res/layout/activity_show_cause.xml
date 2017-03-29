@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cause"
+    tools:context="com.wm.remusic.showCauseActivity">
+    <TextView
+        android:gravity="center"
+        android:layout_marginTop="22dp"
+        android:text="由于手机屏幕在电脑上展示的插件出现问题，所以先用手机录屏啦,皮肤设置逻辑较为复杂，切入极简时有bug待修复"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

@@ -186,4 +186,10 @@ public class MainFragment extends BaseFragment {
         super.changeTheme();
         swipeRefresh.setColorSchemeColors(ThemeUtils.getColorById(mContext, R.color.theme_color_primary));
     }
+
+    @Override
+    public void onDestroy() {
+        mAdapter=null;
+        super.onDestroy();
+    }
 }

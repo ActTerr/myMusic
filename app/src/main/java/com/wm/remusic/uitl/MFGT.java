@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.wm.remusic.R;
+import com.wm.remusic.activity.LoginActivity;
 import com.wm.remusic.activity.MainActivity;
 
 
@@ -20,7 +21,7 @@ public class MFGT {
         ((Activity)context).overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
     }
     public static void gotoLoginActivity(Context context) {
-        Intent intent=new Intent(context,MainActivity.class);
+        Intent intent=new Intent(context, LoginActivity.class);
         startActivity(context,intent);
     }
 

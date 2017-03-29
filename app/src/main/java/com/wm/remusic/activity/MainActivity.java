@@ -16,10 +16,12 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bilibili.magicasakura.utils.ThemeUtils;
@@ -31,8 +33,8 @@ import com.wm.remusic.fragment.BitSetFragment;
 import com.wm.remusic.fragment.MainFragment;
 import com.wm.remusic.fragment.TimingFragment;
 import com.wm.remusic.fragmentnet.TabNetPagerFragment;
-import com.wm.remusic.handler.HandlerUtil;
 import com.wm.remusic.service.MusicPlayer;
+import com.wm.remusic.uitl.L;
 import com.wm.remusic.uitl.ThemeHelper;
 import com.wm.remusic.uitl.ToastUtil;
 import com.wm.remusic.widget.CustomViewPager;
@@ -43,7 +45,7 @@ import java.util.List;
 
 import static com.wm.remusic.MainApplication.context;
 
-public class MainActivity extends BaseActivity implements CardPickerDialog.ClickListener {
+public class MainActivity extends BaseActivity implements CardPickerDialog.ClickListener,View.OnClickListener {
     private ActionBar ab;
     private ImageView barnet, barmusic, barfriends, search;
     private ArrayList<ImageView> tabs = new ArrayList<>();
@@ -73,12 +75,12 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
         setToolBar();
         setViewPager();
         setUpDrawer();
-        HandlerUtil.getInstance(this).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                splashScreen.removeSplashScreen();
-            }
-        }, 3000);
+//        HandlerUtil.getInstance(this).postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                splashScreen.removeSplashScreen();
+//            }
+//        }, 3000);
 
     }
 
@@ -90,6 +92,12 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setTitle("");
+
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return true;
     }
 
     private void setViewPager() {
@@ -103,7 +111,6 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
         customViewPagerAdapter.addFragment(mainFragment);
         customViewPager.setAdapter(customViewPagerAdapter);
         customViewPager.setCurrentItem(1);
-        barmusic.setSelected(true);
         customViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -147,8 +154,14 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
 
     private void setUpDrawer() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        mLvLeftMenu.addHeaderView(inflater.inflate(R.layout.nav_header_main, mLvLeftMenu, false));
+        View view = inflater.inflate(R.layout.nav_header_main, mLvLeftMenu, false);
+        mLvLeftMenu.addHeaderView(view);
         mLvLeftMenu.setAdapter(new MenuItemAdapter(this));
+        TextView textView= (TextView) view.findViewById(R.id.name);
+        if (textView!=null){
+            L.e("main","text不为空");
+            textView.setOnClickListener(this);
+        }
         mLvLeftMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -178,13 +191,18 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
                         startActivity(intent);
                         finish();
                         break;
-                    case 5:
+                    case 6:
                         if (MusicPlayer.isPlaying()) {
                             MusicPlayer.playOrPause();
                         }
                         unbindService();
                         finish();
                         drawerLayout.closeDrawers();
+                        break;
+                    case 5:
+                        Intent intent1=new Intent(context,UserActivity.class);
+                        startActivity(intent1);
+                        finish();
                         break;
                 }
             }
@@ -231,6 +249,13 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
         changeTheme();
     }
 
+    @Override
+    public void onClick(View v) {
+        L.e("main","onClick");
+        Intent intent=new Intent(context,UserActivity.class);
+        startActivity(intent);
+    }
+
     static class CustomViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragments = new ArrayList<>();
 
@@ -271,7 +296,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        splashScreen.removeSplashScreen();
+//        splashScreen.removeSplashScreen();
     }
 
     /**

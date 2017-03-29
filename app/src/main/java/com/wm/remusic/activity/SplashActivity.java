@@ -103,7 +103,12 @@ public class SplashActivity extends Activity {
             public void run() {
                 try {
                     Thread.sleep(3000);
-                    MFGT.gotoMainActivity(mContext);
+                    if (SpUtil.getLoginUser(mContext).equals("")){
+                        MFGT.gotoLoginActivity(mContext);
+                    }else {
+                        MFGT.gotoMainActivity(mContext);
+                    }
+                    finish();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
