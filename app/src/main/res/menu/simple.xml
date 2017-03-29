@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/musicList"
-        android:title="歌单"
-        android:icon="@mipmap/simple_music"
+        android:id="@+id/close"
+        android:title="定时关闭"
+        android:icon="@mipmap/close"
         />
+    <item android:id="@+id/quality"
+        android:title="歌曲品质"
+        android:icon="@mipmap/download"/>
     <item
         android:id="@+id/common"
         android:title="普通模式"
         android:icon="@mipmap/common"/>
+    <item android:id="@+id/exit"
+        android:title="退出"
+        android:icon="@mipmap/exit"/>
 </menu>

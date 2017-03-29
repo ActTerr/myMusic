@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.wm.remusic.MainApplication;
 import com.wm.remusic.MediaAidlInterface;
 import com.wm.remusic.R;
 import com.wm.remusic.fragment.QuickControlsFragment;
@@ -167,7 +168,11 @@ public class BaseActivity extends AppCompatActivity implements ServiceConnection
         f.addAction(IConstants.PLAYLIST_COUNT_CHANGED);
         f.addAction(MediaService.MUSIC_LODING);
         registerReceiver(mPlaybackStatus, new IntentFilter(f));
-        showQuickControl(true);
+        if (MainApplication.isSimple()){
+            showQuickControl(false);
+        }else {
+            showQuickControl(true);
+        }
     }
 
 

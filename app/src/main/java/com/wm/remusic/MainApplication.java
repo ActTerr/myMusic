@@ -232,5 +232,13 @@ public class MainApplication extends Application implements ThemeUtils.switchCol
         }
         return -1;
     }
+    static   boolean  isSimple=false;
 
+    public static void setSimple(boolean simple) {
+        isSimple = simple;
+    }
+
+    public static boolean isSimple() {
+        return isSimple;
+    }
 }

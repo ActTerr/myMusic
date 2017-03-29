@@ -6,18 +6,21 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
+import com.wm.remusic.fragment.BitSetFragment;
+import com.wm.remusic.fragment.TimingFragment;
 import com.wm.remusic.fragment.simpleMainFrag;
+import com.wm.remusic.service.MusicPlayer;
 import com.wm.remusic.uitl.ActivityUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class simpleActivity extends AppCompatActivity {
+public class simpleActivity extends BaseActivity {
 
     @BindView(R.id.toolBar)
     Toolbar toolBar;
@@ -45,16 +48,31 @@ public class simpleActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()){
+                    case R.id.close:
+                        TimingFragment fragment3 = new TimingFragment();
+                        fragment3.show(getSupportFragmentManager(), "timing");
+                        break;
+                    case R.id.quality:
+                        BitSetFragment bfragment = new BitSetFragment();
+                        bfragment.show(getSupportFragmentManager(), "bitset");
+                        break;
                     case R.id.common:
                         Intent intent=new Intent(simpleActivity.this,MainActivity.class);
+                        intent.putExtra("from",1);
+                        MainApplication.setSimple(false);
                         startActivity(intent);
                         finish();
                         break;
-                    case R.id.musicList:
+                    case R.id.exit:
+                        if (MusicPlayer.isPlaying()) {
+                            MusicPlayer.playOrPause();
+                        }
+                        unbindService();
+                        finish();
                         break;
                 }
                 drawLayout.closeDrawers();
-                return false;
+                return true;
             }
         });
     }

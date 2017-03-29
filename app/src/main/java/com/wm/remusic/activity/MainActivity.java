@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.bilibili.magicasakura.utils.ThemeUtils;
+import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
 import com.wm.remusic.adapter.MenuItemAdapter;
 import com.wm.remusic.dialog.CardPickerDialog;
@@ -49,9 +50,11 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
     private SplashScreen splashScreen;
 
     public void onCreate(Bundle savedInstanceState) {
-        splashScreen = new SplashScreen(this);
-        splashScreen.show(R.drawable.art_login_bg,
-                SplashScreen.SLIDE_LEFT);
+        if(getIntent().getIntExtra("from",0)==0){
+            splashScreen = new SplashScreen(this);
+            splashScreen.show(R.drawable.art_login_bg,
+                    SplashScreen.SLIDE_LEFT);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getWindow().setBackgroundDrawableResource(R.color.background_material_light_1);
@@ -169,6 +172,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
                     case 4:
                         drawerLayout.closeDrawers();
                         Intent intent=new Intent(MainActivity.this,simpleActivity.class);
+                        MainApplication.setSimple(true);
                         startActivity(intent);
                         finish();
                         break;
