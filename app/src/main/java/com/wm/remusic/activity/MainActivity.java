@@ -30,6 +30,7 @@ import com.wm.remusic.R;
 import com.wm.remusic.adapter.MenuItemAdapter;
 import com.wm.remusic.dialog.CardPickerDialog;
 import com.wm.remusic.fragment.BitSetFragment;
+import com.wm.remusic.fragment.FriendFragment;
 import com.wm.remusic.fragment.MainFragment;
 import com.wm.remusic.fragment.TimingFragment;
 import com.wm.remusic.fragmentnet.TabNetPagerFragment;
@@ -68,7 +69,6 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
         barmusic = (ImageView) findViewById(R.id.bar_music);
         barfriends = (ImageView) findViewById(R.id.bar_friends);
         search = (ImageView) findViewById(R.id.bar_search);
-        barmusic = (ImageView) findViewById(R.id.bar_music);
         drawerLayout = (DrawerLayout) findViewById(R.id.fd);
         mLvLeftMenu = (ListView) findViewById(R.id.id_lv_left_menu);
 
@@ -106,9 +106,11 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
         final CustomViewPager customViewPager = (CustomViewPager) findViewById(R.id.main_viewpager);
         final MainFragment mainFragment = new MainFragment();
         final TabNetPagerFragment tabNetPagerFragment = new TabNetPagerFragment();
+        final FriendFragment friendFragment=new FriendFragment();
         CustomViewPagerAdapter customViewPagerAdapter = new CustomViewPagerAdapter(getSupportFragmentManager());
         customViewPagerAdapter.addFragment(tabNetPagerFragment);
         customViewPagerAdapter.addFragment(mainFragment);
+        customViewPagerAdapter.addFragment(friendFragment);
         customViewPager.setAdapter(customViewPagerAdapter);
         customViewPager.setCurrentItem(1);
         customViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -140,7 +142,12 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
                 customViewPager.setCurrentItem(1);
             }
         });
-
+        barfriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customViewPager.setCurrentItem(2);
+            }
+        });
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
