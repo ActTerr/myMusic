@@ -15,13 +15,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.wm.remusic.widget.LoodView
-            android:focusableInTouchMode="true"
-            android:focusable="true"
-            android:id="@+id/loop_view"
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_gravity="center_horizontal" />
+        <!--<com.wm.remusic.widget.LoodView-->
+            <!--android:focusableInTouchMode="true"-->
+            <!--android:focusable="true"-->
+            <!--android:id="@+id/loop_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="160dp"-->
+            <!--android:layout_gravity="center_horizontal" />-->
 
         <RelativeLayout
             android:visibility="gone"

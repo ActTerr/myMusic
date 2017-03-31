@@ -113,22 +113,30 @@ public class AddDownTask extends DialogFragment {
             int le = ids.length;
             for (int j = 0; j < le; j++) {
                 try {
+                    //从json数据获得歌曲下载地址数组
                     JsonArray jsonArray = HttpUtil.getResposeJsonObject(BMA.Song.songInfo(ids[j]).trim()).get("songurl")
                             .getAsJsonObject().get("url").getAsJsonArray();
                     int len = jsonArray.size();
-
+                    //从首选项拿到字节数
                     int downloadBit = PreferencesUtility.getInstance(mContext).getDownMusicBit();
+
                     MusicFileDownInfo musicFileDownInfo = null;
                     for (int i = len - 1; i > -1; i--) {
+                        //得到文件大小
                         int bit = Integer.parseInt(jsonArray.get(i).getAsJsonObject().get("file_bitrate").toString());
+                        //当大小和首选项存的大小相等时
                         if (bit == downloadBit) {
+                            //解析成实体类
                             musicFileDownInfo = MainApplication.gsonInstance().fromJson(jsonArray.get(i), MusicFileDownInfo.class);
                         } else if (bit < downloadBit && bit >= 64) {
+
                             musicFileDownInfo = MainApplication.gsonInstance().fromJson(jsonArray.get(i), MusicFileDownInfo.class);
                         }
                     }
                     if (musicFileDownInfo != null) {
+                        //把下载地址放到link中
                         mList.add(musicFileDownInfo.getFile_link());
+                        //
                         size += musicFileDownInfo.getFile_size();
                     }
 

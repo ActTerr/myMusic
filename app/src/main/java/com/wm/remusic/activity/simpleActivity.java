@@ -12,9 +12,7 @@ import android.view.MenuItem;
 
 import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
-import com.wm.remusic.fragment.BitSetFragment;
 import com.wm.remusic.fragment.MainFragment;
-import com.wm.remusic.fragment.TimingFragment;
 import com.wm.remusic.service.MusicPlayer;
 import com.wm.remusic.uitl.ActivityUtils;
 import com.wm.remusic.uitl.ToastUtil;
@@ -52,14 +50,14 @@ public class simpleActivity extends BaseActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.close:
-                        TimingFragment fragment3 = new TimingFragment();
-                        fragment3.show(getSupportFragmentManager(), "timing");
-                        break;
-                    case R.id.quality:
-                        BitSetFragment bfragment = new BitSetFragment();
-                        bfragment.show(getSupportFragmentManager(), "bitset");
-                        break;
+//                    case R.id.close:
+//                        TimingFragment fragment3 = new TimingFragment();
+//                        fragment3.show(getSupportFragmentManager(), "timing");
+//                        break;
+//                    case R.id.quality:
+//                        BitSetFragment bfragment = new BitSetFragment();
+//                        bfragment.show(getSupportFragmentManager(), "bitset");
+//                        break;
                     case R.id.common:
                         Intent intent=new Intent(simpleActivity.this,MainActivity.class);
                         intent.putExtra("from",1);

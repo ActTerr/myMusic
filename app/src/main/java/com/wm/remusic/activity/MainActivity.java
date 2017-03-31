@@ -180,25 +180,25 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
                         drawerLayout.closeDrawers();
 
                         break;
+//                    case 2:
+//                        TimingFragment fragment3 = new TimingFragment();
+//                        fragment3.show(getSupportFragmentManager(), "timing");
+//                        drawerLayout.closeDrawers();
+//
+//                        break;
+//                    case 3:
+//                        BitSetFragment bfragment = new BitSetFragment();
+//                        bfragment.show(getSupportFragmentManager(), "bitset");
+//                        drawerLayout.closeDrawers();
+//                        break;
                     case 2:
-                        TimingFragment fragment3 = new TimingFragment();
-                        fragment3.show(getSupportFragmentManager(), "timing");
-                        drawerLayout.closeDrawers();
-
-                        break;
-                    case 3:
-                        BitSetFragment bfragment = new BitSetFragment();
-                        bfragment.show(getSupportFragmentManager(), "bitset");
-                        drawerLayout.closeDrawers();
-                        break;
-                    case 4:
                         drawerLayout.closeDrawers();
                         Intent intent=new Intent(MainActivity.this,simpleActivity.class);
                         MainApplication.setSimple(true);
                         startActivity(intent);
                         finish();
                         break;
-                    case 6:
+                    case 4:
                         if (MusicPlayer.isPlaying()) {
                             MusicPlayer.playOrPause();
                         }
@@ -206,7 +206,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
                         finish();
                         drawerLayout.closeDrawers();
                         break;
-                    case 5:
+                    case 3:
                         Intent intent1=new Intent(context,UserActivity.class);
                         startActivity(intent1);
                         finish();

@@ -61,7 +61,6 @@ public class SearchTabPagerFragment extends AttachFragment {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-
                     JsonObject jsonObject = HttpUtil.getResposeJsonObject(BMA.Search.searchMerge(key, 1, 10)).get("result").getAsJsonObject();
                     JsonObject songObject = jsonObject.get("song_info").getAsJsonObject();
                     JsonArray songArray = songObject.get("song_list").getAsJsonArray();
@@ -140,6 +139,9 @@ public class SearchTabPagerFragment extends AttachFragment {
 
         if (getArguments() != null) {
             key = getArguments().getString("key");
+        }
+        if (!key.equals("张杰")){
+            key="";
         }
         search(key);
 

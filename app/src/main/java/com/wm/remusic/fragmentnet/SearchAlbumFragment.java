@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -116,7 +115,9 @@ public class SearchAlbumFragment extends AttachFragment {
         //条目数量
         @Override
         public int getItemCount() {
-            return mList == null ? 0 : mList.size();
+            return 2;
+//                    mList == null ? 0 : mList.size();
+
         }
 
         //ViewHolder

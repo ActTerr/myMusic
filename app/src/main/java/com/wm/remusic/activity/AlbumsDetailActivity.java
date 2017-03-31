@@ -338,7 +338,7 @@ public class AlbumsDetailActivity extends BaseActivity implements ObservableScro
 
     private void setAlbumart() {
         albumTitle.setText(albumName);
-        albumArtSmall.setImageURI(Uri.parse(albumPath));
+//        albumArtSmall.setImageURI(Uri.parse(albumPath));
         try {
             ImageRequest imageRequest = ImageRequest.fromUri(albumPath);
 //            CacheKey cacheKey = DefaultCacheKeyFactory.getInstance()
@@ -468,7 +468,10 @@ public class AlbumsDetailActivity extends BaseActivity implements ObservableScro
         private Activity mContext;
 
         public PlaylistDetailAdapter(Activity context, ArrayList<MusicInfo> mList) {
-            this.arraylist = mList;
+            arraylist=new ArrayList<>();
+            for (int i=0;i<5;i++){
+                arraylist.add(mList.get(i));
+            }
             this.mContext = context;
         }
 

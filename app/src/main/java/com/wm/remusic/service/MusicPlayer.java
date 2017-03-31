@@ -503,6 +503,7 @@ public class MusicPlayer {
             return;
         }
         try {
+            //设置可拖拽
             if (forceShuffle) {
                 mService.setShuffleMode(MediaService.SHUFFLE_NORMAL);
             }

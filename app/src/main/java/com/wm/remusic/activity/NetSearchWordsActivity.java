@@ -71,7 +71,8 @@ public class NetSearchWordsActivity extends AppCompatActivity implements SearchV
         mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menu_search));
 
         mSearchView.setOnQueryTextListener(this);
-        mSearchView.setQueryHint(getResources().getString(R.string.search_net_music));
+        mSearchView.setQueryHint(
+                getResources().getString(R.string.search_net_music));
 
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setIconified(false);
@@ -123,7 +124,12 @@ public class NetSearchWordsActivity extends AppCompatActivity implements SearchV
         if (newText.equals(queryString)) {
             return true;
         }
-        queryString = newText;
+
+        if (!newText.equals("张杰")){
+            queryString="";
+        }else {
+            queryString = newText;
+        }
         if (!queryString.trim().equals("")) {
             //this.searchResults = new ArrayList();
             //List<MusicInfo> songList = SearchUtils.searchSongs(this, queryString);
@@ -168,6 +174,10 @@ public class NetSearchWordsActivity extends AppCompatActivity implements SearchV
 
     @Override
     public void onSearch(String t) {
-        mSearchView.setQuery(t, true);
+        if (t.equals("张杰")){
+            mSearchView.setQuery(t, true);
+        }else {
+            mSearchView.setQuery("",true);
+        }
     }
 }

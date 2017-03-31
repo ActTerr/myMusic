@@ -33,8 +33,8 @@ public class MenuItemAdapter extends BaseAdapter {
     private List<LvMenuItem> mItems = new ArrayList<LvMenuItem>(
             Arrays.asList(
                     new LvMenuItem(R.mipmap.change, "主题换肤"),
-                    new LvMenuItem(R.mipmap.close, "定时关闭"),
-                    new LvMenuItem(R.mipmap.download, "歌曲品质"),
+//                    new LvMenuItem(R.mipmap.close, "定时关闭"),
+//                    new LvMenuItem(R.mipmap.download, "歌曲品质"),
                     new LvMenuItem(R.mipmap.simple,"极简模式"),
                     new LvMenuItem(R.drawable.avatar,"用户"),
                     new LvMenuItem(R.mipmap.exit, "退出")

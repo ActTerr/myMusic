@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -109,7 +108,8 @@ public class SearchArtistFragment extends AttachFragment {
 
         @Override
         public int getItemCount() {
-            return mList == null ? 0 : mList.size();
+            return 1;
+//                    mList == null ? 0 : mList.size();
         }
 
         public class ListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
@@ -618,6 +617,10 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
         private Activity mContext;
 
         public PlaylistDetailAdapter(Activity context, ArrayList<MusicInfo> mList) {
+//            L.e("wocao","mlistsize"+mList.size());
+//            for (int i=0;i<5;i++){
+//                arraylist.add(mList.get(i));
+//            }
             this.arraylist = mList;
             this.mContext = context;
         }
@@ -689,7 +692,7 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
 
         @Override
         public int getItemCount() {
-            return arraylist == null ? 0 : arraylist.size() + 1;
+            return 5;
         }
 
         public void updateDataSet(ArrayList<MusicInfo> arraylist) {

@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,10 +32,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
-import com.wm.remusic.activity.AlbumsDetailActivity;
 import com.wm.remusic.activity.NetItemChangeActivity;
 import com.wm.remusic.activity.PlaylistActivity;
-import com.wm.remusic.activity.RadioDetailActivity;
 import com.wm.remusic.fragment.AttachFragment;
 import com.wm.remusic.json.RecommendListNewAlbumInfo;
 import com.wm.remusic.json.RecommendListRadioInfo;
@@ -44,7 +41,6 @@ import com.wm.remusic.json.RecommendListRecommendInfo;
 import com.wm.remusic.net.HttpUtil;
 import com.wm.remusic.net.NetworkUtils;
 import com.wm.remusic.uitl.PreferencesUtility;
-import com.wm.remusic.widget.LoodView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,6 +56,7 @@ public class RecommendFragment extends AttachFragment {
     private GridLayoutManager mGridLayoutManager, mGridLayoutManager2, mGridLayoutManager3;
     private RecommendAdapter mRecomendAdapter;
     private NewAlbumsAdapter mNewAlbumsAdapter;
+
     private RadioAdapter mRadioAdapter;
 
     private ArrayList<RecommendListRecommendInfo> mRecomendList = new ArrayList<>();
@@ -76,7 +73,7 @@ public class RecommendFragment extends AttachFragment {
     private boolean isDayFirst;
     private ViewGroup mContent;
     private View mRecommendView;
-    private LoodView mLoodView;
+//    private LoodView mLoodView;
 
     public void setChanger(ChangeView changer) {
         mChangeView = changer;
@@ -124,7 +121,7 @@ public class RecommendFragment extends AttachFragment {
             }
         });
 
-        mLoodView = (LoodView) mRecommendView.findViewById(R.id.loop_view);
+//        mLoodView = (LoodView) mRecommendView.findViewById(R.id.loop_view);
         if(!isDayFirst){
             mContent.addView(mRecommendView);
         }
@@ -136,8 +133,8 @@ public class RecommendFragment extends AttachFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
-            if(mLoodView != null)
-            mLoodView.requestFocus();
+//            if(mLoodView != null)
+//            mLoodView.requestFocus();
         }
     }
 
@@ -363,7 +360,7 @@ public class RecommendFragment extends AttachFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mLoodView.onDestroy();
+//        mLoodView.onDestroy();
     }
 
     @Override
@@ -410,8 +407,8 @@ public class RecommendFragment extends AttachFragment {
                     .setImageRequest(request)
                     .build();
 
-            ((ItemView) holder).art.setController(controller);
-
+//            ((ItemView) holder).art.setController(controller);
+            ((ItemView) holder).art.setImageDrawable(getResources().getDrawable(R.mipmap.simple_music));
 
             ((ItemView) holder).name.setText(info.getTitle());
             ((ItemView) holder).count.setText(spanString);
@@ -423,20 +420,22 @@ public class RecommendFragment extends AttachFragment {
             } else {
                 ((ItemView) holder).count.append(" " + info.getListenum());
             }
-            ((ItemView) holder).itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, PlaylistActivity.class);
-                    intent.putExtra("playlistid", info.getListid());
-                    intent.putExtra("islocal", false);
-                    intent.putExtra("albumart", info.getPic());
-                    intent.putExtra("playlistname", info.getTitle());
-                    intent.putExtra("playlistDetail", info.getTag());
-                    intent.putExtra("playlistcount", info.getListenum());
+            if (position==0){
+                ((ItemView) holder).itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, PlaylistActivity.class);
+                        intent.putExtra("playlistid", info.getListid());
+                        intent.putExtra("islocal", false);
+                        intent.putExtra("albumart", info.getPic());
+                        intent.putExtra("playlistname", info.getTitle());
+                        intent.putExtra("playlistDetail", info.getTag());
+                        intent.putExtra("playlistcount", info.getListenum());
 
-                    mContext.startActivity(intent);
-                }
-            });
+                        mContext.startActivity(intent);
+                    }
+                });
+            }
 
         }
 
@@ -500,8 +499,8 @@ public class RecommendFragment extends AttachFragment {
                     .setImageRequest(request)
                     .build();
 
-            ((ItemView) holder).art.setController(controller);
-
+//            ((ItemView) holder).art.setController(controller);
+            ((ItemView) holder).art.setImageDrawable(getResources().getDrawable(R.mipmap.simple_music));
 
 //            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(info.getPic()))
 //                    .setResizeOptions(new ResizeOptions(width, height))
@@ -515,19 +514,19 @@ public class RecommendFragment extends AttachFragment {
 
             ((ItemView) holder).albumName.setText(info.getTitle());
             ((ItemView) holder).artsit.setText(info.getDesc());
-            ((ItemView) holder).itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent intent = new Intent(mContext, RadioDetailActivity.class);
-                    intent.putExtra("albumid", info.getAlbum_id());
-                    intent.putExtra("albumart", info.getPic());
-                    intent.putExtra("albumname", info.getTitle());
-                    intent.putExtra("artistname", info.getDesc());
-                    mContext.startActivity(intent);
-
-                }
-            });
+//            ((ItemView) holder).itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    Intent intent = new Intent(mContext, RadioDetailActivity.class);
+//                    intent.putExtra("albumid", info.getAlbum_id());
+//                    intent.putExtra("albumart", info.getPic());
+//                    intent.putExtra("albumname", info.getTitle());
+//                    intent.putExtra("artistname", info.getDesc());
+//                    mContext.startActivity(intent);
+//
+//                }
+//            });
         }
 
         @Override
@@ -602,8 +601,8 @@ public class RecommendFragment extends AttachFragment {
                     .setImageRequest(request)
                     .build();
 
-            ((ItemView) holder).art.setController(controller);
-
+//            ((ItemView) holder).art.setController(controller);
+            ((ItemView) holder).art.setImageDrawable(getResources().getDrawable(R.mipmap.simple_music));
 //            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(info.coverImgUrl))
 //                    .setResizeOptions(new ResizeOptions(width, height))
 //                    .build();
@@ -616,30 +615,30 @@ public class RecommendFragment extends AttachFragment {
 
             ((ItemView) holder).albumName.setText(info.getTitle());
             ((ItemView) holder).artsit.setText(info.getAuthor());
-            ((ItemView) holder).itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Intent intent = new Intent(mContext, AlbumsDetailActivity.class);
-//                    intent.putExtra("albumid",info.getType_id());
-//                    intent.putExtra("albumart",info.getPic());
-//                    intent.putExtra("albumname",info.getTitle());
-//                    intent.putExtra("artistname",info.getAuthor());
-
-                    intent.putExtra("albumid", info.getType_id());
-                    intent.putExtra("albumart", info.getPic());
-                    intent.putExtra("albumname", info.getTitle());
-                    intent.putExtra("albumdetail", info.getDesc());
-                    // intent.putExtra("playlistcount",info.get);
-                    mContext.startActivity(intent);
-
-//                    AlbumsDetail fragment = AlbumsDetail.newInstance(info.id, info.coverImgUrl, info.albumName,
-//                            info.artistName, info.publishTime);
-//                    FragmentTransaction transaction = ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction();
-//                    transaction.replace(R.id.fragment_container, fragment);
-//                    transaction.commitAllowingStateLoss();
-                }
-            });
+//            ((ItemView) holder).itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    Intent intent = new Intent(mContext, AlbumsDetailActivity.class);
+////                    intent.putExtra("albumid",info.getType_id());
+////                    intent.putExtra("albumart",info.getPic());
+////                    intent.putExtra("albumname",info.getTitle());
+////                    intent.putExtra("artistname",info.getAuthor());
+//
+//                    intent.putExtra("albumid", info.getType_id());
+//                    intent.putExtra("albumart", info.getPic());
+//                    intent.putExtra("albumname", info.getTitle());
+//                    intent.putExtra("albumdetail", info.getDesc());
+//                    // intent.putExtra("playlistcount",info.get);
+//                    mContext.startActivity(intent);
+//
+////                    AlbumsDetail fragment = AlbumsDetail.newInstance(info.id, info.coverImgUrl, info.albumName,
+////                            info.artistName, info.publishTime);
+////                    FragmentTransaction transaction = ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction();
+////                    transaction.replace(R.id.fragment_container, fragment);
+////                    transaction.commitAllowingStateLoss();
+//                }
+//            });
         }
 
         @Override
@@ -655,7 +654,7 @@ public class RecommendFragment extends AttachFragment {
             }
         }
 
-        class ItemView extends RecyclerView.ViewHolder implements View.OnClickListener {
+        class ItemView extends RecyclerView.ViewHolder  {
             private SimpleDraweeView art;
             private TextView albumName, artsit;
 
@@ -666,10 +665,10 @@ public class RecommendFragment extends AttachFragment {
                 artsit = (TextView) itemView.findViewById(R.id.artist_name);
             }
 
-            @Override
-            public void onClick(View v) {
-
-            }
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
         }
 
     }
