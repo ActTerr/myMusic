@@ -108,7 +108,7 @@ public class SearchArtistFragment extends AttachFragment {
 
         @Override
         public int getItemCount() {
-            return 1;
+            return 3;
 //                    mList == null ? 0 : mList.size();
         }
 

@@ -12,16 +12,20 @@ import android.widget.Toast;
 
 import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
+import com.wm.remusic.net.ApiWrapper;
+import com.wm.remusic.net.ServerAPI;
 import com.wm.remusic.uitl.ExceptionFilter;
+import com.wm.remusic.uitl.L;
 import com.wm.remusic.uitl.MFGT;
 import com.wm.remusic.uitl.SpUtil;
 import com.wm.remusic.uitl.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -72,13 +76,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
     public void onLogin(View view) {
-        Observable.just("succcess").subscribe(observer);
-//        progressDialog.show();
-//        ApiWrapper<ServerAPI> ApiWrapper =new ApiWrapper<>();
-//        subscription= ApiWrapper.targetClass(ServerAPI.class).getAPI().login(name.getText().toString(),
-//                passwd.getText().toString()).compose(ApiWrapper.<String>applySchedulers())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(observer);
+//        Observable.just("succcess").subscribe(observer);
+        progressDialog.show();
+        ApiWrapper<ServerAPI> ApiWrapper =new ApiWrapper<>();
+        L.e("longin",name.getText().toString());
+        subscription= ApiWrapper.targetClass(ServerAPI.class).getAPI().login(name.getText().toString(),
+                passwd.getText().toString()).compose(ApiWrapper.<String>applySchedulers())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
     }
 }

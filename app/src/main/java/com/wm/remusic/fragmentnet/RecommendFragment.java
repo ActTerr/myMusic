@@ -352,6 +352,7 @@ public class RecommendFragment extends AttachFragment {
             mPosition = st;
             mViewContent.removeAllViews();
             addViews();
+
         }
 
     }

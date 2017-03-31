@@ -23,12 +23,20 @@ import com.wm.remusic.fragment.AttachFragment;
 import com.wm.remusic.json.SearchAlbumInfo;
 import com.wm.remusic.json.SearchArtistInfo;
 import com.wm.remusic.json.SearchSongInfo;
+import com.wm.remusic.net.ApiWrapper;
 import com.wm.remusic.net.BMA;
+import com.wm.remusic.net.ConvertUtils;
 import com.wm.remusic.net.HttpUtil;
+import com.wm.remusic.net.ServerAPI;
+import com.wm.remusic.uitl.ExceptionFilter;
+import com.wm.remusic.uitl.L;
+import com.wm.remusic.uitl.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import rx.Subscriber;
 
 /**
  * Created by wm on 2016/4/11.
@@ -61,7 +69,7 @@ public class SearchTabPagerFragment extends AttachFragment {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    JsonObject jsonObject = HttpUtil.getResposeJsonObject("合并搜索:",BMA.Search.searchMerge(key, 1, 10)).get("result").getAsJsonObject();
+                    final JsonObject jsonObject = HttpUtil.getResposeJsonObject("合并搜索5:", BMA.Search.searchMerge(key, 1, 10)).get("result").getAsJsonObject();
                     JsonObject songObject = jsonObject.get("song_info").getAsJsonObject();
                     JsonArray songArray = songObject.get("song_list").getAsJsonArray();
                     for (JsonElement o : songArray) {
@@ -70,19 +78,64 @@ public class SearchTabPagerFragment extends AttachFragment {
                         songResults.add(songInfo);
                     }
 
-                    JsonObject artistObject = jsonObject.get("artist_info").getAsJsonObject();
-                    JsonArray artistArray = artistObject.get("artist_list").getAsJsonArray();
-                    for (JsonElement o : artistArray) {
-                        SearchArtistInfo artistInfo = MainApplication.gsonInstance().fromJson(o, SearchArtistInfo.class);
-                        artistResults.add(artistInfo);
-                    }
 
-                    JsonObject albumObject = jsonObject.get("album_info").getAsJsonObject();
-                    JsonArray albumArray = albumObject.get("album_list").getAsJsonArray();
-                    for (JsonElement o : albumArray) {
-                        SearchAlbumInfo albumInfo = MainApplication.gsonInstance().fromJson(o, SearchAlbumInfo.class);
-                        albumResults.add(albumInfo);
-                    }
+//                    JsonObject artistObject = jsonObject.get("artist_info").getAsJsonObject();
+//                    JsonArray artistArray = artistObject.get("artist_list").getAsJsonArray();
+//                    for (JsonElement o : artistArray) {
+//                        SearchArtistInfo artistInfo = MainApplication.gsonInstance().fromJson(o, SearchArtistInfo.class);
+//                        artistResults.add(artistInfo);
+//                    }
+                    ApiWrapper<ServerAPI> wrapper=new ApiWrapper<>();
+                    wrapper.targetClass(ServerAPI.class).getAPI().search(key)
+                            .compose(wrapper.<SearchArtistInfo[]>applySchedulers())
+                            .subscribe(new Subscriber<SearchArtistInfo[]>() {
+                                @Override
+                                public void onCompleted() {
+
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    if(ExceptionFilter.filter(getContext(),e)){
+                                        ToastUtil.showToast(getContext(),"搜索失败");
+                                    }
+                                }
+
+                                @Override
+                                public void onNext(SearchArtistInfo[] searchArtistInfos) {
+                                    L.e("search","length:"+searchArtistInfos.length);
+                                    artistResults= ConvertUtils.array2List(searchArtistInfos);
+                                    JsonObject albumObject = jsonObject.get("album_info").getAsJsonObject();
+                                    JsonArray albumArray = albumObject.get("album_list").getAsJsonArray();
+                                    for (JsonElement o : albumArray) {
+                                        SearchAlbumInfo albumInfo = MainApplication.gsonInstance().fromJson(o, SearchAlbumInfo.class);
+                                        albumResults.add(albumInfo);
+                                    }
+                                    if (mContext == null) {
+                                        return;
+                                    }
+                                    contentView = LayoutInflater.from(mContext).inflate(R.layout.fragment_net_tab, frameLayout, false);
+                                    viewPager = (ViewPager) contentView.findViewById(R.id.viewpager);
+                                    if (viewPager != null) {
+                                        Adapter adapter = new Adapter(getChildFragmentManager());
+                                        adapter.addFragment(SearchMusicFragment.newInstance(songResults), "单曲");
+                                        adapter.addFragment(SearchArtistFragment.newInstance(artistResults), "歌手");
+                                        adapter.addFragment(SearchAlbumFragment.newInstance(albumResults), "专辑");
+                                        viewPager.setAdapter(adapter);
+                                        viewPager.setOffscreenPageLimit(3);
+                                    }
+
+                                    TabLayout tabLayout = (TabLayout) contentView.findViewById(R.id.tabs);
+                                    tabLayout.setupWithViewPager(viewPager);
+                                    viewPager.setCurrentItem(page);
+                                    tabLayout.setTabTextColors(R.color.text_color, ThemeUtils.getThemeColorStateList(mContext, R.color.theme_color_primary).getDefaultColor());
+                                    tabLayout.setSelectedTabIndicatorColor(ThemeUtils.getThemeColorStateList(mContext, R.color.theme_color_primary).getDefaultColor());
+                                    frameLayout.removeAllViews();
+                                    frameLayout.addView(contentView);
+                                }
+                            });
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -94,27 +147,7 @@ public class SearchTabPagerFragment extends AttachFragment {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-                if (mContext == null) {
-                    return;
-                }
-                contentView = LayoutInflater.from(mContext).inflate(R.layout.fragment_net_tab, frameLayout, false);
-                viewPager = (ViewPager) contentView.findViewById(R.id.viewpager);
-                if (viewPager != null) {
-                    Adapter adapter = new Adapter(getChildFragmentManager());
-                    adapter.addFragment(SearchMusicFragment.newInstance(songResults), "单曲");
-                    adapter.addFragment(SearchArtistFragment.newInstance(artistResults), "歌手");
-                    adapter.addFragment(SearchAlbumFragment.newInstance(albumResults), "专辑");
-                    viewPager.setAdapter(adapter);
-                    viewPager.setOffscreenPageLimit(3);
-                }
 
-                TabLayout tabLayout = (TabLayout) contentView.findViewById(R.id.tabs);
-                tabLayout.setupWithViewPager(viewPager);
-                viewPager.setCurrentItem(page);
-                tabLayout.setTabTextColors(R.color.text_color, ThemeUtils.getThemeColorStateList(mContext, R.color.theme_color_primary).getDefaultColor());
-                tabLayout.setSelectedTabIndicatorColor(ThemeUtils.getThemeColorStateList(mContext, R.color.theme_color_primary).getDefaultColor());
-                frameLayout.removeAllViews();
-                frameLayout.addView(contentView);
 
             }
         }.execute();
