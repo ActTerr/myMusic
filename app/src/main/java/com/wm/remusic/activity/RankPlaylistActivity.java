@@ -235,7 +235,7 @@ public class RankPlaylistActivity extends BaseActivity implements ObservableScro
         @Override
         protected Boolean doInBackground(final Void... unused) {
             try {
-                JsonObject jsonObject = HttpUtil.getResposeJsonObject(BMA.Billboard.billSongList(mBillType, 0, 100));
+                JsonObject jsonObject = HttpUtil.getResposeJsonObject("排行榜",BMA.Billboard.billSongList(mBillType, 0, 100));
                 JsonArray pArray = jsonObject.get("song_list").getAsJsonArray();
 
                 JsonObject jsonObject1 = jsonObject.get("billboard").getAsJsonObject();

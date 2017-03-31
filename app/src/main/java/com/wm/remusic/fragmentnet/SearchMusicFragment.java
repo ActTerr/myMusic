@@ -183,7 +183,7 @@ public class SearchMusicFragment extends AttachFragment {
                                 MusicInfo musicInfo = new MusicInfo();
                                 try {
                                     MusicDetailInfo info = null;
-                                    JsonObject jsonObject = HttpUtil.getResposeJsonObject(BMA.Song.songBaseInfo(model.getSong_id()))
+                                    JsonObject jsonObject = HttpUtil.getResposeJsonObject("歌曲基本信息:",BMA.Song.songBaseInfo(model.getSong_id()))
                                             .get("result").getAsJsonObject().get("items").getAsJsonArray().get(0).getAsJsonObject();
                                     info = MainApplication.gsonInstance().fromJson(jsonObject, MusicDetailInfo.class);
                                     musicInfo.albumData = info.getPic_small();

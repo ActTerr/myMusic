@@ -213,7 +213,7 @@ public class NetMoreFragment extends AttachDialogFragment {
                                     ArrayList<SearchArtistInfo> artistResults = new ArrayList<>();
                                     try {
 
-                                        JsonObject jsonObject = HttpUtil.getResposeJsonObject(BMA.Search.searchMerge(adapterMusicInfo.artist, 1, 50)).get("result").getAsJsonObject();
+                                        JsonObject jsonObject = HttpUtil.getResposeJsonObject("合并搜索:",BMA.Search.searchMerge(adapterMusicInfo.artist, 1, 50)).get("result").getAsJsonObject();
                                         JsonObject artistObject = jsonObject.get("artist_info").getAsJsonObject();
                                         JsonArray artistArray = artistObject.get("artist_list").getAsJsonArray();
                                         for (JsonElement o : artistArray) {
@@ -266,7 +266,7 @@ public class NetMoreFragment extends AttachDialogFragment {
                                     ArrayList<SearchAlbumInfo> albumResults = new ArrayList<SearchAlbumInfo>();
                                     try {
 
-                                        JsonObject jsonObject = HttpUtil.getResposeJsonObject(BMA.Search.searchMerge(adapterMusicInfo.albumName, 1, 10)).get("result").getAsJsonObject();
+                                        JsonObject jsonObject = HttpUtil.getResposeJsonObject("合并搜索:",BMA.Search.searchMerge(adapterMusicInfo.albumName, 1, 10)).get("result").getAsJsonObject();
 //                                        JsonObject artistObject =  jsonObject.get("artist_info").getAsJsonObject();
 //                                        JsonArray artistArray = artistObject.get("artist_list").getAsJsonArray();
 //                                        for (JsonElement o : artistArray) {

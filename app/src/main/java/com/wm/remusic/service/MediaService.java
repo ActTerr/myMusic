@@ -915,6 +915,7 @@ public class MediaService extends Service {
                     MusicFileDownInfo song = Down.getUrl(MediaService.this, id + "");
                     if (song != null && song.getShow_link() != null) {
                         url = song.getShow_link();
+//                        L.e("showLink:"+song.getShow_link());
                         PreferencesUtility.getInstance(MediaService.this).setPlayLink(id, url);
                     }
                 }
@@ -924,10 +925,14 @@ public class MediaService extends Service {
                     gotoNext(true);
                 }
 
+                /**
+                 * 使用代理完成在线播放
+                 */
                 if (!stop) {
                     startProxy();
                     // String urlEn = HttpUtil.urlEncode(url);
                     String urlEn = url;
+                    //对url进行转换
                     urlEn = mProxy.getProxyURL(urlEn);
                     mPlayer.setDataSource(urlEn);
                 }
@@ -963,7 +968,7 @@ public class MediaService extends Service {
                 url = musicInfo.lrc;
             }
             try {
-                JsonObject jsonObject = HttpUtil.getResposeJsonObject(BMA.Search.searchLrcPic(musicInfo.musicName, musicInfo.artist));
+                JsonObject jsonObject = HttpUtil.getResposeJsonObject("歌词:",BMA.Search.searchLrcPic(musicInfo.musicName, musicInfo.artist));
                 JsonArray array = jsonObject.get("songinfo").getAsJsonArray();
                 int len = array.size();
                 url = null;

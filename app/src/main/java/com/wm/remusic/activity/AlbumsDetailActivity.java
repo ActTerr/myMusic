@@ -239,7 +239,7 @@ public class AlbumsDetailActivity extends BaseActivity implements ObservableScro
         @Override
         protected Boolean doInBackground(final Void... unused) {
             try {
-                JsonObject jsonObject = HttpUtil.getResposeJsonObject(BMA.Album.albumInfo(albumId + ""));
+                JsonObject jsonObject = HttpUtil.getResposeJsonObject("唱片信息",BMA.Album.albumInfo(albumId + ""));
                 JsonArray pArray = jsonObject.get("songlist").getAsJsonArray();
                 mHandler.post(showInfo);
                 musicCount = pArray.size();
@@ -513,7 +513,7 @@ public class AlbumsDetailActivity extends BaseActivity implements ObservableScro
                     public void onClick(View v) {
 
                         Log.e("re", "get");
-                        HttpUtil.getResposeJsonObject("http://tingapi.ting.baidu.com/v1/restserver/ting?from=android&version=5.8.1.0&channel=ppzs&operator=3&method=baidu.ting.artist.item&format=json&tinguid=1035&artistid=14");
+                        HttpUtil.getResposeJsonObject("未知","http://tingapi.ting.baidu.com/v1/restserver/ting?from=android&version=5.8.1.0&channel=ppzs&operator=3&method=baidu.ting.artist.item&format=json&tinguid=1035&artistid=14");
 
                         if (localItem.islocal) {
                             MoreFragment morefragment = MoreFragment.newInstance(arraylist.get(i - 1),

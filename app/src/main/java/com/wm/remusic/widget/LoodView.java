@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
@@ -29,14 +28,7 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.image.QualityInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.wm.remusic.R;
-import com.wm.remusic.json.FocusItemInfo;
-import com.wm.remusic.net.BMA;
-import com.wm.remusic.net.HttpUtil;
-import com.wm.remusic.net.NetworkUtils;
-import com.wm.remusic.service.MusicPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -208,43 +200,43 @@ public class LoodView extends FrameLayout {
                 R.mipmap.six,
                 R.mipmap.seven
         };
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                if (NetworkUtils.isConnectInternet(mContext)) {
-                    isFromCache = false;
-                }
-
-                try {
-                    JsonArray rray = HttpUtil.getResposeJsonObject(BMA.focusPic(7), mContext, isFromCache).get("pic").getAsJsonArray();
-                    int en = rray.size();
-                    Gson gson = new Gson();
-
-                    imageNet.clear();
-                    for (int i = 0; i < en; i++) {
-                        FocusItemInfo focusItemInfo = gson.fromJson(rray.get(i), FocusItemInfo.class);
-                        if (focusItemInfo != null) {
-                            imageNet.add(focusItemInfo.getRandpic());
-                        } else {
-                            imageNet.add("");
-                        }
-                    }
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                for (int i = 0; i < 7; i++) {
-                    imageViewList.get(i).setImageURI(Uri.parse(imageNet.get(i)));
-                }
-            }
-        }.execute();
+//
+//        new AsyncTask<Void, Void, Void>() {
+//            @Override
+//            protected Void doInBackground(Void... params) {
+//                if (NetworkUtils.isConnectInternet(mContext)) {
+//                    isFromCache = false;
+//                }
+//
+//                try {
+//                    JsonArray rray = HttpUtil.getResposeJsonObject(BMA.focusPic(7), mContext, isFromCache).get("pic").getAsJsonArray();
+//                    int en = rray.size();
+//                    Gson gson = new Gson();
+//
+//                    imageNet.clear();
+//                    for (int i = 0; i < en; i++) {
+//                        FocusItemInfo focusItemInfo = gson.fromJson(rray.get(i), FocusItemInfo.class);
+//                        if (focusItemInfo != null) {
+//                            imageNet.add(focusItemInfo.getRandpic());
+//                        } else {
+//                            imageNet.add("");
+//                        }
+//                    }
+//                } catch (NullPointerException e) {
+//                    e.printStackTrace();
+//                }
+//
+//
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Void aVoid) {
+//                for (int i = 0; i < 7; i++) {
+//                    imageViewList.get(i).setImageURI(Uri.parse(imageNet.get(i)));
+//                }
+//            }
+//        }.execute();
 
 
         for (int i = 0; i < 7; i++) {

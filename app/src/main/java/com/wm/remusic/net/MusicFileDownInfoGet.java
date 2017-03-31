@@ -1,14 +1,10 @@
 package com.wm.remusic.net;
 
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.wm.remusic.MainApplication;
-import com.wm.remusic.json.MusicDetailInfo;
 import com.wm.remusic.json.MusicFileDownInfo;
-import com.wm.remusic.uitl.PreferencesUtility;
 
 public class MusicFileDownInfoGet implements Runnable {
     String id;
@@ -26,7 +22,7 @@ public class MusicFileDownInfoGet implements Runnable {
     @Override
     public void run() {
         try {
-            JsonArray jsonArray = HttpUtil.getResposeJsonObject(BMA.Song.songInfo(id)).get("songurl")
+            JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址:",BMA.Song.songInfo(id)).get("songurl")
                     .getAsJsonObject().get("url").getAsJsonArray();
             int len = jsonArray.size();
 

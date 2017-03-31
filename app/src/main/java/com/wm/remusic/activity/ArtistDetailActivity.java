@@ -168,7 +168,7 @@ public class ArtistDetailActivity extends BaseActivity implements ObservableScro
         @Override
         protected Boolean doInBackground(final Void... unused) {
             try {
-                JsonObject jsonObject = HttpUtil.getResposeJsonObject(BMA.Artist.artistSongList("", artistId, 0, 50));
+                JsonObject jsonObject = HttpUtil.getResposeJsonObject("艺术家歌曲：",BMA.Artist.artistSongList("", artistId, 0, 50));
 
                 JsonArray pArray = jsonObject.get("songlist").getAsJsonArray();
                 musicCount = pArray.size();
@@ -268,7 +268,7 @@ public class ArtistDetailActivity extends BaseActivity implements ObservableScro
         new Thread(new Runnable() {
             @Override
             public void run() {
-                JsonObject object = HttpUtil.getResposeJsonObject(BMA.Artist.artistInfo("", artistId));
+                JsonObject object = HttpUtil.getResposeJsonObject("艺术家信息：",BMA.Artist.artistInfo("", artistId));
                 artistInfo = MainApplication.gsonInstance().fromJson(object, ArtistInfo.class);
                 if (artistInfo != null && artistInfo.getAvatar_s500() != null) {
                     artistPath = artistInfo.getAvatar_s500();

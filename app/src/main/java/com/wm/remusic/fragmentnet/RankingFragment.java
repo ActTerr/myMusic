@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,8 +24,6 @@ import com.wm.remusic.net.BMA;
 import com.wm.remusic.net.HttpUtil;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Created by wm on 2016/5/14.
@@ -95,7 +92,7 @@ public class RankingFragment extends AttachFragment {
 
             JsonArray array = null;
             try {
-                JsonObject jsonObject = HttpUtil.getResposeJsonObject(BMA.Billboard.billSongList(params[0], 0, 3));
+                JsonObject jsonObject = HttpUtil.getResposeJsonObject("音乐榜歌曲",BMA.Billboard.billSongList(params[0], 0, 3));
                 array = jsonObject.get("song_list").getAsJsonArray();
 
                 for (int i = 0; i < array.size(); i++) {
@@ -128,7 +125,7 @@ public class RankingFragment extends AttachFragment {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    JsonObject jsonObject = HttpUtil.getResposeJsonObject(BMA.Billboard.billSongList(BILLBOARD_KING, 0, 3));
+                    JsonObject jsonObject = HttpUtil.getResposeJsonObject("音乐榜歌曲",BMA.Billboard.billSongList(BILLBOARD_KING, 0, 3));
                     JsonArray array = jsonObject.get("song_list").getAsJsonArray();
 
                     for (int i = 0; i < array.size(); i++) {

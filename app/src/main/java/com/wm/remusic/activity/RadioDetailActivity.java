@@ -17,7 +17,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bilibili.magicasakura.widgets.TintImageView;
 import com.facebook.binaryresource.BinaryResource;
@@ -57,8 +55,6 @@ import com.wm.remusic.fragment.MoreFragment;
 import com.wm.remusic.fragment.NetMoreFragment;
 import com.wm.remusic.handler.HandlerUtil;
 import com.wm.remusic.info.MusicInfo;
-import com.wm.remusic.json.AlbumInfo;
-import com.wm.remusic.json.MusicDetailInfo;
 import com.wm.remusic.json.RadioInfo;
 import com.wm.remusic.net.BMA;
 import com.wm.remusic.net.HttpUtil;
@@ -258,7 +254,7 @@ public class RadioDetailActivity extends BaseActivity implements ObservableScrol
         @Override
         protected Void doInBackground(final Void... unused) {
             try {
-                JsonArray jsonArray = HttpUtil.getResposeJsonObject(BMA.Lebo.albumInfo(albumId, 10)).get("result").getAsJsonObject()
+                JsonArray jsonArray = HttpUtil.getResposeJsonObject("节目信息",BMA.Lebo.albumInfo(albumId, 10)).get("result").getAsJsonObject()
                         .get("latest_song").getAsJsonArray();
 
                 musicCount = jsonArray.size();
@@ -489,7 +485,7 @@ public class RadioDetailActivity extends BaseActivity implements ObservableScrol
                     @Override
                     public void onClick(View v) {
 
-                        HttpUtil.getResposeJsonObject("http://tingapi.ting.baidu.com/v1/restserver/ting?from=android&version=5.8.1.0&channel=ppzs&operator=3&method=baidu.ting.artist.item&format=json&tinguid=1035&artistid=14");
+                        HttpUtil.getResposeJsonObject("未知","http://tingapi.ting.baidu.com/v1/restserver/ting?from=android&version=5.8.1.0&channel=ppzs&operator=3&method=baidu.ting.artist.item&format=json&tinguid=1035&artistid=14");
 
                         if (localItem.islocal) {
                             MoreFragment morefragment = MoreFragment.newInstance(arraylist.get(i - 1),

@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -108,7 +107,7 @@ public class AllPlaylistFragment extends AttachFragment {
         @Override
         protected Object doInBackground(Object[] params) {
 
-            JsonObject result = HttpUtil.getResposeJsonObject(BMA.GeDan.geDan(next, 10));
+            JsonObject result = HttpUtil.getResposeJsonObject("歌单：",BMA.GeDan.geDan(next, 10));
             if (result == null) {
                 return null;
             }
@@ -142,7 +141,7 @@ public class AllPlaylistFragment extends AttachFragment {
             @Override
             protected Void doInBackground(Void... params) {
                 gson = new Gson();
-                JsonObject result = HttpUtil.getResposeJsonObject(BMA.GeDan.geDan(1, 10));
+                JsonObject result = HttpUtil.getResposeJsonObject("歌单：",BMA.GeDan.geDan(1, 10));
                 if (result == null) {
                     return null;
                 }

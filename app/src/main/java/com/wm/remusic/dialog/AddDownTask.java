@@ -114,7 +114,7 @@ public class AddDownTask extends DialogFragment {
             for (int j = 0; j < le; j++) {
                 try {
                     //从json数据获得歌曲下载地址数组
-                    JsonArray jsonArray = HttpUtil.getResposeJsonObject(BMA.Song.songInfo(ids[j]).trim()).get("songurl")
+                    JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址:",BMA.Song.songInfo(ids[j]).trim()).get("songurl")
                             .getAsJsonObject().get("url").getAsJsonArray();
                     int len = jsonArray.size();
                     //从首选项拿到字节数
@@ -134,7 +134,7 @@ public class AddDownTask extends DialogFragment {
                         }
                     }
                     if (musicFileDownInfo != null) {
-                        //把下载地址放到link中
+                        //把下载地址放到list中
                         mList.add(musicFileDownInfo.getFile_link());
                         //
                         size += musicFileDownInfo.getFile_size();
@@ -171,6 +171,7 @@ public class AddDownTask extends DialogFragment {
 
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            //使用adil下载
                             Intent intent = new Intent();
                             intent.putExtra("names", names);
                             intent.putExtra("artists", artists);

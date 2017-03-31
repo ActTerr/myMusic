@@ -2,7 +2,6 @@ package com.wm.remusic.fragmentnet;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +73,7 @@ public class ArtistInfoFragment extends AttachFragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                JsonObject object = HttpUtil.getResposeJsonObject(BMA.Artist.artistInfo("", artistid));
+                JsonObject object = HttpUtil.getResposeJsonObject("艺术家信息:",BMA.Artist.artistInfo("", artistid));
                 artistInfo = MainApplication.gsonInstance().fromJson(object, ArtistInfo.class);
                 if (artistInfo != null && artistInfo.getAvatar_s500() != null) {
                     HandlerUtil.getInstance(mContext).post(new Runnable() {

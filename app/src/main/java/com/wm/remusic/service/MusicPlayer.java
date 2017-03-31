@@ -507,9 +507,11 @@ public class MusicPlayer {
             if (forceShuffle) {
                 mService.setShuffleMode(MediaService.SHUFFLE_NORMAL);
             }
+            //得到自动播放id
             final long currentId = mService.getAudioId();
             long playId = list[position];
             Log.e("currentId", currentId + "");
+            //得到队列
             final int currentQueuePosition = getQueuePosition();
             if (position != -1) {
                 final long[] playlist = getQueue();
@@ -518,6 +520,7 @@ public class MusicPlayer {
                         mService.play();
                         return;
                     } else {
+                        //矫正索引
                         mService.setQueuePosition(position);
                         return;
                     }

@@ -365,7 +365,7 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
         @Override
         protected Boolean doInBackground(final Void... unused) {
             try {
-                JsonObject jsonObject = HttpUtil.getResposeJsonObject(BMA.GeDan.geDanInfo(playlsitId + ""));
+                JsonObject jsonObject = HttpUtil.getResposeJsonObject("歌单信息:",BMA.GeDan.geDanInfo(playlsitId + ""));
                 JsonArray pArray = jsonObject.get("content").getAsJsonArray();
 
                 mCollected = PlaylistInfo.getInstance(mContext).hasPlaylist(Long.parseLong(playlsitId));

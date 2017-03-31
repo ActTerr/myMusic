@@ -3,7 +3,6 @@ package com.wm.remusic.downmusic;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
@@ -16,8 +15,6 @@ import com.wm.remusic.net.BMA;
 import com.wm.remusic.net.HttpUtil;
 import com.wm.remusic.uitl.IConstants;
 import com.wm.remusic.uitl.PreferencesUtility;
-
-import java.io.File;
 
 /**
  * Created by wm on 2016/5/30.
@@ -32,7 +29,7 @@ public class Down {
             @Override
             protected MusicFileDownInfo doInBackground(final String... name) {
                 try {
-                    JsonArray jsonArray = HttpUtil.getResposeJsonObject(BMA.Song.songInfo(id).trim()).get("songurl")
+                    JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址:",BMA.Song.songInfo(id).trim()).get("songurl")
                             .getAsJsonObject().get("url").getAsJsonArray();
                     int len = jsonArray.size();
 
@@ -76,7 +73,7 @@ public class Down {
     public static MusicFileDownInfo getUrl(final Context context, final String id) {
         MusicFileDownInfo musicFileDownInfo = null;
         try {
-            JsonArray jsonArray = HttpUtil.getResposeJsonObject(BMA.Song.songInfo(id).trim(), context, false).get("songurl")
+            JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址:",BMA.Song.songInfo(id).trim(), context, false).get("songurl")
                     .getAsJsonObject().get("url").getAsJsonArray();
             int len = jsonArray.size();
             int downloadBit = 192;
@@ -104,7 +101,7 @@ public class Down {
     public static MusicDetailInfo getInfo(final String id) {
         MusicDetailInfo info = null;
         try {
-            JsonObject jsonObject = HttpUtil.getResposeJsonObject(BMA.Song.songBaseInfo(id).trim()).get("result")
+            JsonObject jsonObject = HttpUtil.getResposeJsonObject("歌曲基本信息：",BMA.Song.songBaseInfo(id).trim()).get("result")
                     .getAsJsonObject().get("items").getAsJsonArray().get(0).getAsJsonObject();
             info = MainApplication.gsonInstance().fromJson(jsonObject, MusicDetailInfo.class);
         } catch (Exception e) {
@@ -126,7 +123,7 @@ public class Down {
 
         @Override
         public void run() {
-            JsonArray jsonArray = HttpUtil.getResposeJsonObject(BMA.Song.songInfo(id).trim()).get("songurl")
+            JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址:",BMA.Song.songInfo(id).trim()).get("songurl")
                     .getAsJsonObject().get("url").getAsJsonArray();
             int len = jsonArray.size();
 

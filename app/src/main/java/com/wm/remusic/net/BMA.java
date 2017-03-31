@@ -16,12 +16,12 @@ public class BMA {
      * @param num 数量
      * @return
      */
-    public static String focusPic(int num) {
-        StringBuffer sb = new StringBuffer(BASE);
-        sb.append("&method=").append("baidu.ting.plaza.getFocusPic")
-                .append("&num=").append(num);
-        return sb.toString();
-    }
+//    public static String focusPic(int num) {
+//        StringBuffer sb = new StringBuffer(BASE);
+//        sb.append("&method=").append("baidu.ting.plaza.getFocusPic")
+//                .append("&num=").append(num);
+//        return sb.toString();
+//    }
 
     /**
      * 唱片专辑

@@ -154,7 +154,7 @@ public class RecommendFragment extends AttachFragment {
 
                 //推荐电台
                 try {
-                    JsonObject list = HttpUtil.getResposeJsonObject("http://tingapi.ting.baidu.com/v1/restserver/ting?from=android&version=5.8.1.0&channel=ppzs&operator=3&method=baidu.ting.plaza.index&cuid=89CF1E1A06826F9AB95A34DC0F6AAA14"
+                    JsonObject list = HttpUtil.getResposeJsonObject("电台:","http://tingapi.ting.baidu.com/v1/restserver/ting?from=android&version=5.8.1.0&channel=ppzs&operator=3&method=baidu.ting.plaza.index&cuid=89CF1E1A06826F9AB95A34DC0F6AAA14"
                             , mContext, isFromCache);
 
                     JsonObject object = list.get("result").getAsJsonObject();
@@ -244,7 +244,7 @@ public class RecommendFragment extends AttachFragment {
 
             //推荐电台
             try {
-                JsonObject list = HttpUtil.getResposeJsonObject("http://tingapi.ting.baidu.com/v1/restserver/ting?from=android&version=5.8.1.0&channel=ppzs&operator=3&method=baidu.ting.plaza.index&cuid=89CF1E1A06826F9AB95A34DC0F6AAA14"
+                JsonObject list = HttpUtil.getResposeJsonObject("电台","http://tingapi.ting.baidu.com/v1/restserver/ting?from=android&version=5.8.1.0&channel=ppzs&operator=3&method=baidu.ting.plaza.index&cuid=89CF1E1A06826F9AB95A34DC0F6AAA14"
                         , mContext, isFromCache);
 
                 JsonObject object = list.get("result").getAsJsonObject();

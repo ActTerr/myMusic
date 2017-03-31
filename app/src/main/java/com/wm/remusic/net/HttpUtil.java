@@ -19,6 +19,7 @@ import com.squareup.okhttp.Response;
 import com.squareup.okhttp.internal.DiskLruCache;
 import com.squareup.okhttp.internal.Util;
 import com.squareup.okhttp.internal.io.FileSystem;
+import com.wm.remusic.uitl.L;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -219,9 +220,11 @@ public class HttpUtil {
         return null;
     }
 
-    public static JsonObject getResposeJsonObject(String action1, Context context, boolean forceCache) {
+    public static JsonObject getResposeJsonObject(
+            String tag,
+                                                  String action1, Context context, boolean forceCache) {
         try {
-            Log.e("action-cache", action1);
+            Log.e(tag, action1);
             File sdcache = context.getCacheDir();
             //File cacheFile = new File(context.getCacheDir(), "[缓存目录]");
             Cache cache = new Cache(sdcache.getAbsoluteFile(), 1024 * 1024 * 30); //30Mb
@@ -257,8 +260,11 @@ public class HttpUtil {
     }
 
 
-    public static JsonObject getResposeJsonObject(String action1) {
+    public static JsonObject getResposeJsonObject(
+            String tag,
+            String action1){
         try {
+            L.e(tag,action1);
             mOkHttpClient.setConnectTimeout(3000, TimeUnit.MINUTES);
             mOkHttpClient.setReadTimeout(3000, TimeUnit.MINUTES);
             Request request = new Request.Builder()
