@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.JsonObject;
 import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
 import com.wm.remusic.downmusic.Down;
@@ -21,9 +20,8 @@ import com.wm.remusic.fragment.AttachFragment;
 import com.wm.remusic.info.MusicInfo;
 import com.wm.remusic.json.MusicDetailInfo;
 import com.wm.remusic.json.SearchSongInfo;
-import com.wm.remusic.net.BMA;
-import com.wm.remusic.net.HttpUtil;
 import com.wm.remusic.service.MusicPlayer;
+import com.wm.remusic.uitl.L;
 import com.wm.remusic.widget.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -183,16 +181,20 @@ public class SearchMusicFragment extends AttachFragment {
                                 MusicInfo musicInfo = new MusicInfo();
                                 try {
                                     MusicDetailInfo info = null;
-                                    JsonObject jsonObject = HttpUtil.getResposeJsonObject("歌曲基本信息:",BMA.Song.songBaseInfo(model.getSong_id()))
-                                            .get("result").getAsJsonObject().get("items").getAsJsonArray().get(0).getAsJsonObject();
-                                    info = MainApplication.gsonInstance().fromJson(jsonObject, MusicDetailInfo.class);
-                                    musicInfo.albumData = info.getPic_small();
+                                    /**
+                                     * 从服务器取到基本信息，但是只使用了pic属性
+                                     */
+//                                    JsonObject jsonObject = HttpUtil.getResposeJsonObject("歌曲基本信息:",BMA.Song.songBaseInfo(model.getSong_id()))
+//                                            .get("result").getAsJsonObject().get("items").getAsJsonArray().get(0).getAsJsonObject();
+//                                    info = MainApplication.gsonInstance().fromJson(jsonObject, MusicDetailInfo.class);
+//                                    musicInfo.albumData = info.getPic_small();
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
 
 
                                 musicInfo.songId = Integer.parseInt(model.getSong_id());
+                                L.e("songid",musicInfo.songId+"");
                                 musicInfo.musicName = model.getTitle();
                                 musicInfo.artist = model.getAuthor();
                                 musicInfo.islocal = false;

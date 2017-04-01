@@ -7,26 +7,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.bilibili.magicasakura.utils.ThemeUtils;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
 import com.wm.remusic.fragment.AttachFragment;
 import com.wm.remusic.json.SearchAlbumInfo;
 import com.wm.remusic.json.SearchArtistInfo;
 import com.wm.remusic.json.SearchSongInfo;
 import com.wm.remusic.net.ApiWrapper;
-import com.wm.remusic.net.BMA;
 import com.wm.remusic.net.ConvertUtils;
-import com.wm.remusic.net.HttpUtil;
 import com.wm.remusic.net.ServerAPI;
 import com.wm.remusic.uitl.ExceptionFilter;
 import com.wm.remusic.uitl.L;
@@ -69,14 +62,14 @@ public class SearchTabPagerFragment extends AttachFragment {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    final JsonObject jsonObject = HttpUtil.getResposeJsonObject("合并搜索5:", BMA.Search.searchMerge(key, 1, 10)).get("result").getAsJsonObject();
-                    JsonObject songObject = jsonObject.get("song_info").getAsJsonObject();
-                    JsonArray songArray = songObject.get("song_list").getAsJsonArray();
-                    for (JsonElement o : songArray) {
-                        SearchSongInfo songInfo = MainApplication.gsonInstance().fromJson(o, SearchSongInfo.class);
-                        Log.e("songinfo", songInfo.getTitle());
-                        songResults.add(songInfo);
-                    }
+//                    final JsonObject jsonObject = HttpUtil.getResposeJsonObject("合并搜索5:", BMA.Search.searchMerge(key, 1, 10)).get("result").getAsJsonObject();
+//                    JsonObject songObject = jsonObject.get("song_info").getAsJsonObject();
+//                    JsonArray songArray = songObject.get("song_list").getAsJsonArray();
+//                    for (JsonElement o : songArray) {
+//                        SearchSongInfo songInfo = MainApplication.gsonInstance().fromJson(o, SearchSongInfo.class);
+//                        Log.e("songinfo", songInfo.getTitle());
+//                        songResults.add(songInfo);
+//                    }
 
 
 //                    JsonObject artistObject = jsonObject.get("artist_info").getAsJsonObject();
@@ -85,8 +78,8 @@ public class SearchTabPagerFragment extends AttachFragment {
 //                        SearchArtistInfo artistInfo = MainApplication.gsonInstance().fromJson(o, SearchArtistInfo.class);
 //                        artistResults.add(artistInfo);
 //                    }
-                    ApiWrapper<ServerAPI> wrapper=new ApiWrapper<>();
-                    wrapper.targetClass(ServerAPI.class).getAPI().search(key)
+                    final ApiWrapper<ServerAPI> wrapper=new ApiWrapper<>();
+                    wrapper.targetClass(ServerAPI.class).getAPI().searchArtist(key)
                             .compose(wrapper.<SearchArtistInfo[]>applySchedulers())
                             .subscribe(new Subscriber<SearchArtistInfo[]>() {
                                 @Override
@@ -102,36 +95,37 @@ public class SearchTabPagerFragment extends AttachFragment {
                                 }
 
                                 @Override
-                                public void onNext(SearchArtistInfo[] searchArtistInfos) {
+                                public void onNext(final SearchArtistInfo[] searchArtistInfos) {
                                     L.e("search","length:"+searchArtistInfos.length);
                                     artistResults= ConvertUtils.array2List(searchArtistInfos);
-                                    JsonObject albumObject = jsonObject.get("album_info").getAsJsonObject();
-                                    JsonArray albumArray = albumObject.get("album_list").getAsJsonArray();
-                                    for (JsonElement o : albumArray) {
-                                        SearchAlbumInfo albumInfo = MainApplication.gsonInstance().fromJson(o, SearchAlbumInfo.class);
-                                        albumResults.add(albumInfo);
-                                    }
-                                    if (mContext == null) {
-                                        return;
-                                    }
-                                    contentView = LayoutInflater.from(mContext).inflate(R.layout.fragment_net_tab, frameLayout, false);
-                                    viewPager = (ViewPager) contentView.findViewById(R.id.viewpager);
-                                    if (viewPager != null) {
-                                        Adapter adapter = new Adapter(getChildFragmentManager());
-                                        adapter.addFragment(SearchMusicFragment.newInstance(songResults), "单曲");
-                                        adapter.addFragment(SearchArtistFragment.newInstance(artistResults), "歌手");
-                                        adapter.addFragment(SearchAlbumFragment.newInstance(albumResults), "专辑");
-                                        viewPager.setAdapter(adapter);
-                                        viewPager.setOffscreenPageLimit(3);
-                                    }
+//                                    initFragment();
+//                                    JsonObject albumObject = jsonObject.get("album_info").getAsJsonObject();
+//                                    JsonArray albumArray = albumObject.get("album_list").getAsJsonArray();
+//                                    for (JsonElement o : albumArray) {
+//                                        SearchAlbumInfo albumInfo = MainApplication.gsonInstance().fromJson(o, SearchAlbumInfo.class);
+//                                        albumResults.add(albumInfo);
+//                                    }
+                                    wrapper.getAPI().searchSong(key).compose(wrapper.<SearchSongInfo[]>applySchedulers())
+                                            .subscribe(new Subscriber<SearchSongInfo[]>() {
+                                                @Override
+                                                public void onCompleted() {
 
-                                    TabLayout tabLayout = (TabLayout) contentView.findViewById(R.id.tabs);
-                                    tabLayout.setupWithViewPager(viewPager);
-                                    viewPager.setCurrentItem(page);
-                                    tabLayout.setTabTextColors(R.color.text_color, ThemeUtils.getThemeColorStateList(mContext, R.color.theme_color_primary).getDefaultColor());
-                                    tabLayout.setSelectedTabIndicatorColor(ThemeUtils.getThemeColorStateList(mContext, R.color.theme_color_primary).getDefaultColor());
-                                    frameLayout.removeAllViews();
-                                    frameLayout.addView(contentView);
+                                                }
+
+                                                @Override
+                                                public void onError(Throwable e) {
+                                                    if(ExceptionFilter.filter(getContext(),e)){
+                                                        ToastUtil.showToast(getContext(),"搜索失败");
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onNext(SearchSongInfo[] searchSongInfos) {
+                                                    songResults=ConvertUtils.array2List(searchSongInfos);
+                                                    initFragment();
+                                                }
+                                            });
+
                                 }
                             });
 
@@ -153,6 +147,29 @@ public class SearchTabPagerFragment extends AttachFragment {
         }.execute();
 
 
+    }
+    private void initFragment(){
+        if (mContext == null) {
+            return;
+        }
+        contentView = LayoutInflater.from(mContext).inflate(R.layout.fragment_net_tab, frameLayout, false);
+        viewPager = (ViewPager) contentView.findViewById(R.id.viewpager);
+        if (viewPager != null) {
+            Adapter adapter = new Adapter(getChildFragmentManager());
+            adapter.addFragment(SearchMusicFragment.newInstance(songResults), "单曲");
+            adapter.addFragment(SearchArtistFragment.newInstance(artistResults), "歌手");
+//                                        adapter.addFragment(SearchAlbumFragment.newInstance(albumResults), "专辑");
+            viewPager.setAdapter(adapter);
+            viewPager.setOffscreenPageLimit(2);
+        }
+
+        TabLayout tabLayout = (TabLayout) contentView.findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        viewPager.setCurrentItem(page);
+        tabLayout.setTabTextColors(R.color.text_color, ThemeUtils.getThemeColorStateList(mContext, R.color.theme_color_primary).getDefaultColor());
+        tabLayout.setSelectedTabIndicatorColor(ThemeUtils.getThemeColorStateList(mContext, R.color.theme_color_primary).getDefaultColor());
+        frameLayout.removeAllViews();
+        frameLayout.addView(contentView);
     }
 
 

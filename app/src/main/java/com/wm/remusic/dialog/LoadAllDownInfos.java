@@ -90,7 +90,7 @@ public class LoadAllDownInfos extends AsyncTask<Void, Void, Boolean> {
             }
                 for (int i = 0; i < le; i++) {
                     totalSize += mDownInfoArray.get(i).getFile_size();
-                    mUrlList.add(mDownInfoArray.get(i).getFile_link());
+                    mUrlList.add(mDownInfoArray.get(i).getShow_link());
                 }
 
         } catch (Exception e) {

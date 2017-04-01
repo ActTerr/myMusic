@@ -114,7 +114,7 @@ public class AddDownTask extends DialogFragment {
             for (int j = 0; j < le; j++) {
                 try {
                     //从json数据获得歌曲下载地址数组
-                    JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址:",BMA.Song.songInfo(ids[j]).trim()).get("songurl")
+                    JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址1:",BMA.Song.songInfo(ids[j]).trim()).get("songurl")
                             .getAsJsonObject().get("url").getAsJsonArray();
                     int len = jsonArray.size();
                     //从首选项拿到字节数
@@ -135,7 +135,7 @@ public class AddDownTask extends DialogFragment {
                     }
                     if (musicFileDownInfo != null) {
                         //把下载地址放到list中
-                        mList.add(musicFileDownInfo.getFile_link());
+                        mList.add(musicFileDownInfo.getShow_link());
                         //
                         size += musicFileDownInfo.getFile_size();
                     }

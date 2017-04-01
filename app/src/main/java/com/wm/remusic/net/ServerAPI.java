@@ -4,7 +4,9 @@ package com.wm.remusic.net;
 import com.squareup.okhttp.RequestBody;
 import com.wm.remusic.I;
 import com.wm.remusic.bean.Result;
+import com.wm.remusic.json.MusicFileDownInfo;
 import com.wm.remusic.json.SearchArtistInfo;
+import com.wm.remusic.json.SearchSongInfo;
 
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
@@ -26,8 +28,16 @@ public interface ServerAPI {
     @GET(I.REQUEST.PATH+"?request="+I.REQUEST.LOGOUT)
     Observable<Result<String>> logOut(@Query(I.USER.USER) String name);
 
-    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.SEARCH)
-    Observable<Result<SearchArtistInfo[]>> search(@Query(I.SERACHARTISIINFO.KEY) String key);
+    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.SEARCHARTIST)
+    Observable<Result<SearchArtistInfo[]>> searchArtist(@Query(I.SERACHARTISIINFO.KEY) String key);
+
+    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.SEARCHSONG)
+    Observable<Result<SearchSongInfo[]>> searchSong(@Query(I.SERACHARTISIINFO.KEY) String key);
+
+    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.GETDOWNINFO)
+    Observable<Result<MusicFileDownInfo>> getDownInfo(@Query(I.MUSICFILEDOWNINFO.SONG_ID) String id);
+
+//    @GET(I.)
 
     @POST(I.REQUEST.PATH+"?request="+I.REQUEST.UPLOADUNCAUGHT)
     @Multipart

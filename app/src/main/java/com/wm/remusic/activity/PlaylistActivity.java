@@ -752,6 +752,7 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
 
             @Override
             public void onClick(View v) {
+                L.e("cao","歌曲被点击");
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {

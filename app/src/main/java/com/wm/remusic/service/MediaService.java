@@ -909,13 +909,17 @@ public class MediaService extends Service {
 
         @Override
         public void run() {
+            L.e("cao","执行run");
             try {
                 String url = PreferencesUtility.getInstance(MediaService.this).getPlayLink(id);
                 if (url == null) {
+                    /**
+                     * 取到歌曲的索引,然后拼接出下载的地址
+                     */
                     MusicFileDownInfo song = Down.getUrl(MediaService.this, id + "");
                     if (song != null && song.getShow_link() != null) {
                         url = song.getShow_link();
-//                        L.e("showLink:"+song.getShow_link());
+                        L.e("downUrl:"+song.getShow_link());
                         PreferencesUtility.getInstance(MediaService.this).setPlayLink(id, url);
                     }
                 }
@@ -1058,8 +1062,10 @@ public class MediaService extends Service {
 
 
     private void openCurrentAndMaybeNext(final boolean play, final boolean openNext) {
+        L.e("cao","zhixingCurrent next");
         synchronized (this) {
-            if (D) Log.d(TAG, "open current");
+            if (D)
+                Log.e(TAG, "open current");
             closeCursor();
             stop(false);
             boolean shutdown = false;
@@ -1074,15 +1080,21 @@ public class MediaService extends Service {
             if(mPlaylistInfo.get(id) == null){
                 return;
             }
+            /**
+             * 只用到了MuiscInfo中的islocal属性，判断是否本地的
+             */
             if (!mPlaylistInfo.get(id).islocal) {
                 if (mRequestUrl != null) {
                     mRequestUrl.stop();
                     mUrlHandler.removeCallbacks(mRequestUrl);
                 }
+                //postDelayed是执行runnable，也就是mRequestUrl的run方法
+                L.e("cao","执行postdelayed");
                 mRequestUrl = new RequestPlayUrl(id, play);
                 mUrlHandler.postDelayed(mRequestUrl, 70);
 
             } else {
+                L.e("cao","竟然特么是本地的?");
                 while (true) {
                     if (mCursor != null
                             && openFile(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/"
@@ -2240,14 +2252,22 @@ public class MediaService extends Service {
         return isPlaying() || System.currentTimeMillis() - mLastPlayedTime < IDLE_DELAY;
     }
 
+    /**
+     * 将MusicInfo打开并使用
+     * @param infos
+     * @param list
+     * @param position
+     */
     public void open(final HashMap<Long, MusicInfo> infos, final long[] list, final int position) {
         synchronized (this) {
 
             mPlaylistInfo = infos;
-            L.d(TAG,mPlaylistInfo.toString());
+            L.e(TAG,mPlaylistInfo.toString());
+
             if (mShuffleMode == SHUFFLE_AUTO) {
                 mShuffleMode = SHUFFLE_NORMAL;
             }
+            //取到以前的id
             final long oldId = getAudioId();
             final int listlength = list.length;
             boolean newlist = true;
@@ -2270,7 +2290,6 @@ public class MediaService extends Service {
                 mPlayPos = mShuffler.nextInt(mPlaylist.size());
             }
 
-
             mHistory.clear();
             openCurrentAndNextPlay(true);
             if (oldId != getAudioId()) {
@@ -2291,7 +2310,7 @@ public class MediaService extends Service {
         int status = mAudioManager.requestAudioFocus(mAudioFocusListener,
                 AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-        if (D) Log.d(TAG, "Starting playback: audio focus request status = " + status);
+        if (D) Log.e(TAG, "Starting playback: audio focus request status = " + status);
 
         if (status != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             return;

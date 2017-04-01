@@ -22,7 +22,8 @@ public class MusicFileDownInfoGet implements Runnable {
     @Override
     public void run() {
         try {
-            JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址:",BMA.Song.songInfo(id)).get("songurl")
+
+            JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址5:",BMA.Song.songInfo(id)).get("songurl")
                     .getAsJsonObject().get("url").getAsJsonArray();
             int len = jsonArray.size();
 

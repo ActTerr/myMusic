@@ -1,7 +1,5 @@
 package com.wm.remusic.net;
 
-import com.wm.remusic.uitl.L;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -200,8 +198,6 @@ public class BMA {
             sb.append("&method=").append("baidu.ting.song.getInfos")
                     .append("&").append(str)
                     .append("&e=").append(e);
-
-            L.e("info",sb.toString());
             return sb.toString();
         }
 
