@@ -4,7 +4,7 @@ public interface I {
 
     interface REQUEST{
         String UPLOADUNCAUGHT="uploadUncaught";
-        String PATH="Server?request=";
+        String PATH="Server";
         String SERVER_ROOT="http://192.168.1.100:8080/myMusic/";
         String LOGIN="login";
         String REGISTER="register";
@@ -16,9 +16,15 @@ public interface I {
         String LOGOUT="logOut";
         String GETPUSH="getPush";
         String GETDOWNINFO="getDownInfo";
+        String SONGDETAIL="songDetail";
+        String HOTWORD="hotWord";
 
     }
-
+    interface HOTWORD{
+        String TABLENAME="HotWord";
+        String WORD="word";
+        String COUNT="count";
+    }
     interface RESULT{
         int SUCCESS=1;
         int DEFEAT=0;
@@ -54,6 +60,7 @@ public interface I {
         String HEIGHT="height";
     }
     interface MUSICDETAILINFO{
+        String TABLENAME="musicDetailInfo";
         String ARTIST_ID="artist_id";
         String PIC_SMALL="pic_small";
         String LRCLINK="lrclink";
@@ -95,8 +102,24 @@ public interface I {
     interface MUSICFILEDOWNINFO{
         String TABLENAME="MusicFileDownInfo";
         String SHOW_LINK="show_link";
-        String FREE_SIZE="free_size";
+        String FREE_SIZE="file_size";
         String SONG_ID="song_id";
+    }
+    interface SEARCHRECORD{
+        String QINGGAN="qinggan";
+        String XINTONG="xintong";
+        String ANJING="anjing";
+        String KUAILE="kuaile";
+    }
+    interface KEYCONTRAST{
+        String TABLENAME="KeyContrast";
+        String KEY="skey";
+        String TYPE="type";
+    }
+    interface PROPERTIES{
+        String DEIVCEPATH="device_path";
+        String JDBC="musicjdbc.properties";
+        String PATH="musicpath.properties";
     }
 
 

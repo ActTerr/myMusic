@@ -147,7 +147,7 @@ public class Down {
     public static MusicDetailInfo getInfo(final String id) {
         MusicDetailInfo info = null;
         try {
-            JsonObject jsonObject = HttpUtil.getResposeJsonObject("歌曲基本信息：",BMA.Song.songBaseInfo(id).trim()).get("result")
+            JsonObject jsonObject = HttpUtil.getResposeJsonObject("歌曲基本信息2：",BMA.Song.songBaseInfo(id).trim()).get("result")
                     .getAsJsonObject().get("items").getAsJsonArray().get(0).getAsJsonObject();
             info = MainApplication.gsonInstance().fromJson(jsonObject, MusicDetailInfo.class);
         } catch (Exception e) {

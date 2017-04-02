@@ -37,6 +37,8 @@ public interface ServerAPI {
     @GET(I.REQUEST.PATH+I.REQUEST.GETDOWNINFO)
     Observable<Result<MusicFileDownInfo>> getDownInfo(@Query(I.MUSICFILEDOWNINFO.SONG_ID) String id);
 
+    @GET(I.REQUEST.PATH+I.REQUEST.HOTWORD)
+    Observable<Result<String[]>> getHotWord();
 //    @GET(I.)
 
     @POST(I.REQUEST.PATH+I.REQUEST.UPLOADUNCAUGHT)
