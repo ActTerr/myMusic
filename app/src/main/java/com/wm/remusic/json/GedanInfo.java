@@ -108,4 +108,15 @@ public class GedanInfo {
     public void setHeight(String height) {
         this.height = height;
     }
+
+    @Override
+    public String toString() {
+        return "GedanInfo{" +
+                "listenum='" + listenum + '\'' +
+                ", collectnum='" + collectnum + '\'' +
+                ", title='" + title + '\'' +
+                ", pic_300='" + pic_300 + '\'' +
+                ", tag='" + tag + '\'' +
+                '}';
+    }
 }

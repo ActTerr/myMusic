@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.bilibili.magicasakura.utils.ThemeUtils;
 import com.wm.remusic.R;
 import com.wm.remusic.fragment.AttachFragment;
+import com.wm.remusic.uitl.L;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,7 @@ public class TabNetPagerFragment extends AttachFragment implements ChangeView {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        L.e("tabNet","execute");
         if(recommendFragment == null){
             return;
         }

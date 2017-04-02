@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
 import com.wm.remusic.uitl.MFGT;
 import com.wm.remusic.uitl.PermissionHelper;
@@ -27,6 +28,8 @@ import net.youmi.android.normal.spot.SpotManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.wm.remusic.uitl.SpUtil.getLoginUser;
 
 /**
  * <p>开屏窗口</p>
@@ -44,6 +47,7 @@ public class SplashActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         mContext = this;
+
         // 设置全屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         // 移除标题栏
@@ -103,9 +107,11 @@ public class SplashActivity extends Activity {
             public void run() {
                 try {
                     Thread.sleep(3000);
-                    if (SpUtil.getLoginUser(mContext).equals("")){
+                   String name= SpUtil.getLoginUser(mContext);
+                    if (name.equals("")){
                         MFGT.gotoLoginActivity(mContext);
                     }else {
+                        MainApplication.setUserName(name);
                         MFGT.gotoMainActivity(mContext);
                     }
                     finish();
@@ -131,7 +137,7 @@ public class SplashActivity extends Activity {
         //		// 设置是否展示失败自动跳转，默认自动跳转
         //		splashViewSettings.setAutoJumpToTargetWhenShowFailed(false);
         // 设置跳转的窗口类
-        if (SpUtil.getLoginUser(mContext).equals("")) {
+        if (getLoginUser(mContext).equals("")) {
             splashViewSettings.setTargetClass(LoginActivity.class);
         } else {
             splashViewSettings.setTargetClass(MainActivity.class);

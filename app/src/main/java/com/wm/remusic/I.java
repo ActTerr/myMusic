@@ -4,7 +4,7 @@ public interface I {
 
     interface REQUEST{
         String UPLOADUNCAUGHT="uploadUncaught";
-        String PATH="Server";
+        String PATH="Server?request=";
         String SERVER_ROOT="http://192.168.1.100:8080/myMusic/";
         String LOGIN="login";
         String REGISTER="register";

@@ -22,26 +22,30 @@ import rx.Observable;
 public interface ServerAPI {
 
 
-    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.LOGIN)
+    @GET(I.REQUEST.PATH+I.REQUEST.LOGIN)
     Observable<Result<String>> login(@Query(I.USER.USER) String name, @Query(I.USER.PASSWD) String passwd);
 
-    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.LOGOUT)
+    @GET(I.REQUEST.PATH+I.REQUEST.LOGOUT)
     Observable<Result<String>> logOut(@Query(I.USER.USER) String name);
 
-    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.SEARCHARTIST)
+    @GET(I.REQUEST.PATH+I.REQUEST.SEARCHARTIST)
     Observable<Result<SearchArtistInfo[]>> searchArtist(@Query(I.SERACHARTISIINFO.KEY) String key);
 
-    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.SEARCHSONG)
-    Observable<Result<SearchSongInfo[]>> searchSong(@Query(I.SERACHARTISIINFO.KEY) String key);
+    @GET(I.REQUEST.PATH+I.REQUEST.SEARCHSONG)
+    Observable<Result<SearchSongInfo[]>> searchSong(@Query(I.USER.USER) String name,@Query(I.SERACHARTISIINFO.KEY) String key);
 
-    @GET(I.REQUEST.PATH+"?request="+I.REQUEST.GETDOWNINFO)
+    @GET(I.REQUEST.PATH+I.REQUEST.GETDOWNINFO)
     Observable<Result<MusicFileDownInfo>> getDownInfo(@Query(I.MUSICFILEDOWNINFO.SONG_ID) String id);
 
 //    @GET(I.)
 
-    @POST(I.REQUEST.PATH+"?request="+I.REQUEST.UPLOADUNCAUGHT)
+    @POST(I.REQUEST.PATH+I.REQUEST.UPLOADUNCAUGHT)
     @Multipart
     Observable<Result<String>> uploadCrash(
             @Part("file\";filename=\"throwable.log\"") RequestBody file,
             @Query(I.UNCAUGHT.PATH) String path, @Query(I.UNCAUGHT.FILE_NAME) String name);
+    
+    @GET(I.REQUEST.PATH+I.REQUEST.GETPUSH)
+    Observable<Result<String>> getPush(@Query(I.USER.USER) String user);
+
 }

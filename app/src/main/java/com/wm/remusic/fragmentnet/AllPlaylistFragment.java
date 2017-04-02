@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -27,14 +26,20 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
 import com.wm.remusic.activity.PlaylistActivity;
 import com.wm.remusic.fragment.AttachFragment;
 import com.wm.remusic.json.GedanInfo;
-import com.wm.remusic.net.BMA;
-import com.wm.remusic.net.HttpUtil;
+import com.wm.remusic.net.ApiWrapper;
+import com.wm.remusic.net.ServerAPI;
+import com.wm.remusic.uitl.ExceptionFilter;
+import com.wm.remusic.uitl.L;
+import com.wm.remusic.uitl.ToastUtil;
 
 import java.util.ArrayList;
+
+import rx.Subscriber;
 
 /**
  * Created by wm on 2016/5/15.
@@ -50,7 +55,7 @@ public class AllPlaylistFragment extends AttachFragment {
     private ArrayList<GedanInfo> recommendList = new ArrayList<>();
     int pageCount = 1;
     Gson gson;
-
+    JsonObject result;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,7 +82,8 @@ public class AllPlaylistFragment extends AttachFragment {
                     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                         super.onScrollStateChanged(recyclerView, newState);
                         if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == recomendAdapter.getItemCount()) {
-                            new MAsyncTask(++pageCount).execute();
+//                            new MAsyncTask(++pageCount).execute();
+                            getGedan();
                         }
                     }
 
@@ -96,83 +102,95 @@ public class AllPlaylistFragment extends AttachFragment {
         }
     }
 
-    class MAsyncTask extends AsyncTask {
+    private void getGedan(){
 
-        private int next;
+            ApiWrapper<ServerAPI> wrapper = new ApiWrapper<>();
+            wrapper.targetClass(ServerAPI.class).getAPI().getPush(MainApplication.getUserName())
+                    .compose(wrapper.<String>applySchedulers())
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
 
-        public MAsyncTask(int next) {
-            this.next = next;
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (ExceptionFilter.filter(mContext, e)) {
+                                ToastUtil.showToast(mContext, "加载歌单失败！");
+                            }
+                        }
+
+                        @Override
+                        public void onNext(String s) {
+                            Gson gson = new Gson();
+                            result = gson.fromJson(s, JsonObject.class);
+                            getresult();
+                            recomendAdapter.update(recommendList);
+                        }
+                    });
+
+//            JsonObject result = HttpUtil.getResposeJsonObject("歌单：",BMA.GeDan.geDan(next, 10));
+
         }
 
-        @Override
-        protected Object doInBackground(Object[] params) {
 
-            JsonObject result = HttpUtil.getResposeJsonObject("歌单：",BMA.GeDan.geDan(next, 10));
-            if (result == null) {
-                return null;
-            }
-            //热门歌单
-            JsonArray pArray = result.get("content").getAsJsonArray();
-            if (pArray == null) {
-                return null;
-            }
 
-            int plen = pArray.size();
 
-            for (int i = 0; i < plen; i++) {
-                GedanInfo gedanInfo = gson.fromJson(pArray.get(i), GedanInfo.class);
-                recommendList.add(gedanInfo);
-            }
-
-            return null;
+    private void getresult() {
+        if (result == null) {
+            return;
+        }
+        //热门歌单
+        JsonArray pArray = result.get("content").getAsJsonArray();
+        if (pArray == null) {
+            return;
         }
 
-        @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
-            recomendAdapter.update(recommendList);
-        }
+        int plen = pArray.size();
 
+        for (int i = 0; i < plen; i++) {
+            GedanInfo gedanInfo = gson.fromJson(pArray.get(i), GedanInfo.class);
+            L.e("gedanInfo",gedanInfo.toString());
+            recommendList.add(gedanInfo);
+        }
+        return;
     }
 
     private void loadData() {
-        new AsyncTask<Void, Void, Void>() {
-
-            @Override
-            protected Void doInBackground(Void... params) {
                 gson = new Gson();
-                JsonObject result = HttpUtil.getResposeJsonObject("歌单：",BMA.GeDan.geDan(1, 10));
-                if (result == null) {
-                    return null;
-                }
-                //热门歌单
-                JsonArray pArray = result.get("content").getAsJsonArray();
-                if (pArray == null) {
-                    return null;
-                }
+                ApiWrapper<ServerAPI> wrapper = new ApiWrapper<>();
+                wrapper.targetClass(ServerAPI.class).getAPI().getPush(MainApplication.getUserName())
+                        .compose(wrapper.<String>applySchedulers())
+                        .subscribe(new Subscriber<String>() {
+                            @Override
+                            public void onCompleted() {
 
-                int plen = pArray.size();
+                            }
 
-                for (int i = 0; i < plen; i++) {
-                    GedanInfo GedanInfo = gson.fromJson(pArray.get(i), GedanInfo.class);
-                    recommendList.add(GedanInfo);
-                }
+                            @Override
+                            public void onError(Throwable e) {
+                                if (ExceptionFilter.filter(mContext, e)) {
+                                    ToastUtil.showToast(mContext, "加载歌单失败！");
+                                }
+                            }
 
-                return null;
+                            @Override
+                            public void onNext(String s) {
+                                Gson gson = new Gson();
+                                result = gson.fromJson(s, JsonObject.class);
+                                getresult();
+                                recomendAdapter = new RecommendAdapter(recommendList);
+                                recyclerView.setAdapter(recomendAdapter);
+                                frameLayout.removeAllViews();
+                                frameLayout.addView(view);
+                            }
+                        });
+//                JsonObject result = HttpUtil.getResposeJsonObject("歌单：",BMA.GeDan.geDan(1, 10));
+
             }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                recomendAdapter = new RecommendAdapter(recommendList);
-                recyclerView.setAdapter(recomendAdapter);
-                frameLayout.removeAllViews();
-                frameLayout.addView(view);
 
-            }
-        }.execute();
 
-    }
 
     class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private ArrayList<GedanInfo> mList;

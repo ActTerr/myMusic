@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.bilibili.magicasakura.utils.ThemeUtils;
+import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
 import com.wm.remusic.fragment.AttachFragment;
 import com.wm.remusic.json.SearchAlbumInfo;
@@ -105,7 +106,7 @@ public class SearchTabPagerFragment extends AttachFragment {
 //                                        SearchAlbumInfo albumInfo = MainApplication.gsonInstance().fromJson(o, SearchAlbumInfo.class);
 //                                        albumResults.add(albumInfo);
 //                                    }
-                                    wrapper.getAPI().searchSong(key).compose(wrapper.<SearchSongInfo[]>applySchedulers())
+                                    wrapper.getAPI().searchSong(MainApplication.getUserName(),key).compose(wrapper.<SearchSongInfo[]>applySchedulers())
                                             .subscribe(new Subscriber<SearchSongInfo[]>() {
                                                 @Override
                                                 public void onCompleted() {
