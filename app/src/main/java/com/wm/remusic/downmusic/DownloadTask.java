@@ -16,6 +16,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.squareup.okhttp.ResponseBody;
 import com.wm.remusic.provider.DownFileStore;
+import com.wm.remusic.uitl.L;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -77,6 +78,7 @@ public class DownloadTask implements Runnable {
         dbEntity = builder.dbEntity;
         url = builder.url;
         totalSize = builder.totalSize;
+        L.e("totalSize1",totalSize+"");
         completedSize = builder.completedSize;
         id = builder.id;
         downloadStatus = builder.downloadStatus;
@@ -160,7 +162,7 @@ public class DownloadTask implements Runnable {
             saveDirPath = dbEntity.getSaveDirPath();
             completedSize = dbEntity.getCompletedSize();
             totalSize = dbEntity.getTotalSize();
-
+            L.e("totalSize2",totalSize+"");
             return this;
         }
 
@@ -201,6 +203,7 @@ public class DownloadTask implements Runnable {
             if (dbEntity != null) {
                 completedSize = dbEntity.getCompletedSize();
                 totalSize = dbEntity.getTotalSize();
+                L.e("totalSize3",totalSize+"");
             }
             if (file.length() < completedSize) {
                 completedSize = file.length();
@@ -209,6 +212,7 @@ public class DownloadTask implements Runnable {
             if (fileLength != 0 && totalSize == fileLength) {
                 downloadStatus = DownloadStatus.DOWNLOAD_STATUS_COMPLETED;
                 totalSize = completedSize = fileLength;
+                L.e("totalSize4",totalSize+"");
                 dbEntity = new DownloadDBEntity(id, totalSize, completedSize, url, saveDirPath, fileName, artist, downloadStatus);
                 downFileStore.insert(dbEntity);
                 Log.e(TAG, "file is completed , file length = " + fileLength + "  file totalsize = " + totalSize);
@@ -227,6 +231,8 @@ public class DownloadTask implements Runnable {
                     .header("RANGE", "bytes=" + completedSize + "-")//  Http value set breakpoints RANGE
                     .addHeader("Referer", url)
                     .build();
+            Log.e("downSizeUrl:",url+"");
+
             Log.e("comlesize", completedSize + "");
             file.seek(completedSize);
             Response response = client.newCall(request).execute();
@@ -235,6 +241,7 @@ public class DownloadTask implements Runnable {
                 downloadStatus = DownloadStatus.DOWNLOAD_STATUS_DOWNLOADING;
                 if (totalSize <= 0)
                     totalSize = responseBody.contentLength();
+                L.e("totalSize5",totalSize+"");
 
                 inputStream = responseBody.byteStream();
                 bis = new BufferedInputStream(inputStream);
@@ -243,6 +250,7 @@ public class DownloadTask implements Runnable {
                 int buffOffset = 0;
                 if (dbEntity == null) {
                     dbEntity = new DownloadDBEntity(id, totalSize, 0L, url, saveDirPath, fileName, artist, downloadStatus);
+                    Log.e(TAG, "file is completed , file length = " + fileLength + "  file totalsize = " + totalSize);
                     downFileStore.insert(dbEntity);
                 }
                 while ((length = bis.read(buffer)) > 0 && downloadStatus != DownloadStatus.DOWNLOAD_STATUS_CANCEL && downloadStatus != DownloadStatus.DOWNLOAD_STATUS_PAUSE) {
@@ -309,7 +317,7 @@ public class DownloadTask implements Runnable {
             downloadStatus = DownloadStatus.DOWNLOAD_STATUS_COMPLETED;
             dbEntity.setDownloadStatus(downloadStatus);
             downFileStore.update(dbEntity);
-            Uri contentUri = Uri.fromFile(new File(saveDirPath + fileName + ".mp3"));
+            Uri contentUri = Uri.fromFile(new File(saveDirPath + fileName));
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, contentUri);
             mContext.sendBroadcast(mediaScanIntent);
         }

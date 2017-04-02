@@ -14,7 +14,6 @@ import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import com.squareup.okhttp.OkHttpClient;
 import com.wm.remusic.R;
 import com.wm.remusic.activity.DownActivity;
 import com.wm.remusic.net.HttpUtil;
@@ -73,6 +72,7 @@ public class DownService extends Service {
             Intent intent = new Intent(TASK_STARTDOWN);
             intent.putExtra("completesize", downloadTask.getCompletedSize());
             intent.putExtra("totalsize", downloadTask.getTotalSize());
+            L.e("startsize1:",""+downloadTask.getTotalSize());
             intent.setPackage(IConstants.PACKAGE);
             sendBroadcast(intent);
         }
@@ -83,6 +83,7 @@ public class DownService extends Service {
             Intent intent = new Intent(UPDATE_DOWNSTAUS);
             intent.putExtra("completesize", downloadTask.getCompletedSize());
             intent.putExtra("totalsize", downloadTask.getTotalSize());
+            L.e("startsize2:",""+downloadTask.getTotalSize());
             intent.setPackage(IConstants.PACKAGE);
             sendBroadcast(intent);
         }
@@ -170,6 +171,7 @@ public class DownService extends Service {
                 String name = intent.getStringExtra("name");
                 String artist = intent.getStringExtra("artist");
                 String url = intent.getStringExtra("url");
+                L.e("DownService173","name:"+name+"artisit:"+artist+"url"+url);
                 addDownloadTask(name, artist, url);
                 break;
             case ADD_MULTI_DOWNTASK:
@@ -287,7 +289,7 @@ public class DownService extends Service {
     private void addDownloadTask(String name, String artist, String url) {
 
 
-        L.d( TAG, "add task name = " + name + "  taskid = " + (url).hashCode() + "  task artsit = " + artist);
+        L.e( TAG, "add task name = " + name + "  taskid = " + (url).hashCode() + "  task artsit = " + artist);
         DownloadDBEntity dbEntity = new DownloadDBEntity((url).hashCode() + "", 0l,
                 0l, url, getDownSave(), name, artist, DownloadStatus.DOWNLOAD_STATUS_INIT);
         downFileStore.insert(dbEntity);

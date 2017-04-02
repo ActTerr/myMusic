@@ -2,7 +2,6 @@ package com.wm.remusic.downmusic;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
@@ -17,6 +16,7 @@ import com.wm.remusic.net.HttpUtil;
 import com.wm.remusic.net.ServerAPI;
 import com.wm.remusic.uitl.ExceptionFilter;
 import com.wm.remusic.uitl.IConstants;
+import com.wm.remusic.uitl.L;
 import com.wm.remusic.uitl.ToastUtil;
 
 import rx.Subscriber;
@@ -29,15 +29,52 @@ public class Down {
 
     public static void downMusic(final Context context, final String id, final String name, final String artist) {
 
+        ApiWrapper<ServerAPI> wrapper = new ApiWrapper<ServerAPI>();
+        wrapper.targetClass(ServerAPI.class).getAPI().getDownInfo(id)
+                .compose(wrapper.<MusicFileDownInfo>applySchedulers())
+                .subscribe(new Subscriber<MusicFileDownInfo>() {
+                    @Override
+                    public void onCompleted() {
 
-        new AsyncTask<String, String, MusicFileDownInfo>() {
-            @Override
-            protected MusicFileDownInfo doInBackground(final String... name) {
-                try {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (ExceptionFilter.filter(context, e)) {
+                            ToastUtil.showToast(context, "下载失败");
+                        }
+                    }
+
+                    @Override
+                    public void onNext(MusicFileDownInfo musicFileDownInfo) {
+                        if (musicFileDownInfo != null && musicFileDownInfo.getShow_link() != null) {
+                            Intent i = new Intent(DownService.ADD_DOWNTASK);
+                            i.setAction(DownService.ADD_DOWNTASK);
+                            i.putExtra("id", id);
+                            L.e("rxjava", "fileNmae:" +name);
+                            if (name == null) {
+                                i.putExtra("name", "cao");
+                            }else{
+                                i.putExtra("name",name);
+                            }
+                            i.putExtra("artist", artist);
+                            i.putExtra("url", musicFileDownInfo.getShow_link());
+                            i.setPackage(IConstants.PACKAGE);
+                            context.startService(i);
+                        } else {
+                            Toast.makeText(context, "该歌曲没有下载连接", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+//        new AsyncTask<String, String, MusicFileDownInfo>() {
+//            @Override
+//            protected MusicFileDownInfo doInBackground(final String... name) {
+//                try {
 //                    JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址2:",BMA.Song.songInfo(id).trim()).get("songurl")
 //                            .getAsJsonObject().get("url").getAsJsonArray();
 //                    int len = jsonArray.size();
-
+//
 //                    int downloadBit = PreferencesUtility.getInstance(context).getDownMusicBit();
 //                    MusicFileDownInfo musicFileDownInfo;
 //                    for (int i = len - 1; i > -1; i--) {
@@ -50,52 +87,33 @@ public class Down {
 //                            return musicFileDownInfo;
 //                        }
 //                    }
-                    ApiWrapper<ServerAPI> wrapper=new ApiWrapper<ServerAPI>();
-                    wrapper.targetClass(ServerAPI.class).getAPI().getDownInfo(id)
-                            .compose(wrapper.<MusicFileDownInfo>applySchedulers())
-                            .subscribe(new Subscriber<MusicFileDownInfo>() {
-                                @Override
-                                public void onCompleted() {
-
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-                                    if(ExceptionFilter.filter(context,e)){
-                                        ToastUtil.showToast(context,"下载失败");
-                                    }
-                                }
-
-                                @Override
-                                public void onNext(MusicFileDownInfo musicFileDownInfo) {
-                                    if (musicFileDownInfo != null && musicFileDownInfo.getShow_link() != null) {
-                                        Intent i = new Intent(DownService.ADD_DOWNTASK);
-                                        i.setAction(DownService.ADD_DOWNTASK);
-                                        i.putExtra("id", id);
-                                        i.putExtra("name", name);
-                                        i.putExtra("artist", artist);
-                                        i.putExtra("url", musicFileDownInfo.getShow_link());
-                                        i.setPackage(IConstants.PACKAGE);
-                                        context.startService(i);
-                                    }else {
-                                        Toast.makeText(context,"该歌曲没有下载连接",Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(MusicFileDownInfo musicFileDownInfo) {
-
-            }
-        }.execute();
-    }
+//
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//
+//                return null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(MusicFileDownInfo musicFileDownInfo) {
+////                if (musicFileDownInfo != null && musicFileDownInfo.getShow_link() != null) {
+////                    Intent i = new Intent(DownService.ADD_DOWNTASK);
+////                    i.setAction(DownService.ADD_DOWNTASK);
+////                    i.putExtra("id", id);
+////                    i.putExtra("name", name);
+////                    i.putExtra("artist", artist);
+////                    i.putExtra("url", musicFileDownInfo.getShow_link());
+////                    L.e("url:",musicFileDownInfo.getShow_link());
+////                    i.setPackage(IConstants.PACKAGE);
+////                    context.startService(i);
+////                }else {
+////                    Toast.makeText(context,"该歌曲没有下载连接",Toast.LENGTH_SHORT).show();
+////                }
+//            }
+//        }.execute();
+//    }
 
 
     public static MusicFileDownInfo getUrl(final Context context, final String id) {

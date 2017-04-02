@@ -175,6 +175,7 @@ public class DownFragment extends Fragment {
             // L.d(TAG," comleted = " + completed + "  total = " + total);
             this.completed = completed;
             if (total != -1)
+                L.e("total:",total+"");
                 this.totalsize = total;
             notifyItemChanged(downPosition);
 
@@ -193,7 +194,7 @@ public class DownFragment extends Fragment {
             ((ItemViewHolder) holder).title.setText(task.getFileName());
 
             if (currentTaskList.size() > 0) {
-                L.d( TAG, "currentlist size = " + currentTaskList.size());
+                L.e( TAG, "currentlist size = " + currentTaskList.size());
                 isCurrent = currentTaskList.get(0).equals(task.getDownloadId());
                 if (isCurrent) {
                     downPosition = position;
@@ -206,12 +207,14 @@ public class DownFragment extends Fragment {
             if (isCurrent) {
                 completed = completed > task.getCompletedSize() ? completed : task.getCompletedSize();
                 totalsize = totalsize > task.getTotalSize() ? totalsize : task.getTotalSize();
+                L.e("fule","totalsize"+totalsize+" tsize:"+task.getTotalSize()+"");
                 if (completed == 0 || totalsize == -1) {
                     ((ItemViewHolder) holder).count.setText("正在计算大小文件大小");
                     ((ItemViewHolder) holder).progressBar.setVisibility(View.GONE);
                 } else {
                     ((ItemViewHolder) holder).count.setText((float) (Math.round((float) completed / (1024 * 1024) * 10)) / 10 + "M/" +
                             (float) (Math.round((float) totalsize / (1024 * 1024) * 10)) / 10 + "M");
+
                     if (((ItemViewHolder) holder).progressBar.getVisibility() != View.VISIBLE)
                         ((ItemViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                     if (totalsize > 0)

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.wm.remusic.downmusic.DownloadDBEntity;
 import com.wm.remusic.downmusic.DownloadStatus;
+import com.wm.remusic.uitl.L;
 
 import java.util.ArrayList;
 
@@ -63,6 +64,9 @@ public class DownFileStore {
             values.put(DownFileStoreColumns.FILE_NAME, entity.getFileName());
             values.put(DownFileStoreColumns.ARTIST_NAME, entity.getArtist());
             values.put(DownFileStoreColumns.DOWNSTATUS, entity.getDownloadStatus());
+            for(Object value:values.valueSet()){
+                L.e("value",String.valueOf(value));
+            }
             database.replace(DownFileStoreColumns.NAME, null, values);
             database.setTransactionSuccessful();
         } finally {
@@ -162,6 +166,8 @@ public class DownFileStore {
                 do {
                     entity = new DownloadDBEntity(cursor.getString(0), cursor.getLong(1), cursor.getLong(2),
                             cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getInt(7));
+
+                    L.e("downfileStore170:",cursor.getLong(1)+"");
                 } while (cursor.moveToNext());
                 return entity;
             } else return null;
