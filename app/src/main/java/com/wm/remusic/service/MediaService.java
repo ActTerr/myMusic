@@ -974,12 +974,13 @@ public class MediaService extends Service {
             try {
                 JsonObject jsonObject = HttpUtil.getResposeJsonObject("歌词:",BMA.Search.searchLrcPic(musicInfo.musicName, musicInfo.artist));
                 JsonArray array = jsonObject.get("songinfo").getAsJsonArray();
+                L.e("kunsi","execute");
                 int len = array.size();
                 url = null;
                 for (int i = 0; i < len; i++) {
                     url = array.get(i).getAsJsonObject().get("lrclink").getAsString();
                     if (url != null) {
-                        L.d(TAG,"lrclink = " + url);
+                        L.e(TAG,"lrclink = " + url);
                         break;
                     }
                 }
@@ -1011,7 +1012,7 @@ public class MediaService extends Service {
         MusicInfo info = mPlaylistInfo.get(id);
 
         if(info == null){
-            L.d(TAG,"get lrc err ,musicinfo is null");
+            L.e(TAG,"get lrc err ,musicinfo is null");
         }
         String lrc = Environment.getExternalStorageDirectory().getAbsolutePath() + LRC_PATH;
         File file = new File(lrc);

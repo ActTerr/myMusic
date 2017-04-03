@@ -193,6 +193,7 @@ public class PlayingActivity extends BaseActivity implements IConstants {
     }
 
     private void initLrcView() {
+        L.e("hh","excute");
         mLrcView.setOnSeekToListener(onSeekToListener);
         mLrcView.setOnLrcClickListener(onLrcClickListener);
         mViewPager.setOnSingleTouchListener(new AlbumViewPager.OnSingleTouchListener() {
@@ -215,10 +216,10 @@ public class PlayingActivity extends BaseActivity implements IConstants {
                 }
             }
         });
-
         mTryGetLrc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                L.e("hhh","beidianji");
                 Intent intent = new Intent();
                 intent.setAction(MediaService.TRY_GET_TRACKINFO);
                 sendBroadcast(intent);
@@ -585,11 +586,14 @@ public class PlayingActivity extends BaseActivity implements IConstants {
     }
 
     public void updateLrc() {
+        L.e("hhh","updateLrc");
         List<LrcRow> list = getLrcRows();
         if (list != null && list.size() > 0) {
+            L.e("hhh","have");
             mTryGetLrc.setVisibility(View.INVISIBLE);
             mLrcView.setLrcRows(list);
         } else {
+            L.e("hhh","no");
             mTryGetLrc.setVisibility(View.VISIBLE);
             mLrcView.reset();
         }
@@ -970,7 +974,6 @@ public class PlayingActivity extends BaseActivity implements IConstants {
 
         @Override
         public Fragment getItem(int position) {
-
             if (position == MusicPlayer.getQueue().length + 1 || position == 0) {
                 return RoundFragment.newInstance("");
             }

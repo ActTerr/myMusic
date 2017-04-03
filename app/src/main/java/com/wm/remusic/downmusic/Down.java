@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import com.wm.remusic.MainApplication;
 import com.wm.remusic.json.MusicDetailInfo;
 import com.wm.remusic.json.MusicFileDownInfo;
@@ -26,7 +25,7 @@ import rx.Subscriber;
  */
 public class Down {
 
-
+    static MusicFileDownInfo DownInfo;
     public static void downMusic(final Context context, final String id, final String name, final String artist) {
 
         ApiWrapper<ServerAPI> wrapper = new ApiWrapper<ServerAPI>();
@@ -116,32 +115,45 @@ public class Down {
 //    }
 
 
+
     public static MusicFileDownInfo getUrl(final Context context, final String id) {
-        MusicFileDownInfo musicFileDownInfo = null;
-        try {
-            JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址3:",BMA.Song.songInfo(id).trim(), context, false).get("songurl")
-                    .getAsJsonObject().get("url").getAsJsonArray();
-            int len = jsonArray.size();
-            int downloadBit = 192;
+//            JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址3:",BMA.Song.songInfo(id).trim(), context, false).get("songurl")
+//                    .getAsJsonObject().get("url").getAsJsonArray();
+//            int len = jsonArray.size();
+//            int downloadBit = 192;
+//
+//            for (int i = len - 1; i > -1; i--) {
+//                int bit = Integer.parseInt(jsonArray.get(i).getAsJsonObject().get("file_bitrate").toString());
+//                if (bit == downloadBit) {
+//                    musicFileDownInfo = MainApplication.gsonInstance().fromJson(jsonArray.get(i), MusicFileDownInfo.class);
+//
+//                } else if (bit < downloadBit && bit >= 64) {
+//                    musicFileDownInfo = MainApplication.gsonInstance().fromJson(jsonArray.get(i), MusicFileDownInfo.class);
+//                }
+//            }
+            ApiWrapper<ServerAPI> wrapper = new ApiWrapper<ServerAPI>();
+            wrapper.targetClass(ServerAPI.class).getAPI().getDownInfo(id)
+                    .compose(wrapper.<MusicFileDownInfo>applySchedulers())
+                    .subscribe(new Subscriber<MusicFileDownInfo>() {
+                        @Override
+                        public void onCompleted() {
 
-            for (int i = len - 1; i > -1; i--) {
-                int bit = Integer.parseInt(jsonArray.get(i).getAsJsonObject().get("file_bitrate").toString());
-                if (bit == downloadBit) {
-                    musicFileDownInfo = MainApplication.gsonInstance().fromJson(jsonArray.get(i), MusicFileDownInfo.class);
+                        }
 
-                } else if (bit < downloadBit && bit >= 64) {
-                    musicFileDownInfo = MainApplication.gsonInstance().fromJson(jsonArray.get(i), MusicFileDownInfo.class);
-                }
-            }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+                        @Override
+                        public void onError(Throwable e) {
+                            if (ExceptionFilter.filter(context, e)) {
+                                ToastUtil.showToast(context, "下载失败");
+                            }
+                        }
 
-        return musicFileDownInfo;
+                        @Override
+                        public void onNext(MusicFileDownInfo musicFileDownInfo) {
+                           DownInfo=musicFileDownInfo;
+                        }
+                    });
+
+        return DownInfo;
     }
 
     public static MusicDetailInfo getInfo(final String id) {

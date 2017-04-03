@@ -123,20 +123,7 @@
                     android:thumbOffset="3.0dip" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tragetlrc"
-                android:layout_width="100dp"
-                android:layout_height="30dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:background="#70d7d7d7"
-                android:focusable="false"
-                android:gravity="center"
-                android:padding="5dp"
-                android:text="获取封面和歌词"
-                android:textAlignment="center" />
+
 
             <com.wm.remusic.lrc.LrcView
                 android:id="@+id/lrcview"
@@ -144,6 +131,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/volume_layout"
                 android:layout_marginTop="10dp" />
+
         </RelativeLayout>
 
         <LinearLayout
@@ -156,6 +144,19 @@
             android:gravity="center_horizontal|center_vertical"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/tragetlrc"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="#70d7d7d7"
+                android:focusable="false"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@color/white"
+                android:text="获取封面和歌词"
+                />
             <LinearLayout
                 android:id="@+id/music_tool"
                 android:layout_width="match_parent"

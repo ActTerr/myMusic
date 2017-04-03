@@ -121,6 +121,9 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<MainFragmentAdapte
                 isLoveList = false;
                 break;
             case 2:
+                /**
+                 * 有BUG
+                 */
                 itemHolder.sectionItem.setText("创建的歌单" + "(" + playlists.size() + ")");
                 itemHolder.sectionImg.setImageResource(R.drawable.list_icn_arr_right);
                 setSectionListener(itemHolder, i);
