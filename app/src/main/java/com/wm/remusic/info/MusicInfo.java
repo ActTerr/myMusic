@@ -103,6 +103,30 @@ public class MusicInfo implements Parcelable {
         dest.writeBundle(bundle);
     }
 
+    public MusicInfo() {
+    }
+
+    @Override
+    public String toString() {
+        return "MusicInfo{" +
+                "songId=" + songId +
+                ", albumId=" + albumId +
+                ", albumName='" + albumName + '\'' +
+                ", albumData='" + albumData + '\'' +
+                ", duration=" + duration +
+                ", musicName='" + musicName + '\'' +
+                ", artist='" + artist + '\'' +
+                ", artistId=" + artistId +
+                ", data='" + data + '\'' +
+                ", folder='" + folder + '\'' +
+                ", lrc='" + lrc + '\'' +
+                ", islocal=" + islocal +
+                ", sort='" + sort + '\'' +
+                ", size=" + size +
+                ", favorite=" + favorite +
+                '}';
+    }
+
     public int getFavorite() {
         return favorite;
     }
