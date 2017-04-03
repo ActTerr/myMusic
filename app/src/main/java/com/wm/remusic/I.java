@@ -4,7 +4,7 @@ public interface I {
 
     interface REQUEST{
         String UPLOADUNCAUGHT="uploadUncaught";
-        String PATH="Server";
+        String PATH="Server?request=";
         String SERVER_ROOT="http://192.168.1.100:8080/myMusic/";
         String LOGIN="login";
         String REGISTER="register";
@@ -18,6 +18,7 @@ public interface I {
         String GETDOWNINFO="getDownInfo";
         String SONGDETAIL="songDetail";
         String HOTWORD="hotWord";
+        String DOWNPIC="downPic";
 
     }
     interface HOTWORD{
@@ -120,6 +121,14 @@ public interface I {
         String DEIVCEPATH="device_path";
         String JDBC="musicjdbc.properties";
         String PATH="musicpath.properties";
+    }
+    interface GEDANGEINFO{
+        String TABLENAME="GeDanGeInfo";
+        String SONG_ID="song_id";
+        String AUTHOR="author";
+        String TITLE="title";
+        String ALBUM_ID="album_id";
+        String NAME = "name";
     }
 
 

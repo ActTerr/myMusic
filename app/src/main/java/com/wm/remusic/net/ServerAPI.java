@@ -4,9 +4,13 @@ package com.wm.remusic.net;
 import com.squareup.okhttp.RequestBody;
 import com.wm.remusic.I;
 import com.wm.remusic.bean.Result;
+import com.wm.remusic.json.GeDanGeInfo;
+import com.wm.remusic.json.MusicDetailInfo;
 import com.wm.remusic.json.MusicFileDownInfo;
 import com.wm.remusic.json.SearchArtistInfo;
 import com.wm.remusic.json.SearchSongInfo;
+
+import java.util.ArrayList;
 
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
@@ -39,7 +43,12 @@ public interface ServerAPI {
 
     @GET(I.REQUEST.PATH+I.REQUEST.HOTWORD)
     Observable<Result<String[]>> getHotWord();
-//    @GET(I.)
+
+    @GET(I.REQUEST.PATH+I.REQUEST.SONGSHEET)
+    Observable<Result<ArrayList<GeDanGeInfo>>> getSongSheet(@Query(I.GEDANGEINFO.NAME)String name);
+
+    @GET(I.REQUEST.PATH+I.REQUEST.SONGDETAIL)
+    Observable<Result<MusicDetailInfo>> getSongDetail(@Query(I.MUSICDETAILINFO.SONG_ID) String id);
 
     @POST(I.REQUEST.PATH+I.REQUEST.UPLOADUNCAUGHT)
     @Multipart

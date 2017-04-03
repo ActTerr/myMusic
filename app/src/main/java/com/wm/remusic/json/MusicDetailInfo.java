@@ -99,4 +99,16 @@ public class MusicDetailInfo {
     public void setArtist_name(String artist_name) {
         this.artist_name = artist_name;
     }
+
+    @Override
+    public String toString() {
+        return "MusicDetailInfo{" +
+                "artist_id='" + artist_id + '\'' +
+                ", lrclink='" + lrclink + '\'' +
+                ", pic_radio='" + pic_radio + '\'' +
+                ", song_id='" + song_id + '\'' +
+                ", album_title='" + album_title + '\'' +
+                ", artist_name='" + artist_name + '\'' +
+                '}';
+    }
 }
