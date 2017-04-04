@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
 
         barnet = (ImageView) findViewById(R.id.bar_net);
         barmusic = (ImageView) findViewById(R.id.bar_music);
-        barfriends = (ImageView) findViewById(R.id.bar_friends);
+//        barfriends = (ImageView) findViewById(R.id.bar_friends);
         search = (ImageView) findViewById(R.id.bar_search);
         drawerLayout = (DrawerLayout) findViewById(R.id.fd);
         mLvLeftMenu = (ListView) findViewById(R.id.id_lv_left_menu);
@@ -103,6 +103,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
     private void setViewPager() {
         tabs.add(barnet);
         tabs.add(barmusic);
+//        tabs.add(barfriends);
         final CustomViewPager customViewPager = (CustomViewPager) findViewById(R.id.main_viewpager);
         final MainFragment mainFragment = new MainFragment();
         final TabNetPagerFragment tabNetPagerFragment = new TabNetPagerFragment();
@@ -110,7 +111,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
         CustomViewPagerAdapter customViewPagerAdapter = new CustomViewPagerAdapter(getSupportFragmentManager());
         customViewPagerAdapter.addFragment(tabNetPagerFragment);
         customViewPagerAdapter.addFragment(mainFragment);
-        customViewPagerAdapter.addFragment(friendFragment);
+//        customViewPagerAdapter.addFragment(friendFragment);
         customViewPager.setAdapter(customViewPagerAdapter);
         customViewPager.setCurrentItem(1);
         customViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -142,12 +143,12 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
                 customViewPager.setCurrentItem(1);
             }
         });
-        barfriends.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customViewPager.setCurrentItem(2);
-            }
-        });
+//        barfriends.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                customViewPager.setCurrentItem(2);
+//            }
+//        });
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,11 +240,11 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
                                 final MainActivity context = MainActivity.this;
                                 ActivityManager.TaskDescription taskDescription = new ActivityManager.TaskDescription(null, null, ThemeUtils.getThemeAttrColor(context, android.R.attr.colorPrimary));
                                 setTaskDescription(taskDescription);
-                                if (MainApplication.isSimple()){
-                                 getWindow().setStatusBarColor(getResources().getColor(R.color.black2));
-                                }else {
+//                                if (MainApplication.isSimple()){
+//                                 getWindow().setStatusBarColor(getResources().getColor(R.color.black2));
+//                                }else {
                                     getWindow().setStatusBarColor(ThemeUtils.getColorById(context, R.color.theme_color_primary));
-                                }
+//                                }
                             }
                         }
 

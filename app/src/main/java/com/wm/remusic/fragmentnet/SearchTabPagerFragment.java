@@ -1,6 +1,5 @@
 package com.wm.remusic.fragmentnet;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -31,6 +30,8 @@ import java.util.Collections;
 import java.util.List;
 
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by wm on 2016/4/11.
@@ -58,11 +59,7 @@ public class SearchTabPagerFragment extends AttachFragment {
 
 
     private void search(final String key) {
-        new AsyncTask<Void, Void, Void>() {
 
-            @Override
-            protected Void doInBackground(Void... params) {
-                try {
 //                    final JsonObject jsonObject = HttpUtil.getResposeJsonObject("合并搜索5:", BMA.Search.searchMerge(key, 1, 10)).get("result").getAsJsonObject();
 //                    JsonObject songObject = jsonObject.get("song_info").getAsJsonObject();
 //                    JsonArray songArray = songObject.get("song_list").getAsJsonArray();
@@ -82,6 +79,8 @@ public class SearchTabPagerFragment extends AttachFragment {
                     final ApiWrapper<ServerAPI> wrapper=new ApiWrapper<>();
                     wrapper.targetClass(ServerAPI.class).getAPI().searchArtist(key)
                             .compose(wrapper.<SearchArtistInfo[]>applySchedulers())
+                            .subscribeOn(Schedulers.io())
+                            .subscribeOn(AndroidSchedulers.mainThread())
                             .subscribe(new Subscriber<SearchArtistInfo[]>() {
                                 @Override
                                 public void onCompleted() {
@@ -99,6 +98,7 @@ public class SearchTabPagerFragment extends AttachFragment {
                                 public void onNext(final SearchArtistInfo[] searchArtistInfos) {
                                     L.e("search","length:"+searchArtistInfos.length);
                                     artistResults= ConvertUtils.array2List(searchArtistInfos);
+                                    searchSong(key);
 //                                    initFragment();
 //                                    JsonObject albumObject = jsonObject.get("album_info").getAsJsonObject();
 //                                    JsonArray albumArray = albumObject.get("album_list").getAsJsonArray();
@@ -106,7 +106,10 @@ public class SearchTabPagerFragment extends AttachFragment {
 //                                        SearchAlbumInfo albumInfo = MainApplication.gsonInstance().fromJson(o, SearchAlbumInfo.class);
 //                                        albumResults.add(albumInfo);
 //                                    }
+                                    L.e("cao","kaishi");
                                     wrapper.getAPI().searchSong(MainApplication.getUserName(),key).compose(wrapper.<SearchSongInfo[]>applySchedulers())
+                                            .subscribeOn(Schedulers.io())
+                                            .observeOn(AndroidSchedulers.mainThread())
                                             .subscribe(new Subscriber<SearchSongInfo[]>() {
                                                 @Override
                                                 public void onCompleted() {
@@ -122,6 +125,7 @@ public class SearchTabPagerFragment extends AttachFragment {
 
                                                 @Override
                                                 public void onNext(SearchSongInfo[] searchSongInfos) {
+                                                    L.e("wocao",searchSongInfos[1].getTitle());
                                                     songResults=ConvertUtils.array2List(searchSongInfos);
                                                     initFragment();
                                                 }
@@ -131,22 +135,10 @@ public class SearchTabPagerFragment extends AttachFragment {
                             });
 
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
 
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-
-
-            }
-        }.execute();
-
+    }
+    private void searchSong(String key){
 
     }
     private void initFragment(){

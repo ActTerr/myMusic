@@ -124,6 +124,9 @@ public class MainFragmentAdapter extends RecyclerView.Adapter<MainFragmentAdapte
                 /**
                  * 有BUG
                  */
+                if(playlists==null){
+                    playlists=new ArrayList<>();
+                }
                 itemHolder.sectionItem.setText("创建的歌单" + "(" + playlists.size() + ")");
                 itemHolder.sectionImg.setImageResource(R.drawable.list_icn_arr_right);
                 setSectionListener(itemHolder, i);

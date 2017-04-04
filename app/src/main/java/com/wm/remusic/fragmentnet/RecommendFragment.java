@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,6 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
@@ -41,10 +39,9 @@ import com.wm.remusic.json.RecommendListNewAlbumInfo;
 import com.wm.remusic.json.RecommendListRadioInfo;
 import com.wm.remusic.json.RecommendListRecommendInfo;
 import com.wm.remusic.net.ApiWrapper;
-import com.wm.remusic.net.HttpUtil;
-import com.wm.remusic.net.NetworkUtils;
 import com.wm.remusic.net.ServerAPI;
 import com.wm.remusic.uitl.ExceptionFilter;
+import com.wm.remusic.uitl.L;
 import com.wm.remusic.uitl.PreferencesUtility;
 import com.wm.remusic.uitl.ToastUtil;
 
@@ -81,17 +78,18 @@ public class RecommendFragment extends AttachFragment {
     private String mPosition;
     private ChangeView mChangeView;
     private boolean isFromCache = true;
-    private boolean isDayFirst;
+    private boolean isDayFirst=true;
     private ViewGroup mContent;
     private View mRecommendView;
 //    private LoodView mLoodView;
-
+    final String TAG="RecommendFragment";
     public void setChanger(ChangeView changer) {
         mChangeView = changer;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        L.e(TAG,"onCreate");
         mContent = (ViewGroup) inflater.inflate(R.layout.fragment_recommend_container, container, false);
 
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -111,7 +109,7 @@ public class RecommendFragment extends AttachFragment {
             rotateAnimation.setRepeatCount(Animation.INFINITE);
             rotateAnimation.setRepeatMode(Animation.INFINITE);
             view1.startAnimation(rotateAnimation);
-            isDayFirst = true;
+            isDayFirst = false;
             mContent.addView(dayRec);
         }
 
@@ -149,17 +147,19 @@ public class RecommendFragment extends AttachFragment {
         }
     }
 
+
+
     public void requestData() {
 
         reloadAdapter();
     }
 
-    private void reloadAdapter() {
+    public void reloadAdapter() {
+        L.e("main","reload");
 
-
-        if (NetworkUtils.isConnectInternet(mContext)) {
-            isFromCache = false;
-        }
+//        if (NetworkUtils.isConnectInternet(mContext)) {
+//            isFromCache = false;
+//        }
 
         //推荐电台
 
@@ -267,113 +267,14 @@ public class RecommendFragment extends AttachFragment {
         mViewHashMap.put("主播电台", v3);
         mPosition = PreferencesUtility.getInstance(mContext).getItemPosition();
         mViewContent.removeView(mLoadView);
-        if (isDayFirst) {
+
             mContent.removeAllViews();
             mContent.addView(mRecommendView);
-        }
-
+        L.e("hhhh","safafa");
         addViews();
-
         mItemLayout.setVisibility(View.VISIBLE);
     }
 
-
-    class LoadRecommend extends AsyncTask<Integer, Void, Integer> {
-        @Override
-        protected Integer doInBackground(Integer... params) {
-
-            if (NetworkUtils.isConnectInternet(mContext)) {
-                isFromCache = false;
-            }
-
-            //推荐电台
-            try {
-                JsonObject list = HttpUtil.getResposeJsonObject("电台", "http://tingapi.ting.baidu.com/v1/restserver/ting?from=android&version=5.8.1.0&channel=ppzs&operator=3&method=baidu.ting.plaza.index&cuid=89CF1E1A06826F9AB95A34DC0F6AAA14"
-                        , mContext, isFromCache);
-
-                JsonObject object = list.get("result").getAsJsonObject();
-                JsonArray radioArray = object.get("radio").getAsJsonObject().get("result").getAsJsonArray();
-                JsonArray recommendArray = object.get("diy").getAsJsonObject().get("result").getAsJsonArray();
-                JsonArray newAlbumArray = object.get("mix_1").getAsJsonObject().get("result").getAsJsonArray();
-
-
-                for (int i = 0; i < 6; i++) {
-                    mRecomendList.add(MainApplication.gsonInstance().fromJson(recommendArray.get(i), RecommendListRecommendInfo.class));
-                    mNewAlbumsList.add(MainApplication.gsonInstance().fromJson(newAlbumArray.get(i), RecommendListNewAlbumInfo.class));
-                    mRadioList.add(MainApplication.gsonInstance().fromJson(radioArray.get(i), RecommendListRadioInfo.class));
-                }
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-
-            return params[0];
-        }
-
-        @Override
-        protected void onPostExecute(Integer tryCount) {
-            if (mRecomendList.size() != 6 && mNewAlbumsList.size() != 6 && mRadioList.size() != 6) {
-                if (tryCount < 5) {
-                    tryCount++;
-                    new LoadRecommend().execute(tryCount);
-                } else {
-                    Toast.makeText(mContext, "网络连接失败", Toast.LENGTH_SHORT).show();
-                    View tryAgain = LayoutInflater.from(mContext).inflate(R.layout.try_again, mViewContent, false);
-                    tryAgain.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            new LoadRecommend().execute(0);
-                        }
-                    });
-                    mViewContent.removeView(mLoadView);
-                    mViewContent.addView(tryAgain);
-                }
-
-            }
-
-            v1 = mLayoutInflater.inflate(R.layout.recommend_playlist, mViewContent, false);
-            mRecyclerView1 = (RecyclerView) v1.findViewById(R.id.recommend_playlist_recyclerview);
-            mGridLayoutManager = new GridLayoutManager(mContext, 3);
-            mRecyclerView1.setLayoutManager(mGridLayoutManager);
-            mRecyclerView1.setAdapter(mRecomendAdapter);
-            TextView more = (TextView) v1.findViewById(R.id.more);
-            more.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mChangeView.changeTo(1);
-                }
-            });
-
-
-            v2 = mLayoutInflater.inflate(R.layout.recommend_newalbums, mViewContent, false);
-            mRecyclerView2 = (RecyclerView) v2.findViewById(R.id.recommend_newalbums_recyclerview);
-            mGridLayoutManager2 = new GridLayoutManager(mContext, 3);
-            mRecyclerView2.setLayoutManager(mGridLayoutManager2);
-            mRecyclerView2.setAdapter(mNewAlbumsAdapter);
-
-            v3 = mLayoutInflater.inflate(R.layout.recommend_radio, mViewContent, false);
-            mRecyclerView3 = (RecyclerView) v3.findViewById(R.id.recommend_radio_recyclerview);
-            mGridLayoutManager3 = new GridLayoutManager(mContext, 3);
-            mRecyclerView3.setLayoutManager(mGridLayoutManager3);
-            mRecyclerView3.setAdapter(mRadioAdapter);
-
-
-            mRecomendAdapter.update(mRecomendList);
-            mNewAlbumsAdapter.update(mNewAlbumsList);
-            mRadioAdapter.update(mRadioList);
-
-            mViewHashMap = new HashMap<>();
-            mViewHashMap.put("推荐歌单", v1);
-            mViewHashMap.put("最新专辑", v2);
-            mViewHashMap.put("主播电台", v3);
-            mPosition = PreferencesUtility.getInstance(mContext).getItemPosition();
-            mViewContent.removeView(mLoadView);
-
-            addViews();
-
-            mItemLayout.setVisibility(View.VISIBLE);
-
-        }
-    }
 
     private void addViews() {
 
@@ -392,11 +293,11 @@ public class RecommendFragment extends AttachFragment {
             return;
         }
         String st = PreferencesUtility.getInstance(mContext).getItemPosition();
+        L.e("hhh","st:"+st+"postion:"+mPosition);
         if (!st.equals(mPosition)) {
             mPosition = st;
             mViewContent.removeAllViews();
             addViews();
-
         }
 
     }
@@ -408,10 +309,7 @@ public class RecommendFragment extends AttachFragment {
 //        mLoodView.onDestroy();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
+
 
     class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private ArrayList<RecommendListRecommendInfo> mList;
@@ -446,14 +344,14 @@ public class RecommendFragment extends AttachFragment {
             ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(info.getPic()))
                     .setResizeOptions(new ResizeOptions(width, height))
                     .build();
-
+            L.e("图片",request.toString());
             DraweeController controller = Fresco.newDraweeControllerBuilder()
                     .setOldController(((ItemView) holder).art.getController())
                     .setImageRequest(request)
                     .build();
 
-//            ((ItemView) holder).art.setController(controller);
-            ((ItemView) holder).art.setImageDrawable(getResources().getDrawable(R.mipmap.simple_music));
+            ((ItemView) holder).art.setController(controller);
+//            ((ItemView) holder).art.setImageDrawable(getResources().getDrawable(R.mipmap.simple_music));
 
             ((ItemView) holder).name.setText(info.getTitle());
             ((ItemView) holder).count.setText(spanString);
@@ -544,8 +442,8 @@ public class RecommendFragment extends AttachFragment {
                     .setImageRequest(request)
                     .build();
 
-//            ((ItemView) holder).art.setController(controller);
-            ((ItemView) holder).art.setImageDrawable(getResources().getDrawable(R.mipmap.simple_music));
+            ((ItemView) holder).art.setController(controller);
+//            ((ItemView) holder).art.setImageDrawable(getResources().getDrawable(R.mipmap.simple_music));
 
 //            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(info.getPic()))
 //                    .setResizeOptions(new ResizeOptions(width, height))
@@ -646,8 +544,8 @@ public class RecommendFragment extends AttachFragment {
                     .setImageRequest(request)
                     .build();
 
-//            ((ItemView) holder).art.setController(controller);
-            ((ItemView) holder).art.setImageDrawable(getResources().getDrawable(R.mipmap.simple_music));
+            ((ItemView) holder).art.setController(controller);
+//            ((ItemView) holder).art.setImageDrawable(getResources().getDrawable(R.mipmap.simple_music));
 //            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(info.coverImgUrl))
 //                    .setResizeOptions(new ResizeOptions(width, height))
 //                    .build();

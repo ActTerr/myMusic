@@ -80,7 +80,8 @@ public class TabNetPagerFragment extends AttachFragment implements ChangeView {
         if(recommendFragment == null){
             return;
         }
-        if(isVisibleToUser && isFirstLoad){
+        if(isVisibleToUser&&isFirstLoad){
+            L.e("hhh","reload");
             recommendFragment.requestData();
             isFirstLoad = false;
         }

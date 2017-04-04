@@ -104,7 +104,7 @@ public class SearchMusicFragment extends AttachFragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             SearchSongInfo model = mList.get(position);
             if (holder instanceof ListItemViewHolder) {
-
+                    L.e("zuile",model.getTitle());
                 ((ListItemViewHolder) holder).mainTitle.setText(model.getTitle());
                 ((ListItemViewHolder) holder).title.setText(model.getAuthor());
 

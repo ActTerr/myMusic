@@ -36,13 +36,13 @@
                 android:background="@drawable/actionbar_music"
                 android:clickable="true" />
 
-            <ImageView
-                android:id="@+id/bar_friends"
-                android:layout_width="55dp"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/bar_music"
-                android:background="@drawable/actionbar_friends"
-                android:clickable="true" />
+            <!--<ImageView-->
+                <!--android:id="@+id/bar_friends"-->
+                <!--android:layout_width="55dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_toRightOf="@+id/bar_music"-->
+                <!--android:background="@drawable/actionbar_friends"-->
+                <!--android:clickable="true" />-->
 
             <ImageView
                 android:id="@+id/bar_search"

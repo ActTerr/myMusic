@@ -18,6 +18,7 @@ import com.wm.remusic.json.SearchSongInfo;
 import com.wm.remusic.net.ApiWrapper;
 import com.wm.remusic.net.ServerAPI;
 import com.wm.remusic.uitl.ExceptionFilter;
+import com.wm.remusic.uitl.ToastUtil;
 import com.wm.remusic.widget.WidgetController;
 
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ import java.util.Collections;
 import java.util.List;
 
 import rx.Subscriber;
+
+import static android.R.attr.id;
 
 /**
  * Created by wm on 2016/5/21.
@@ -213,6 +216,9 @@ public class SearchHotWordFragment extends AttachFragment implements View.OnClic
             case R.id.text10:
                 searchWords.onSearch(texts[9]);
                 break;
+        }
+        if (id!=R.id.text8){
+            ToastUtil.showToast(mContext,"搜索失败！");
         }
     }
 
