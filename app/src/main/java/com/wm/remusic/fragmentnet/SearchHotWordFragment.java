@@ -27,8 +27,6 @@ import java.util.List;
 
 import rx.Subscriber;
 
-import static android.R.attr.id;
-
 /**
  * Created by wm on 2016/5/21.
  */
@@ -217,7 +215,7 @@ public class SearchHotWordFragment extends AttachFragment implements View.OnClic
                 searchWords.onSearch(texts[9]);
                 break;
         }
-        if (id!=R.id.text8){
+        if (v.getId()!=R.id.text8){
             ToastUtil.showToast(mContext,"搜索失败！");
         }
     }

@@ -909,7 +909,6 @@ public class MediaService extends Service {
 
         @Override
         public void run() {
-            L.e("cao","执行run");
             try {
                 String url = PreferencesUtility.getInstance(MediaService.this).getPlayLink(id);
                 if (url == null) {
@@ -1063,7 +1062,7 @@ public class MediaService extends Service {
 
 
     private void openCurrentAndMaybeNext(final boolean play, final boolean openNext) {
-        L.e("cao","zhixingCurrent next");
+        L.e("main","zhixingCurrent next");
         synchronized (this) {
             if (D)
                 Log.e(TAG, "open current");
@@ -1090,12 +1089,12 @@ public class MediaService extends Service {
                     mUrlHandler.removeCallbacks(mRequestUrl);
                 }
                 //postDelayed是执行runnable，也就是mRequestUrl的run方法
-                L.e("cao","执行postdelayed");
+                L.e("main","执行postdelayed");
                 mRequestUrl = new RequestPlayUrl(id, play);
                 mUrlHandler.postDelayed(mRequestUrl, 70);
 
             } else {
-                L.e("cao","竟然特么是本地的?");
+                L.e("main","竟然特么是本地的?");
                 while (true) {
                     if (mCursor != null
                             && openFile(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/"

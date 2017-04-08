@@ -30,6 +30,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.wm.remusic.I;
 import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
 import com.wm.remusic.activity.NetItemChangeActivity;
@@ -341,10 +342,9 @@ public class RecommendFragment extends AttachFragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             final RecommendListRecommendInfo info = mList.get(position);
 
-            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(info.getPic()))
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(getPicUrl("t"+position)))
                     .setResizeOptions(new ResizeOptions(width, height))
                     .build();
-            L.e("图片",request.toString());
             DraweeController controller = Fresco.newDraweeControllerBuilder()
                     .setOldController(((ItemView) holder).art.getController())
                     .setImageRequest(request)
@@ -433,10 +433,9 @@ public class RecommendFragment extends AttachFragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             final RecommendListRadioInfo info = mList.get(position);
 
-            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(info.getPic()))
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(getPicUrl("d"+position)))
                     .setResizeOptions(new ResizeOptions(width, height))
                     .build();
-
             DraweeController controller = Fresco.newDraweeControllerBuilder()
                     .setOldController(((ItemView) holder).art.getController())
                     .setImageRequest(request)
@@ -535,10 +534,9 @@ public class RecommendFragment extends AttachFragment {
 //                    .getMainDiskStorageCache().getResource(cacheKey);
 //            File file=((FileBinaryResource)resource).getFile();
 
-            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(info.getPic()))
+            ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(getPicUrl("x"+position)))
                     .setResizeOptions(new ResizeOptions(width, height))
                     .build();
-
             DraweeController controller = Fresco.newDraweeControllerBuilder()
                     .setOldController(((ItemView) holder).art.getController())
                     .setImageRequest(request)
@@ -614,6 +612,9 @@ public class RecommendFragment extends AttachFragment {
 //            }
         }
 
+    }
+    private String getPicUrl(String name){
+        return I.REQUEST.SERVER_ROOT+I.REQUEST.PATH+I.REQUEST.DOWNPIC+"&id="+name;
     }
 
 

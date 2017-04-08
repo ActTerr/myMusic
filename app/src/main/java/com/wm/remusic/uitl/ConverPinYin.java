@@ -45,7 +45,7 @@ public class ConverPinYin {
         spellPut("cai", -19774);
         spellPut("can", -19763);
         spellPut("cang", -19756);
-        spellPut("cao", -19751);
+        spellPut("main", -19751);
         spellPut("ce", -19746);
         spellPut("ceng", -19741);
         spellPut("cha", -19739);

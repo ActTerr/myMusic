@@ -175,7 +175,9 @@ public class MainFragment extends BaseFragment {
             protected void onPostExecute(Void aVoid) {
                 if (mContext == null)
                     return;
-                mAdapter.notifyDataSetChanged();
+                if (mAdapter!=null){
+                    mAdapter.notifyDataSetChanged();
+                }
                 swipeRefresh.setRefreshing(false);
             }
         }.execute();

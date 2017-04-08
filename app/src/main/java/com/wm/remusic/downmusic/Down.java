@@ -15,10 +15,8 @@ import com.wm.remusic.net.ApiWrapper;
 import com.wm.remusic.net.BMA;
 import com.wm.remusic.net.HttpUtil;
 import com.wm.remusic.net.ServerAPI;
-import com.wm.remusic.uitl.ExceptionFilter;
 import com.wm.remusic.uitl.IConstants;
 import com.wm.remusic.uitl.PreferencesUtility;
-import com.wm.remusic.uitl.ToastUtil;
 
 import rx.Subscriber;
 
@@ -30,43 +28,27 @@ public class Down {
     static MusicFileDownInfo DownInfo;
     public static void downMusic(final Context context, final String id, final String name, final String artist) {
 
-//        ApiWrapper<ServerAPI> wrapper = new ApiWrapper<ServerAPI>();
-//        wrapper.targetClass(ServerAPI.class).getAPI().getDownInfo(id)
-//                .compose(wrapper.<MusicFileDownInfo>applySchedulers())
-//                .subscribe(new Subscriber<MusicFileDownInfo>() {
-//                    @Override
-//                    public void onCompleted() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
+        ApiWrapper<ServerAPI> wrapper = new ApiWrapper<ServerAPI>();
+        wrapper.targetClass(ServerAPI.class).getAPI().getDownInfo(id)
+                .compose(wrapper.<MusicFileDownInfo>applySchedulers())
+                .subscribe(new Subscriber<MusicFileDownInfo>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
 //                        if (ExceptionFilter.filter(context, e)) {
 //                            ToastUtil.showToast(context, "下载失败");
 //                        }
-//                    }
-//
-//                    @Override
-//                    public void onNext(MusicFileDownInfo musicFileDownInfo) {
-//                        if (musicFileDownInfo != null && musicFileDownInfo.getShow_link() != null) {
-//                            Intent i = new Intent(DownService.ADD_DOWNTASK);
-//                            i.setAction(DownService.ADD_DOWNTASK);
-//                            i.putExtra("id", id);
-//                            L.e("rxjava", "fileNmae:" +name);
-//                            if (name == null) {
-//                                i.putExtra("name", "cao");
-//                            }else{
-//                                i.putExtra("name",name);
-//                            }
-//                            i.putExtra("artist", artist);
-//                            i.putExtra("url", musicFileDownInfo.getShow_link());
-//                            i.setPackage(IConstants.PACKAGE);
-//                            context.startService(i);
-//                        } else {
-//                            Toast.makeText(context, "该歌曲没有下载连接", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
+                    }
+
+                    @Override
+                    public void onNext(MusicFileDownInfo musicFileDownInfo) {
+
+                    }
+                });
         new AsyncTask<String, String, MusicFileDownInfo>() {
             @Override
             protected MusicFileDownInfo doInBackground(final String... name) {
@@ -137,20 +119,21 @@ public class Down {
 
 
     public static MusicFileDownInfo getUrl(final Context context, final String id) {
-//            JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址3:",BMA.Song.songInfo(id).trim(), context, false).get("songurl")
-//                    .getAsJsonObject().get("url").getAsJsonArray();
-//            int len = jsonArray.size();
-//            int downloadBit = 192;
-//
-//            for (int i = len - 1; i > -1; i--) {
-//                int bit = Integer.parseInt(jsonArray.get(i).getAsJsonObject().get("file_bitrate").toString());
-//                if (bit == downloadBit) {
-//                    musicFileDownInfo = MainApplication.gsonInstance().fromJson(jsonArray.get(i), MusicFileDownInfo.class);
-//
-//                } else if (bit < downloadBit && bit >= 64) {
-//                    musicFileDownInfo = MainApplication.gsonInstance().fromJson(jsonArray.get(i), MusicFileDownInfo.class);
-//                }
-//            }
+        MusicFileDownInfo musicFileDownInfo=null;
+            JsonArray jsonArray = HttpUtil.getResposeJsonObject("歌曲信息和下载地址3:",BMA.Song.songInfo(id).trim(), context, false).get("songurl")
+                    .getAsJsonObject().get("url").getAsJsonArray();
+            int len = jsonArray.size();
+            int downloadBit = 192;
+
+            for (int i = len - 1; i > -1; i--) {
+                int bit = Integer.parseInt(jsonArray.get(i).getAsJsonObject().get("file_bitrate").toString());
+                if (bit == downloadBit) {
+                    musicFileDownInfo = MainApplication.gsonInstance().fromJson(jsonArray.get(i), MusicFileDownInfo.class);
+
+                } else if (bit < downloadBit && bit >= 64) {
+                    musicFileDownInfo = MainApplication.gsonInstance().fromJson(jsonArray.get(i), MusicFileDownInfo.class);
+                }
+            }
             ApiWrapper<ServerAPI> wrapper = new ApiWrapper<ServerAPI>();
             wrapper.targetClass(ServerAPI.class).getAPI().getDownInfo(id)
                     .compose(wrapper.<MusicFileDownInfo>applySchedulers())
@@ -162,9 +145,9 @@ public class Down {
 
                         @Override
                         public void onError(Throwable e) {
-                            if (ExceptionFilter.filter(context, e)) {
-                                ToastUtil.showToast(context, "下载失败");
-                            }
+//                            if (ExceptionFilter.filter(context, e)) {
+//                                ToastUtil.showToast(context, "下载失败");
+//                            }
                         }
 
                         @Override
@@ -173,7 +156,7 @@ public class Down {
                         }
                     });
 
-        return DownInfo;
+        return musicFileDownInfo;
     }
 
     public static MusicDetailInfo getInfo(final String id) {

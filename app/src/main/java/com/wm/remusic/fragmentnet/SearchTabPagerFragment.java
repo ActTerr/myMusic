@@ -106,7 +106,7 @@ public class SearchTabPagerFragment extends AttachFragment {
 //                                        SearchAlbumInfo albumInfo = MainApplication.gsonInstance().fromJson(o, SearchAlbumInfo.class);
 //                                        albumResults.add(albumInfo);
 //                                    }
-                                    L.e("cao","kaishi");
+                                    L.e("main","kaishi");
                                     wrapper.getAPI().searchSong(MainApplication.getUserName(),key).compose(wrapper.<SearchSongInfo[]>applySchedulers())
                                             .subscribeOn(Schedulers.io())
                                             .observeOn(AndroidSchedulers.mainThread())
@@ -125,7 +125,7 @@ public class SearchTabPagerFragment extends AttachFragment {
 
                                                 @Override
                                                 public void onNext(SearchSongInfo[] searchSongInfos) {
-                                                    L.e("wocao",searchSongInfos[1].getTitle());
+                                                    L.e("womain",searchSongInfos[1].getTitle());
                                                     songResults=ConvertUtils.array2List(searchSongInfos);
                                                     initFragment();
                                                 }
