@@ -264,7 +264,7 @@ public class HttpUtil {
             String tag,
             String action1){
         try {
-            L.e(tag,action1);
+//            L.e(tag,action1);
             mOkHttpClient.setConnectTimeout(3000, TimeUnit.MINUTES);
             mOkHttpClient.setReadTimeout(3000, TimeUnit.MINUTES);
             Request request = new Request.Builder()
