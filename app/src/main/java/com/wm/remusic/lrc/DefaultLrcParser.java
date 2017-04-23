@@ -33,22 +33,27 @@ public class DefaultLrcParser implements ILrcParser {
         if (TextUtils.isEmpty(str)) {
             return null;
         }
+        //
         BufferedReader br = new BufferedReader(new StringReader(str));
-
         List<LrcRow> lrcRows = new ArrayList<LrcRow>();
         String lrcLine;
         try {
+            //当读取一行的内容不为空
             while ((lrcLine = br.readLine()) != null) {
+                //调用实体类中的方法生成集合
                 List<LrcRow> rows = LrcRow.createRows(lrcLine);
                 if (rows != null && rows.size() > 0) {
                     lrcRows.addAll(rows);
                 }
             }
+            //根据时间排序
             Collections.sort(lrcRows);
             int len = lrcRows.size();
+            //设置显示时长，用后一个起始-当前起始
             for (int i = 0; i < len - 1; i++) {
                 lrcRows.get(i).setTotalTime(lrcRows.get(i + 1).getTime() - lrcRows.get(i).getTime());
             }
+            //最后一句设置5秒的延时
             lrcRows.get(len - 1).setTotalTime(5000);
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,7 +67,6 @@ public class DefaultLrcParser implements ILrcParser {
                 }
             }
         }
-
         return lrcRows;
     }
 

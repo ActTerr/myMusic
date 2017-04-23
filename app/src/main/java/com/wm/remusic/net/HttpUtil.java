@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.CacheControl;
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -19,7 +20,6 @@ import com.squareup.okhttp.Response;
 import com.squareup.okhttp.internal.DiskLruCache;
 import com.squareup.okhttp.internal.Util;
 import com.squareup.okhttp.internal.io.FileSystem;
-import com.wm.remusic.uitl.L;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,12 +43,17 @@ public class HttpUtil {
 
     public static void getOut(final String url) {
         try {
+            //设置连接超时
             mOkHttpClient.setConnectTimeout(1000, TimeUnit.MINUTES);
+            //设置读取超时
             mOkHttpClient.setReadTimeout(1000, TimeUnit.MINUTES);
+            //创建请求
             Request request = new Request.Builder()
                     .url(url)
                     .build();
+            //把请求加入队列中并执行取得响应
             Response response = mOkHttpClient.newCall(request).execute();
+            //如果成功就把响应体中的流输出到文件中
             if (response.isSuccessful()) {
 
                 FileOutputStream fo = new FileOutputStream("/storage/emulated/0/" + "gedangein" + ".json");
@@ -66,12 +71,14 @@ public class HttpUtil {
 
     public static Bitmap getBitmapStream(Context context, String url, boolean forceCache) {
         try {
+            //创建缓存
             File sdcache = context.getExternalCacheDir();
-            //File cacheFile = new File(context.getCacheDir(), "[缓存目录]");
             Cache cache = new Cache(sdcache.getAbsoluteFile(), 1024 * 1024 * 30); //30Mb
+            //设置缓存
             mOkHttpClient.setCache(cache);
-
+            //设置连接超时
             mOkHttpClient.setConnectTimeout(1000, TimeUnit.MINUTES);
+            //设置读取超时
             mOkHttpClient.setReadTimeout(1000, TimeUnit.MINUTES);
             Request.Builder builder = new Request.Builder()
                     .url(url);
@@ -80,7 +87,19 @@ public class HttpUtil {
             }
             Request request = builder.build();
             Response response = mOkHttpClient.newCall(request).execute();
+            mOkHttpClient.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+
+                }
+            });
             if (response.isSuccessful()) {
+                //将流转换成bitmap
                 return _decodeBitmapFromStream(response.body().byteStream(), 160, 160);
             }
 

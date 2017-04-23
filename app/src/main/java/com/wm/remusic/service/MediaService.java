@@ -57,7 +57,6 @@ import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AlbumColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -94,6 +93,8 @@ import com.wm.remusic.uitl.CommonUtils;
 import com.wm.remusic.uitl.ImageUtils;
 import com.wm.remusic.uitl.L;
 import com.wm.remusic.uitl.PreferencesUtility;
+
+import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -937,6 +938,7 @@ public class MediaService extends Service {
                     String urlEn = url;
                     //对url进行转换
                     urlEn = mProxy.getProxyURL(urlEn);
+                    L.e("zaixian",urlEn);
                     mPlayer.setDataSource(urlEn);
                 }
                 

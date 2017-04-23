@@ -40,13 +40,19 @@ public class CacheFileInfoDao extends SQLiteOpenHelper {
     }
 
     private void insert(CacheFileInfo cacheFileInfo) {
+        //取得可以写入的数据库
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        //开始执行事务
         sqLiteDatabase.beginTransaction();
         try {
+            //将数据赋值给ContentValues
             ContentValues cv = packData(cacheFileInfo);
+            //执行插入方法(表名，字段，数据）
             sqLiteDatabase.insert(TABLE_NAME, null, cv);
+            //设置事务执行成功
             sqLiteDatabase.setTransactionSuccessful();
         } finally {
+            //关闭事务
             sqLiteDatabase.endTransaction();
         }
     }
@@ -75,13 +81,17 @@ public class CacheFileInfoDao extends SQLiteOpenHelper {
     }
 
     public int getFileSize(String fileName) {
+        //通过文件名查询，用结果集来接收
         Cursor cursor = rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE FileName=?", new String[]{fileName});
         CacheFileInfo t = null;
+
         if (cursor != null) {
+            //当指针移动到第一个位置时
             if (cursor.moveToFirst()) {
+                //调用extractData方法来取得实体类
                 t = extractData(cursor);
             }
-
+            //关闭结果集
             cursor.close();
             cursor = null;
         }
@@ -96,7 +106,9 @@ public class CacheFileInfoDao extends SQLiteOpenHelper {
         if (null == cursor) {
             return null;
         }
+        //新建一个实体类
         CacheFileInfo album = new CacheFileInfo();
+        //从结果集中取到对应字段的值
         album.setFileName(cursor.getString(cursor.getColumnIndex("FileName")));
         album.setFileSize(cursor.getInt(cursor.getColumnIndex("FileSize")));
         return album;

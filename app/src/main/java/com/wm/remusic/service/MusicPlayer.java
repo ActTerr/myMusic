@@ -41,7 +41,7 @@ import java.util.HashMap;
 import java.util.WeakHashMap;
 
 public class MusicPlayer {
-
+    //用于消除陈旧对象
     private static final WeakHashMap<Context, ServiceBinder> mConnectionMap;
     private static final long[] sEmptyList;
     public static MediaAidlInterface mService = null;

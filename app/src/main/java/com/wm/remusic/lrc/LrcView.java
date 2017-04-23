@@ -31,7 +31,6 @@ import java.util.List;
  * 2：歌词的水平滚动怎么实现？
  * 通过属性动画ValueAnimator控制高亮歌词绘制的x轴起始坐标
  *
- * @author Ligang  2014/8/19
  */
 public class LrcView extends View implements ILrcView {
     /**
@@ -296,11 +295,14 @@ public class LrcView extends View implements ILrcView {
             return false;
         }
         switch (event.getAction()) {
+            //按下时取到触碰的点坐标
             case MotionEvent.ACTION_DOWN:
                 firstY = event.getRawY();
                 lastX = event.getRawX();
                 break;
+            //移动时
             case MotionEvent.ACTION_MOVE:
+                //如果不是拖拽 停止歌词滚动
                 if (!canDrag) {
                     if (Math.abs(event.getRawY() - firstY) > mTouchSlop && Math.abs(event.getRawY() - firstY) > Math.abs(event.getRawX() - lastX)) {
                         canDrag = true;
@@ -311,7 +313,7 @@ public class LrcView extends View implements ILrcView {
                     }
                     lastY = event.getRawY();
                 }
-
+                //如果是拖拽，调整曲目的进度
                 if (canDrag) {
                     float offset = event.getRawY() - lastY;//偏移量
                     if (getScrollY() - offset < 0) {
@@ -333,16 +335,20 @@ public class LrcView extends View implements ILrcView {
                 }
                 lastY = event.getRawY();
                 break;
+            //抬起和取消时
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                //如果不是拖拽，调用监听器的onClick方法
                 if (!canDrag) {
                     if (onLrcClickListener != null) {
                         onLrcClickListener.onClick();
                     }
+                    //否则，调整进度
                 } else {
                     if (onSeekToListener != null && mCurRow != -1) {
                         onSeekToListener.onSeekTo(mLrcRows.get(mCurRow).getTime());
                     }
+                    //计算调整进度的量
                     if (getScrollY() < 0) {
                         smoothScrollTo(0, DURATION_FOR_ACTION_UP);
                     } else if (getScrollY() > mLrcRows.size() * (mCurSizeForOtherLrc + mCurPadding) - mCurPadding) {
@@ -351,6 +357,7 @@ public class LrcView extends View implements ILrcView {
 
                     canDrag = false;
                     mIsDrawTimeLine = false;
+                    //重新布局和绘制
                     invalidate();
                 }
                 break;
@@ -439,6 +446,7 @@ public class LrcView extends View implements ILrcView {
             mAnimator.cancel();
             mAnimator.setFloatValues(0, endX);
         }
+        //设置时间间隔
         mAnimator.setDuration(duration);
         mAnimator.setStartDelay((long) (duration * 0.3)); //延迟执行属性动画
         mAnimator.start();
@@ -562,4 +570,5 @@ public class LrcView extends View implements ILrcView {
     public void log(Object o) {
         Log.d("LrcView", o + "");
     }
+
 }

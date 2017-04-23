@@ -78,6 +78,7 @@ public class MediaPlayerProxy implements Runnable {
 
     public String getProxyURL(String url) {
         //return String.format("http://127.0.0.1:%d/%s", port, url);
+
         return String.format(Locale.getDefault(), "http://127.0.0.1:%d/%s", port, url);
     }
 

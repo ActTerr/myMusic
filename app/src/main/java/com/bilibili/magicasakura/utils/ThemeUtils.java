@@ -428,12 +428,13 @@ public class ThemeUtils {
 
     private static void refreshView(View view, ExtraRefreshable extraRefreshable) {
         if (view == null) return;
-
+        //清除绘制缓存
         view.destroyDrawingCache();
         if (view instanceof Tintable) {
             ((Tintable) view).tint();
             if (view instanceof ViewGroup) {
                 for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                    //如果是viewGroup循环遍历去刷新view
                     refreshView(((ViewGroup) view).getChildAt(i), extraRefreshable);
                 }
             }

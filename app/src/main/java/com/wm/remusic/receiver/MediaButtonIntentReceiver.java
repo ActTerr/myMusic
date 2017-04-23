@@ -106,21 +106,23 @@ public class MediaButtonIntentReceiver extends WakefulBroadcastReceiver {
         i.putExtra(MediaService.FROM_MEDIA_BUTTON, true);
         startWakefulService(context, i);
     }
-
+    //获得唤醒锁并发送消息
     private static void acquireWakeLockAndSendMessage(Context context, Message msg, long delay) {
         if (mWakeLock == null) {
             Context appContext = context.getApplicationContext();
             PowerManager pm = (PowerManager) appContext.getSystemService(Context.POWER_SERVICE);
+            //新建锁
             mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Timber headset button");
+            //不计算锁的数量
             mWakeLock.setReferenceCounted(false);
         }
         if (DEBUG) Log.v(TAG, "Acquiring wake lock and sending " + msg.what);
-        // Make sure we don't indefinitely hold the wake lock under any circumstances
+        // 确保我们在任何情况下都不会无限期地保持唤醒锁
         mWakeLock.acquire(10000);
-
         mHandler.sendMessageDelayed(msg, delay);
     }
 
+    //释放唤醒锁
     private static void releaseWakeLockIfHandlerIdle() {
         if (mHandler.hasMessages(MSG_LONGPRESS_TIMEOUT)
                 || mHandler.hasMessages(MSG_HEADSET_DOUBLE_CLICK_TIMEOUT)) {
@@ -138,20 +140,24 @@ public class MediaButtonIntentReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(final Context context, final Intent intent) {
         final String intentAction = intent.getAction();
+         //如果接收切换信道意图
         if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(intentAction)) {
             if (true)
+                //让音频暂停
                 startService(context, MediaService.CMDPAUSE);
+            //如果接收到多媒体按钮意图
         } else if (Intent.ACTION_MEDIA_BUTTON.equals(intentAction)) {
+            //从意图中取道按键事件信息
             final KeyEvent event = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
             if (event == null) {
                 return;
             }
-
             final int keycode = event.getKeyCode();
             final int action = event.getAction();
             final long eventtime = event.getEventTime();
 
             String command = null;
+            //根据按键代码来赋上对应的操作值
             switch (keycode) {
                 case KeyEvent.KEYCODE_MEDIA_STOP:
                     command = MediaService.CMDSTOP;
@@ -176,16 +182,20 @@ public class MediaButtonIntentReceiver extends WakefulBroadcastReceiver {
             if (command != null) {
                 if (action == KeyEvent.ACTION_DOWN) {
                     if (mDown) {
+                        //如果当按下时服务的音频状态是暂停后者播放
                         if (MediaService.CMDTOGGLEPAUSE.equals(command)
                                 || MediaService.CMDPLAY.equals(command)) {
+                            //如果按下时长大于长按时间
                             if (mLastClickTime != 0
                                     && eventtime - mLastClickTime > LONG_PRESS_DELAY) {
+                                //唤醒并发送消息
                                 acquireWakeLockAndSendMessage(context,
                                         mHandler.obtainMessage(MSG_LONGPRESS_TIMEOUT, context), 0);
                             }
                         }
+                        //这句话的作用是防止点击过快
                     } else if (event.getRepeatCount() == 0) {
-
+                        //耳机接听
                         if (keycode == KeyEvent.KEYCODE_HEADSETHOOK) {
                             if (eventtime - mLastClickTime >= DOUBLE_CLICK) {
                                 mClickCounter = 0;
@@ -193,11 +203,12 @@ public class MediaButtonIntentReceiver extends WakefulBroadcastReceiver {
 
                             mClickCounter++;
                             if (DEBUG) Log.v(TAG, "Got headset click, count = " + mClickCounter);
+                            //移除两次点击消息
                             mHandler.removeMessages(MSG_HEADSET_DOUBLE_CLICK_TIMEOUT);
-
+                            //创建消息
                             Message msg = mHandler.obtainMessage(
                                     MSG_HEADSET_DOUBLE_CLICK_TIMEOUT, mClickCounter, 0, context);
-
+                            //当点击超过3次就归0
                             long delay = mClickCounter < 3 ? DOUBLE_CLICK : 0;
                             if (mClickCounter >= 3) {
                                 mClickCounter = 0;
@@ -211,12 +222,15 @@ public class MediaButtonIntentReceiver extends WakefulBroadcastReceiver {
                         mDown = true;
                     }
                 } else {
+                    //移除长按消息
                     mHandler.removeMessages(MSG_LONGPRESS_TIMEOUT);
+                    //标记为非按下状态
                     mDown = false;
                 }
                 if (isOrderedBroadcast()) {
                     abortBroadcast();
                 }
+                //释放唤醒锁
                 releaseWakeLockIfHandlerIdle();
             }
         }

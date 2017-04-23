@@ -46,7 +46,7 @@ import java.util.List;
 
 import static com.wm.remusic.MainApplication.context;
 
-public class MainActivity extends BaseActivity implements CardPickerDialog.ClickListener,View.OnClickListener {
+public class MainActivity extends BaseActivity implements CardPickerDialog.ClickListener, View.OnClickListener {
     private ActionBar ab;
     private ImageView barnet, barmusic, barfriends, search;
     private ArrayList<ImageView> tabs = new ArrayList<>();
@@ -62,6 +62,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
 //                    SplashScreen.SLIDE_LEFT);
 //        }
         super.onCreate(savedInstanceState);
+        L.e("main","new");
         setContentView(R.layout.activity_main);
         getWindow().setBackgroundDrawableResource(R.color.background_material_light_1);
 
@@ -107,7 +108,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
         final CustomViewPager customViewPager = (CustomViewPager) findViewById(R.id.main_viewpager);
         final MainFragment mainFragment = new MainFragment();
         final TabNetPagerFragment tabNetPagerFragment = new TabNetPagerFragment();
-        final FriendFragment friendFragment=new FriendFragment();
+        final FriendFragment friendFragment = new FriendFragment();
         CustomViewPagerAdapter customViewPagerAdapter = new CustomViewPagerAdapter(getSupportFragmentManager());
         customViewPagerAdapter.addFragment(tabNetPagerFragment);
         customViewPagerAdapter.addFragment(mainFragment);
@@ -165,9 +166,9 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
         View view = inflater.inflate(R.layout.nav_header_main, mLvLeftMenu, false);
         mLvLeftMenu.addHeaderView(view);
         mLvLeftMenu.setAdapter(new MenuItemAdapter(this));
-        TextView textView= (TextView) view.findViewById(R.id.name);
-        if (textView!=null){
-            L.e("main","text不为空");
+        TextView textView = (TextView) view.findViewById(R.id.name);
+        if (textView != null) {
+            L.e("main", "text不为空");
             textView.setOnClickListener(this);
         }
         mLvLeftMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -194,7 +195,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
 //                        break;
                     case 2:
                         drawerLayout.closeDrawers();
-                        Intent intent=new Intent(MainActivity.this,simpleActivity.class);
+                        Intent intent = new Intent(MainActivity.this, simpleActivity.class);
                         MainApplication.setSimple(true);
                         startActivity(intent);
                         finish();
@@ -208,7 +209,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
                         drawerLayout.closeDrawers();
                         break;
                     case 3:
-                        Intent intent1=new Intent(context,UserActivity.class);
+                        Intent intent1 = new Intent(context, UserActivity.class);
                         startActivity(intent1);
                         finish();
                         break;
@@ -228,23 +229,26 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
         }
     }
 
+
     @Override
     public void onConfirm(int currentTheme) {
+        L.e("MainActivity","执行MAIN当中的");
+        //如果传过来的主题和当前的不一样
         if (ThemeHelper.getTheme(MainActivity.this) != currentTheme) {
+            //让首选项存住当前主题
             ThemeHelper.setTheme(MainActivity.this, currentTheme);
+            //刷新UI
             ThemeUtils.refreshUI(MainActivity.this, new ThemeUtils.ExtraRefreshable() {
                         @Override
                         public void refreshGlobal(Activity activity) {
-                            //for global setting, just do once
+                            //对于全局设置，只需要做一次
                             if (Build.VERSION.SDK_INT >= 21) {
                                 final MainActivity context = MainActivity.this;
+                                //创建一个实体
                                 ActivityManager.TaskDescription taskDescription = new ActivityManager.TaskDescription(null, null, ThemeUtils.getThemeAttrColor(context, android.R.attr.colorPrimary));
                                 setTaskDescription(taskDescription);
-//                                if (MainApplication.isSimple()){
-//                                 getWindow().setStatusBarColor(getResources().getColor(R.color.black2));
-//                                }else {
-                                    getWindow().setStatusBarColor(ThemeUtils.getColorById(context, R.color.theme_color_primary));
-//                                }
+                                //设置状态栏颜色
+                                getWindow().setStatusBarColor(ThemeUtils.getColorById(context, R.color.theme_color_primary));
                             }
                         }
 
@@ -254,13 +258,14 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
                     }
             );
         }
+        //改变歌曲主题
         changeTheme();
     }
 
     @Override
     public void onClick(View v) {
-        L.e("main","onClick");
-        Intent intent=new Intent(context,UserActivity.class);
+        L.e("main", "onClick");
+        Intent intent = new Intent(context, UserActivity.class);
         startActivity(intent);
     }
 
@@ -304,6 +309,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        L.e("main","destro");
 //        splashScreen.removeSplashScreen();
     }
 
@@ -335,7 +341,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
         if (fragments != null) {
             for (Fragment fragment : fragments) {
                 if (fragment != null) {
-                    fragment.onRequestPermissionsResult(requestCode,permissions,grantResults);
+                    fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
                 }
             }
         }
@@ -348,6 +354,7 @@ public class MainActivity extends BaseActivity implements CardPickerDialog.Click
         // System.exit(0);
         // finish();
     }
+
     private long FirstTime = 0;
 
     @Override

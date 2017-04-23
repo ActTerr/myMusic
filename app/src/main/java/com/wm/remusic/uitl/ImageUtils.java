@@ -55,25 +55,29 @@ public class ImageUtils {
     }
 
     public static Drawable createBlurredImageFromBitmap(Bitmap bitmap, Context context, int inSampleSize) {
-
+        //建立渲染脚本
         RenderScript rs = RenderScript.create(context);
         final BitmapFactory.Options options = new BitmapFactory.Options();
+        //取到inSampleSize（压缩比）
         options.inSampleSize = inSampleSize;
-
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        //转换成JPEG并拿到流
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] imageInByte = stream.toByteArray();
         ByteArrayInputStream bis = new ByteArrayInputStream(imageInByte);
+        //用BitmapFactory通过流生成bitmap
         Bitmap blurTemplate = BitmapFactory.decodeStream(bis, null, options);
-
+        //生成输入输出和脚本
         final android.support.v8.renderscript.Allocation input = android.support.v8.renderscript.Allocation.createFromBitmap(rs, blurTemplate);
         final android.support.v8.renderscript.Allocation output = android.support.v8.renderscript.Allocation.createTyped(rs, input.getType());
-        final android.support.v8.renderscript.ScriptIntrinsicBlur script = android.support.v8.renderscript.ScriptIntrinsicBlur.create(rs, android.support.v8.renderscript.Element.U8_4(rs));
+        final android.support.v8.renderscript.ScriptIntrinsicBlur script = android.support.v8.renderscript.ScriptIntrinsicBlur.
+                create(rs, android.support.v8.renderscript.Element.U8_4(rs));
+        //给脚本设置参数
         script.setRadius(8f);
         script.setInput(input);
         script.forEach(output);
         output.copyTo(blurTemplate);
-
+        //生成一个新的图片
         return new BitmapDrawable(context.getResources(), blurTemplate);
     }
 
@@ -195,17 +199,9 @@ public class ImageUtils {
 
     public static Bitmap getArtworkQuick(Context context, Uri uri, int w,
                                          int h) {
-        // NOTE: There is in fact a 1 pixel border on the right side in the
-        // ImageView
-        // used to display this drawable. Take it into account now, so we don't
-        // have to
-        // scale later.
+        //因为在右侧有一像素的边框，将它去掉，否则会导致压缩后不精确。
         w -= 1;
         ContentResolver res = context.getContentResolver();
-//        Cursor cursor = res.query(uri, new String[]{}, null, null, null);
-//        if(cursor == null){
-//            return null;
-//        }else {
 
         if (uri != null) {
             ParcelFileDescriptor fd = null;
@@ -215,10 +211,7 @@ public class ImageUtils {
                     return null;
                 }
                 int sampleSize = 1;
-
-                // Compute the closest power-of-two scale factor
-                // and pass that to sBitmapOptionsCache.inSampleSize, which will
-                // result in faster decoding and better quality
+                //通过比较宽高的比值，计算出最适合的inSampleSize,这将提升效率和质量
                 sBitmapOptionsCache.inJustDecodeBounds = true;
                 BitmapFactory.decodeFileDescriptor(fd.getFileDescriptor(),
                         null, sBitmapOptionsCache);
@@ -236,12 +229,11 @@ public class ImageUtils {
                         fd.getFileDescriptor(), null, sBitmapOptionsCache);
 
                 if (b != null) {
-                    // finally rescale to exactly the size we need
+                    //如果尺寸是需要的，生成压缩图片
                     if (sBitmapOptionsCache.outWidth != w
                             || sBitmapOptionsCache.outHeight != h) {
                         Bitmap tmp = Bitmap.createScaledBitmap(b, w, h, true);
-                        // Bitmap.createScaledBitmap() can return the same
-                        // bitmap
+
                         if (tmp != b)
                             b.recycle();
                         b = tmp;
