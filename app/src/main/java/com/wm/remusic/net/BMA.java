@@ -465,6 +465,10 @@ public class BMA {
                     .append("&listid=").append(listid);
             return sb.toString();
         }
+
+        public static String myGeDanInfo(){
+            return "http://192.168.0.27:8080/myMusic/Server?request=getPush&name=gedan";
+        }
     }
 
     /**

@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -20,6 +21,7 @@ import com.squareup.okhttp.Response;
 import com.squareup.okhttp.internal.DiskLruCache;
 import com.squareup.okhttp.internal.Util;
 import com.squareup.okhttp.internal.io.FileSystem;
+import com.wm.remusic.bean.Result;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -283,7 +285,7 @@ public class HttpUtil {
             String tag,
             String action1){
         try {
-//            L.e(tag,action1);
+            Log.e(tag,action1);
             mOkHttpClient.setConnectTimeout(3000, TimeUnit.MINUTES);
             mOkHttpClient.setReadTimeout(3000, TimeUnit.MINUTES);
             Request request = new Request.Builder()
@@ -315,6 +317,43 @@ public class HttpUtil {
         return null;
     }
 
+    public static JsonObject getResposeJsonObject2(
+            String tag,
+            String action1){
+        try {
+            Log.e(tag,action1);
+            mOkHttpClient.setConnectTimeout(3000, TimeUnit.MINUTES);
+            mOkHttpClient.setReadTimeout(3000, TimeUnit.MINUTES);
+            Request request = new Request.Builder()
+                    .addHeader("User-Agent","User-Agent:Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:0.9.4)")
+                    .url(action1)
+//                    .addHeader("Referer","http://music.163.com/")
+//                    .addHeader("Cookie", "appver=1.5.0.75771")
+                    .build();
+            Response response = mOkHttpClient.newCall(request).execute();
+            if (response.isSuccessful()) {
+                String c = response.body().string();
+                Result result=new Gson().fromJson(c,Result.class);
+                c=result.getRetData().toString();
+//                FileOutputStream fileOutputStream = new FileOutputStream("/sdcard/" + System.currentTimeMillis() + ".txt");
+//                fileOutputStream.write(c.getBytes());
+//                fileOutputStream.close();
+                JsonParser parser = new JsonParser();
+                JsonElement el = parser.parse(c);
+                return el.getAsJsonObject();
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//       mOkHttpClient.setCookieHandler(new CookieManager(
+//                new PersistentCookieStore(getContext().getApplicationContext()),
+//                CookiePolicy.ACCEPT_ALL));
+
+        return null;
+    }
     public static void downMp3(final String url, final String name) {
         new Thread(new Runnable() {
             @Override

@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,7 +21,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,13 +58,11 @@ import com.wm.remusic.handler.HandlerUtil;
 import com.wm.remusic.info.MusicInfo;
 import com.wm.remusic.json.GeDanGeInfo;
 import com.wm.remusic.json.MusicDetailInfo;
-import com.wm.remusic.net.ApiWrapper;
 import com.wm.remusic.net.BMA;
 import com.wm.remusic.net.HttpUtil;
 import com.wm.remusic.net.MusicDetailInfoGet;
 import com.wm.remusic.net.NetworkUtils;
 import com.wm.remusic.net.RequestThreadPool;
-import com.wm.remusic.net.ServerAPI;
 import com.wm.remusic.provider.PlaylistInfo;
 import com.wm.remusic.provider.PlaylistsManager;
 import com.wm.remusic.service.MusicPlayer;
@@ -77,8 +75,6 @@ import com.wm.remusic.widget.DividerItemDecoration;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import rx.functions.Action1;
 
 /**
  * Created by wm on 2016/4/15.
@@ -349,6 +345,7 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
         @Override
         protected Void doInBackground(final Void... unused) {
             adapterList = PlaylistsManager.getInstance(mContext).getMusicInfos(Long.parseLong(playlsitId));
+            L.e("listsize",adapterList.size()+"");
             return null;
         }
 
@@ -369,14 +366,17 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
         @Override
         protected Boolean doInBackground(final Void... unused) {
             try {
-                JsonObject jsonObject = HttpUtil.getResposeJsonObject("gedan",BMA.GeDan.geDanInfo(playlsitId + ""));
+
+//                JsonObject jsonObject = HttpUtil.getResposeJsonObject("gedan",BMA.GeDan.geDanInfo(playlsitId + ""));
+                JsonObject jsonObject = HttpUtil.getResposeJsonObject2("gedan",BMA.GeDan.myGeDanInfo());
+                L.e(jsonObject.toString());
                 JsonArray pArray = jsonObject.get("content").getAsJsonArray();
 
                 mCollected = PlaylistInfo.getInstance(mContext).hasPlaylist(Long.parseLong(playlsitId));
                 playlistDetail = jsonObject.get("desc").getAsString();
                 mHandler.post(showInfo);
 
-                musicCount = pArray.size();
+                musicCount = 4;
                 for (int i = 0; i < musicCount; i++) {
                     GeDanGeInfo geDanGeInfo = MainApplication.gsonInstance().fromJson(pArray.get(i), GeDanGeInfo.class);
                     mList.add(geDanGeInfo);
@@ -391,15 +391,7 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
                         e.printStackTrace();
                     }
                 }
-                ApiWrapper<ServerAPI> wrapper=new ApiWrapper<>();
-                wrapper.targetClass(ServerAPI.class).getAPI().getSongSheet("1")
-                        .compose(wrapper.<ArrayList<GeDanGeInfo>>applySchedulers())
-                        .subscribe(new Action1<ArrayList<GeDanGeInfo>>() {
-                            @Override
-                            public void call(ArrayList<GeDanGeInfo> geDanGeInfos) {
 
-                            }
-                        });
 
                 if(sparseArray.size() == musicCount){
                     for (int i = 0; i < mList.size(); i++) {
@@ -415,7 +407,7 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
                             musicInfo.lrc = sparseArray.get(i).getLrclink();
                             musicInfo.albumData = sparseArray.get(i).getPic_radio();
                             adapterList.add(musicInfo);
-                            Log.e(String.valueOf(musicInfo.songId),musicInfo.lrc);
+                            L.e(String.valueOf(musicInfo.songId),musicInfo.lrc);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -447,7 +439,7 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
 
             cancel(true);
             RequestThreadPool.finish();
-            Log.e(TAG," cancled task , + thread" + Thread.currentThread().getName());
+            L.e(TAG," cancled task , + thread" + Thread.currentThread().getName());
         }
     }
 
@@ -652,6 +644,12 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
 
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder itemHolder, final int i) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SystemClock.sleep(30);
+                }
+            }).start();
             if (itemHolder instanceof ItemViewHolder) {
                 final MusicInfo localItem = arraylist.get(i - 1);
 
@@ -701,7 +699,7 @@ public class PlaylistActivity extends BaseActivity implements ObservableScrollVi
 
         @Override
         public int getItemCount() {
-            return 4;
+            return 5;
         }
 
         public void updateDataSet(ArrayList<MusicInfo> arraylist) {

@@ -35,6 +35,7 @@ import android.widget.Toast;
 import com.wm.remusic.MediaAidlInterface;
 import com.wm.remusic.R;
 import com.wm.remusic.info.MusicInfo;
+import com.wm.remusic.uitl.L;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -517,10 +518,12 @@ public class MusicPlayer {
                 final long[] playlist = getQueue();
                 if (Arrays.equals(list, playlist)) {
                     if (currentQueuePosition == position && currentId == list[position]) {
+                        Log.e("playall",list[position]+"");
                         mService.play();
                         return;
                     } else {
                         //矫正索引
+                        Log.e("playall","jiaozheng");
                         mService.setQueuePosition(position);
                         return;
                     }
