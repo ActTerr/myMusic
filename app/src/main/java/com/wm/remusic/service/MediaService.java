@@ -910,7 +910,7 @@ public class MediaService extends Service {
             try {
 //                String url = PreferencesUtility.getInstance(MediaService.this).getPlayLink(id);
                 L.e("zaixianting",id+"");
-                String url= "http://192.168.1.101:8080/myMusic/Server?request=downMusic&name="+id+".mp3";
+                String url= "http://10.0.2.2:8080/myMusic/Server?request=downMusic&name="+id+".mp3";
                 if (url == null) {
                     /**
                      * 取到歌曲的索引,然后拼接出下载的地址

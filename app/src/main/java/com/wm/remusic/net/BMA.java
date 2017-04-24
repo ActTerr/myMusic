@@ -467,7 +467,7 @@ public class BMA {
         }
 
         public static String myGeDanInfo(){
-            return "http://192.168.1.101:8080/myMusic/Server?request=getPush&name=gedan";
+            return "http://10.0.2.2:8080/myMusic/Server?request=getPush&name=gedan";
         }
     }
 
