@@ -317,7 +317,7 @@ public class DownloadTask implements Runnable {
             downloadStatus = DownloadStatus.DOWNLOAD_STATUS_COMPLETED;
             dbEntity.setDownloadStatus(downloadStatus);
             downFileStore.update(dbEntity);
-            Uri contentUri = Uri.fromFile(new File(saveDirPath + fileName));
+            Uri contentUri = Uri.fromFile(new File(saveDirPath + fileName+ ".mp3"));
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, contentUri);
             mContext.sendBroadcast(mediaScanIntent);
         }
