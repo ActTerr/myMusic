@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
+import com.wm.remusic.net.ApiWrapper;
+import com.wm.remusic.net.ServerAPI;
 import com.wm.remusic.uitl.ExceptionFilter;
 import com.wm.remusic.uitl.MFGT;
 import com.wm.remusic.uitl.SpUtil;
@@ -21,9 +23,10 @@ import com.wm.remusic.uitl.ToastUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class UserActivity extends AppCompatActivity {
     @BindView(R.id.user)
@@ -65,12 +68,11 @@ public class UserActivity extends AppCompatActivity {
             case R.id.logOut:
                 pd.show();
 
-                Observable.just("success")
-//                ApiWrapper<ServerAPI> wrapper = new ApiWrapper<>();
-//                subscription= wrapper.targetClass(ServerAPI.class).getAPI().logOut(MainApplication.getUserName())
-//                        .compose(wrapper.<String>applySchedulers())
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
+                ApiWrapper<ServerAPI> wrapper = new ApiWrapper<>();
+                subscription= wrapper.targetClass(ServerAPI.class).getAPI().logOut(MainApplication.getUserName())
+                        .compose(wrapper.<String>applySchedulers())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Subscriber<String>() {
                             @Override
                             public void onCompleted() {
@@ -91,10 +93,10 @@ public class UserActivity extends AppCompatActivity {
                                 pd.dismiss();
                                 ToastUtil.showToast(context,"退出成功!");
                                 MainApplication.setUserName(null);
-                                SpUtil.saveLoginUser(context, "");
+                                SpUtil.saveLoginUser(context, null);
                                 Intent intent=new Intent(context,LoginActivity.class);
                                 context.startActivity(intent);
-//                                MFGT.gotoLoginActivity(context);
+                                MFGT.gotoLoginActivity(context);
                                 MFGT.finish((Activity) context);
                             }
                         });

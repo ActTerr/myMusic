@@ -911,7 +911,9 @@ public class MediaService extends Service {
         @Override
         public void run() {
             try {
-                String url = PreferencesUtility.getInstance(MediaService.this).getPlayLink(id);
+//                String url = PreferencesUtility.getInstance(MediaService.this).getPlayLink(id);
+                L.e("zaixianting",id+"");
+                String url= "http://192.168.0.27:8080/myMusic/Server?request=downMusic&name="+id+".mp3";
                 if (url == null) {
                     /**
                      * 取到歌曲的索引,然后拼接出下载的地址
@@ -937,7 +939,7 @@ public class MediaService extends Service {
                     // String urlEn = HttpUtil.urlEncode(url);
                     String urlEn = url;
                     //对url进行转换
-                    urlEn = mProxy.getProxyURL(urlEn);
+//                    urlEn = mProxy.getProxyURL(urlEn);
                     L.e("zaixian",urlEn);
                     mPlayer.setDataSource(urlEn);
                 }

@@ -62,16 +62,14 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onNext(String s) {
             progressDialog.dismiss();
-            if (!passwd.getText().toString().equals("1234")){
-                ToastUtil.showToast(context,"密码或者用户名错误，请重试!");
-            }else {
-                ToastUtil.showToast(context,"登陆成功！");
-                SpUtil.saveLoginUser(context,name.getText().toString());
-                Intent intent = new Intent(context, MainActivity.class);
-                MainApplication.setUserName(name.getText().toString());
-                startActivity(intent);
-                MFGT.finish((Activity) context);
-            }
+
+            ToastUtil.showToast(context,"登陆成功！");
+            SpUtil.saveLoginUser(context,name.getText().toString());
+            Intent intent = new Intent(context, MainActivity.class);
+            MainApplication.setUserName(name.getText().toString());
+            startActivity(intent);
+            MFGT.finish((Activity) context);
+
 
         }
     };
