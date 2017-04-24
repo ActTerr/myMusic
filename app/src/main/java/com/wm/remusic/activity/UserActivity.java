@@ -93,7 +93,7 @@ public class UserActivity extends AppCompatActivity {
                                 pd.dismiss();
                                 ToastUtil.showToast(context,"退出成功!");
                                 MainApplication.setUserName(null);
-                                SpUtil.saveLoginUser(context, null);
+                                SpUtil.saveLoginUser(context, "");
                                 Intent intent=new Intent(context,LoginActivity.class);
                                 context.startActivity(intent);
                                 MFGT.gotoLoginActivity(context);

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.wm.remusic.MainApplication;
 import com.wm.remusic.R;
+import com.wm.remusic.uitl.L;
 import com.wm.remusic.uitl.MFGT;
 import com.wm.remusic.uitl.PermissionHelper;
 import com.wm.remusic.uitl.SpUtil;
@@ -108,6 +109,7 @@ public class SplashActivity extends Activity {
                 try {
                     Thread.sleep(3000);
                    String name= SpUtil.getLoginUser(mContext);
+                    L.e("name",name);
                     if (name.equals("")){
                         MFGT.gotoLoginActivity(mContext);
                     }else {

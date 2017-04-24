@@ -71,8 +71,6 @@ import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
 import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.wm.remusic.MainApplication;
 import com.wm.remusic.MediaAidlInterface;
@@ -81,7 +79,6 @@ import com.wm.remusic.activity.LockActivity;
 import com.wm.remusic.downmusic.Down;
 import com.wm.remusic.info.MusicInfo;
 import com.wm.remusic.json.MusicFileDownInfo;
-import com.wm.remusic.net.BMA;
 import com.wm.remusic.net.HttpUtil;
 import com.wm.remusic.permissions.Nammu;
 import com.wm.remusic.provider.MusicPlaybackState;
@@ -913,7 +910,7 @@ public class MediaService extends Service {
             try {
 //                String url = PreferencesUtility.getInstance(MediaService.this).getPlayLink(id);
                 L.e("zaixianting",id+"");
-                String url= "http://192.168.0.27:8080/myMusic/Server?request=downMusic&name="+id+".mp3";
+                String url= "http://192.168.1.101:8080/myMusic/Server?request=downMusic&name="+id+".mp3";
                 if (url == null) {
                     /**
                      * 取到歌曲的索引,然后拼接出下载的地址
@@ -973,20 +970,21 @@ public class MediaService extends Service {
             String url = null;
             if (musicInfo != null && musicInfo.lrc != null) {
                 url = musicInfo.lrc;
+                L.e("歌词",url);
             }
             try {
-                JsonObject jsonObject = HttpUtil.getResposeJsonObject("歌词:",BMA.Search.searchLrcPic(musicInfo.musicName, musicInfo.artist));
-                JsonArray array = jsonObject.get("songinfo").getAsJsonArray();
-                L.e("kunsi","execute");
-                int len = array.size();
-                url = null;
-                for (int i = 0; i < len; i++) {
-                    url = array.get(i).getAsJsonObject().get("lrclink").getAsString();
-                    if (url != null) {
-                        L.e(TAG,"lrclink = " + url);
-                        break;
-                    }
-                }
+//                JsonObject jsonObject = HttpUtil.getResposeJsonObject("歌词:", BMA.Search.searchLrcPic(musicInfo.musicName, musicInfo.artist));
+//                JsonArray array = jsonObject.get("songinfo").getAsJsonArray();
+//                L.e("kunsi","execute");
+//                int len = array.size();
+//                url = null;
+//                for (int i = 0; i < len; i++) {
+//                    url = array.get(i).getAsJsonObject().get("lrclink").getAsString();
+//                    if (url != null) {
+//                        L.e(TAG,"lrclink = " + url);
+//                        break;
+//                    }
+//                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1098,7 +1096,6 @@ public class MediaService extends Service {
                 mUrlHandler.postDelayed(mRequestUrl, 70);
 
             } else {
-                L.e("main","竟然特么是本地的?");
                 while (true) {
                     if (mCursor != null
                             && openFile(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/"
