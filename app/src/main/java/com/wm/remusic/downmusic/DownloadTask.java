@@ -193,22 +193,29 @@ public class DownloadTask implements Runnable {
         downloadStatus = DownloadStatus.DOWNLOAD_STATUS_PREPARE;
         //  id = (saveDirPath + fileName).hashCode() + "";
 
+        //调用监听里的方法，刷新UI
         onPrepare();
 
         InputStream inputStream = null;
         BufferedInputStream bis = null;
         try {
+            //取出数据库的信息
             dbEntity = downFileStore.getDownLoadedList(id);
             file = new RandomAccessFile(saveDirPath + fileName, "rwd");
             if (dbEntity != null) {
+                //已完成的大小
                 completedSize = dbEntity.getCompletedSize();
+                //目标大小
                 totalSize = dbEntity.getTotalSize();
                 L.e("totalSize3",totalSize+"");
             }
+            //如果文件大小比完成的大小要小
             if (file.length() < completedSize) {
+                //重写赋值
                 completedSize = file.length();
             }
             long fileLength = file.length();
+            //如果累计大小等于文件大小 也就是说下载完成了
             if (fileLength != 0 && totalSize == fileLength) {
                 downloadStatus = DownloadStatus.DOWNLOAD_STATUS_COMPLETED;
                 totalSize = completedSize = fileLength;
@@ -224,8 +231,8 @@ public class DownloadTask implements Runnable {
                 totalSize = 0;
             }
             downloadStatus = DownloadStatus.DOWNLOAD_STATUS_START;
-
             onStart();
+            //建立request
             Request request = new Request.Builder()
                     .url(url)
                     .header("RANGE", "bytes=" + completedSize + "-")//  Http value set breakpoints RANGE
@@ -235,11 +242,13 @@ public class DownloadTask implements Runnable {
 
             Log.e("comlesize", completedSize + "");
             file.seek(completedSize);
+            //执行请求
             Response response = client.newCall(request).execute();
             ResponseBody responseBody = response.body();
             if (responseBody != null) {
                 downloadStatus = DownloadStatus.DOWNLOAD_STATUS_DOWNLOADING;
                 if (totalSize <= 0)
+                    //取得目标大小
                     totalSize = responseBody.contentLength();
                 L.e("totalSize5",totalSize+"");
 
@@ -253,8 +262,10 @@ public class DownloadTask implements Runnable {
                     Log.e(TAG, "file is completed , file length = " + fileLength + "  file totalsize = " + totalSize);
                     downFileStore.insert(dbEntity);
                 }
+                //开始写入文件
                 while ((length = bis.read(buffer)) > 0 && downloadStatus != DownloadStatus.DOWNLOAD_STATUS_CANCEL && downloadStatus != DownloadStatus.DOWNLOAD_STATUS_PAUSE) {
                     file.write(buffer, 0, length);
+                    //每写一次就增加已完成的大小
                     completedSize += length;
                     buffOffset += length;
                     if (buffOffset >= UPDATE_SIZE) {
@@ -307,23 +318,28 @@ public class DownloadTask implements Runnable {
             }
 
         }
+        //当下载完成时
         if (totalSize == completedSize) {
+            //建立文件
             String path = saveDirPath + fileName;
             File file = new File(path);
             Log.e("rename", path.substring(0, path.length() - 5));
+            //改名
             boolean c = file.renameTo(new File(path + ".mp3"));
             Log.e("rename", c + "");
 
             downloadStatus = DownloadStatus.DOWNLOAD_STATUS_COMPLETED;
             dbEntity.setDownloadStatus(downloadStatus);
             downFileStore.update(dbEntity);
+            //通知系统刷新本地歌单
             Uri contentUri = Uri.fromFile(new File(saveDirPath + fileName+ ".mp3"));
             Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, contentUri);
             mContext.sendBroadcast(mediaScanIntent);
         }
 
-
+        //根据状态去刷新ui
         switch (downloadStatus) {
+
             case DownloadStatus.DOWNLOAD_STATUS_COMPLETED:
                 onCompleted();
                 break;

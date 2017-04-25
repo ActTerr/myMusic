@@ -331,17 +331,21 @@ public class DownService extends Service {
 
     public void startTask() {
         L.d( TAG, TAG + " start task task size = " + prepareTaskList.size());
+        //非空验证
         if (currentTask != null) {
             L.d( TAG, "start task wrong, current task is running");
             return;
         }
+
         if (prepareTaskList.size() > 0) {
             DownloadTask downloadTask = null;
             L.d( TAG, prepareTaskList.get(0));
+            //从数据库中取出数据
             DownloadDBEntity entity = downFileStore.getDownLoadedList(prepareTaskList.get(0));
 
             if (entity != null) {
                 L.d( TAG, "entity id = " + entity.getDownloadId());
+                //进行转换
                 downloadTask = DownloadTask.parse(entity, mContext);
             }
             if (downloadTask == null) {
@@ -349,11 +353,13 @@ public class DownService extends Service {
                 return;
             }
             L.d( TAG, "start task ,task name = " + downloadTask.getFileName() + "  taskid = " + downloadTask.getId());
+            //当是未完成的下载状态时，进行设置并发送意图
             if (downloadTask.getDownloadStatus() != DownloadStatus.DOWNLOAD_STATUS_COMPLETED) {
                 downloadTask.setDownloadStatus(DownloadStatus.DOWNLOAD_STATUS_PREPARE);
                 downloadTask.setdownFileStore(downFileStore);
                 downloadTask.setHttpClient(HttpUtil.mOkHttpClient);
                 downloadTask.addDownloadListener(listener);
+                //将一个runnable自动在线程上执行
                 executorService.submit(downloadTask);
                 currentTask = downloadTask;
                 upDateNotification();
